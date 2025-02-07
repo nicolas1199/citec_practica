@@ -28,15 +28,8 @@ export class UsuariosService extends BaseServices {
             throw new ConflictException(['Ya existe un usuario con ese email']);
         }
 
-        const contraseñaEncriptada = await bcrypt.hash(usuario.contraseña, 10);
-
-
         const usuarioCreado = await Usuarios.create({
-            email: usuario.email,
-            nombre: usuario.nombre,
-            apellido: usuario.apellido,
-            contraseña: contraseñaEncriptada,
-            nombre_tipos: usuario.nombre_tipos,
+            ...usuario,
         });
 
         return usuarioCreado;

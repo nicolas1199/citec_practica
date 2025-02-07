@@ -37,8 +37,8 @@ async function bootstrap() {
             },
             transform: true,
         }),
+        
     );
-    
     /**
      * Crear Usuario de prueba
      */
@@ -52,10 +52,6 @@ async function bootstrap() {
         nombre_tipos: 'ADMINISTRADOR',
         });
     }
-
-
-
-    
     app.useGlobalGuards(
         new JwtAuthGuard(app.get(JwtService), app.get(Reflector)),
     );
@@ -133,6 +129,6 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
 
-    await app.listen(process.env.PORT || 3000);
+    await app.listen(process.env.PORT || 4000);
 }
 bootstrap();
