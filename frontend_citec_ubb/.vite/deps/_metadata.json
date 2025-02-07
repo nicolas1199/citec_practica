@@ -1,0 +1,55 @@
+{
+    "hash": "00a7dae2",
+    "configHash": "0d518812",
+    "lockfileHash": "7c2fd8cf",
+    "browserHash": "f60d4dc0",
+    "optimized": {
+        "animejs": {
+            "src": "../../node_modules/animejs/lib/anime.es.js",
+            "file": "animejs.js",
+            "fileHash": "33224e4e",
+            "needsInterop": false
+        },
+        "axios": {
+            "src": "../../node_modules/axios/index.js",
+            "file": "axios.js",
+            "fileHash": "3693a85a",
+            "needsInterop": false
+        },
+        "react": {
+            "src": "../../node_modules/react/index.js",
+            "file": "react.js",
+            "fileHash": "55c8ea5c",
+            "needsInterop": true
+        },
+        "react-dom/client": {
+            "src": "../../node_modules/react-dom/client.js",
+            "file": "react-dom_client.js",
+            "fileHash": "568309e0",
+            "needsInterop": true
+        },
+        "react-router-dom": {
+            "src": "../../node_modules/react-router-dom/dist/index.js",
+            "file": "react-router-dom.js",
+            "fileHash": "c58e0e8f",
+            "needsInterop": false
+        },
+        "styled-components": {
+            "src": "../../node_modules/styled-components/dist/styled-components.browser.esm.js",
+            "file": "styled-components.js",
+            "fileHash": "4941e9bf",
+            "needsInterop": false
+        }
+    },
+    "chunks": {
+        "chunk-TNTPHDQH": {
+            "file": "chunk-TNTPHDQH.js"
+        },
+        "chunk-32E4H3EV": {
+            "file": "chunk-32E4H3EV.js"
+        },
+        "chunk-G3PMV62Z": {
+            "file": "chunk-G3PMV62Z.js"
+        }
+    }
+}

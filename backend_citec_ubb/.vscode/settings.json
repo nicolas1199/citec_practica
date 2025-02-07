@@ -1,0 +1,20 @@
+{git remote add origin https://github.com/nicolas1199/citec_practica.git
+git branch -M main
+git push -u origin main
+    "material-icon-theme.activeIconPack": "nest",
+    "material-icon-theme.folders.associations": {
+        "dtos": "element",
+        "dto": "element",
+        "entities": "context",
+        "usuarios": "admin",
+        "propuestas-de-servicios": "docs",
+        "geografia": "environment",
+        "empresas": "job",
+        "ordenes-de-trabajos": "mappings",
+        "comprobantes": "docs",
+        "facturas": "docs",
+        "ordenes-de-compra": "docs",
+        "giros": "tasks",
+        "tipos": "command"
+    }
+}
