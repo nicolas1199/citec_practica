@@ -95,6 +95,39 @@ export class CreateDocumentoDto {
         default:'2025-12-31 12:00:00'
     })
     readonly fecha_inicio: Date
+    
+    
+    @Length(1,20,{
+        message: 'La longitud debe ser entre 1 y 20 caracteres'
+    })
+    @IsDate({
+        message: 'El formato de fecha es "aaaa-mm-dd hh:mm:ss"'
+    })
+    @IsNotEmpty({
+        message:'La fecha de finalizacion esta vacia'
+    })
+    @ApiProperty({
+        description: 'Esta es la fecha de finalizacion del proyecto',
+        default:'2025-12-31 12:00:00'
+    })
+    readonly fecha_finalizacion: Date
+    
+    
+    @Length(1,20,{
+        message: 'La longitud debe ser entre 1 y 20 caracteres'
+    })
+    @IsDate({
+        message: 'El formato de fecha es "aaaa-mm-dd hh:mm:ss"'
+    })
+    @IsNotEmpty({
+        message:'La fecha de emision esta vacia'
+    })
+    @ApiProperty({
+        description: 'Esta es la fecha de emision del proyecto',
+        default:'2025-12-31 12:00:00'
+    })
+    readonly fecha_emision: Date
+    
 }
 export class obtenerDocumentoPorIdDto {
     @IsNumber({}, { message: 'Numero correlativo' })
@@ -106,7 +139,7 @@ export class obtenerDocumentoPorIdDto {
     readonly numero: number;
 }
 
-export class UpdateDocumentoDto {
+export class UpdateDocumentoDto extends PickType(obtenerDocumentoPorIdDto, ['numero']){
 
 }
 export class EliminarDocumentoDto extends PickType(obtenerDocumentoPorIdDto, ['numero']) { }

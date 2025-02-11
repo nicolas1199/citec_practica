@@ -57,7 +57,7 @@ export class Documentos extends Model<Documentos> {
     declare tipo_documento: string;
 
     @BelongsTo(()=> TiposDocumentos)
-    declare tipo: 'string'
+    declare tipo: string
 
 
     @ApiProperty({
