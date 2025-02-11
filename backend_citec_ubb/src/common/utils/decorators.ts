@@ -2,11 +2,16 @@ import { SetMetadata, applyDecorators } from '@nestjs/common';
 import { TiposDeUsuario } from '../constants/tipos-usuarios.constants';
 import { ApiResponse } from '@nestjs/swagger';
 import { ErrorRespuestaDto } from '../dtos/error-respuesta.dto';
+import { TiposDeDocumento } from '../constants/tipos-documentos.constants';
 export const Public = () => SetMetadata('isPublic', true);
 
 export const TIPOS_DE_USUARIO_KEY = 'tiposDeUsuario';
 export const Tipo = (...tiposDeUsuario: TiposDeUsuario[]) =>
     SetMetadata(TIPOS_DE_USUARIO_KEY, tiposDeUsuario);
+
+export const TIPOS_DE_DOCUMENTO_KEY = 'tiposDeDocumento';
+export const TipoDocumento = (...tiposDeDocumento: TiposDeDocumento[]) =>
+    SetMetadata(TIPOS_DE_DOCUMENTO_KEY, tiposDeDocumento);
 
 export function ApiRespuestaError() {
     return applyDecorators(
