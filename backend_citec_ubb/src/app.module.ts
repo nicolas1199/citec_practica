@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -29,7 +29,9 @@ import { SubServiciosService } from './sub-servicios/services/sub-servicios.serv
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { PagosModule } from './pagos/pagos.module';
-
+import { EncargadoEmpresaModule } from './encargadosEmpresas/encargadoEmpresa.module';
+import { EncargadosEmpresasController } from './encargadosEmpresas/controllers/encargadosEmpresas.controller';
+import { EncargadosEmpresasService } from './encargadosEmpresas/services/encargadosEmpresas.service';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -58,6 +60,7 @@ import { PagosModule } from './pagos/pagos.module';
         GrupoDeServiciosModule,
         SubServiciosModule,
         PagosModule,
+        EncargadoEmpresaModule,
     ],
     controllers: [
         AppController,
@@ -66,6 +69,7 @@ import { PagosModule } from './pagos/pagos.module';
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
+        EncargadosEmpresasController,
     ],
     providers: [
         AppService,
@@ -78,6 +82,7 @@ import { PagosModule } from './pagos/pagos.module';
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
+        EncargadosEmpresasService,
     ],
 })
 export class AppModule {}
