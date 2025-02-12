@@ -29,9 +29,6 @@ import { SubServiciosService } from './sub-servicios/services/sub-servicios.serv
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { PagosModule } from './pagos/pagos.module';
-import { EncargadoEmpresaModule } from './encargadosEmpresas/encargadoEmpresa.module';
-import { EncargadosEmpresasController } from './encargadosEmpresas/controllers/encargadosEmpresas.controller';
-import { EncargadosEmpresasService } from './encargadosEmpresas/services/encargadosEmpresas.service';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -60,7 +57,6 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         GrupoDeServiciosModule,
         SubServiciosModule,
         PagosModule,
-        EncargadoEmpresaModule,
     ],
     controllers: [
         AppController,
@@ -69,7 +65,6 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
-        EncargadosEmpresasController,
     ],
     providers: [
         AppService,
@@ -82,7 +77,6 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
-        EncargadosEmpresasService,
     ],
 })
 export class AppModule {}
