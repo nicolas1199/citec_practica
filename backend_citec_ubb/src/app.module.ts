@@ -29,9 +29,14 @@ import { SubServiciosService } from './sub-servicios/services/sub-servicios.serv
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { PagosModule } from './pagos/pagos.module';
-import { DocumentosModule } from './documentos/documentos.module';import { EncargadoEmpresaModule } from './encargadosEmpresas/encargadoEmpresa.module';
+import { DocumentosModule } from './documentos/documentos.module'; import { EncargadoEmpresaModule } from './encargadosEmpresas/encargadoEmpresa.module';
 import { EncargadosEmpresasController } from './encargadosEmpresas/controllers/encargadosEmpresas.controller';
 import { EncargadosEmpresasService } from './encargadosEmpresas/services/encargadosEmpresas.service';
+import { AreasModule } from './area-documentos/area-documentos.module';
+import { DocumentosController } from './documentos/controllers/documentos.controller';
+import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
+import { DocumentosService } from './documentos/services/documentos.service';
+import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -62,6 +67,7 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         PagosModule,
         DocumentosModule,
         EncargadoEmpresaModule,
+        AreasModule,
     ],
     controllers: [
         AppController,
@@ -71,6 +77,8 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         GrupoDeServiciosController,
         SubServiciosController,
         EncargadosEmpresasController,
+        DocumentosController,
+        AreasDocumentosController,
     ],
     providers: [
         AppService,
@@ -84,6 +92,8 @@ import { EncargadosEmpresasService } from './encargadosEmpresas/services/encarga
         GrupoDeServiciosService,
         SubServiciosService,
         EncargadosEmpresasService,
+        DocumentosService,
+        AreasDocumentosService,
     ],
 })
-export class AppModule {}
+export class AppModule { }

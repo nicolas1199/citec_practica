@@ -1,55 +1,144 @@
-import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import { IsDate, IsIn, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 import { toCapitalizeCase } from 'src/common/utils/capitalize';
 
 export class CreateDocumentoDto {
 
-    @IsNumber({},{message: 'Numero correlativo'})
-    @IsNotEmpty({message: 'El numero esta vacio'})
+    @ApiProperty({
+        description: 'Este es el nombre del informe',
+        default: 'MASA DE UN FOTON',
+    })
+    @Length(1, 50, {
+        message: 'La longitud del nombre del proyecto debe ser entre 1 y 50 caracteres',
+    })
+    @IsString({ message: 'El nombre del proyecto debe ser texto' })
+    @IsNotEmpty({ message: 'El nombre del proyecto esta vacio' })
+    @Transform(({ value }) => {
+        if (typeof value !== 'string') return value;
+        return toCapitalizeCase(value);
+    })
+    readonly nombre: string;
+
+    @Length(1, 80, {
+        message: 'La longitud del ejecutor debe ser entre 1 y 80 caracteres'
+    })
+    @IsString({
+        message: 'El nombre del ejecutor debe ser un nombre valido'
+    })
+    @IsNotEmpty({message: 'El nombre del ejecutor esta vacio'})
+    @Transform(({ value }) => {
+        if (typeof value !== 'string') return value;
+        return toCapitalizeCase(value);
+    })
+    readonly ejecutor: string
+
+    @ApiProperty({
+        description: 'Este es el nombre del cliente',
+        default: 'MASA DE UN FOTON',
+    })
+    @Length(1, 50, {
+        message: 'La longitud del nombre del cliente debe ser entre 1 y 50 caracteres',
+    })
+    @IsString({ message: 'El nombre del cliente debe ser texto' })
+    @IsNotEmpty({ message: 'El nombre del cliente esta vacio' })
+    @Transform(({ value }) => {
+        if (typeof value !== 'string') return value;
+        return toCapitalizeCase(value);
+    })
+    readonly cliente: string;
+    
+    @Length(1, 100, {
+        message: 'La longitud la direccion debe ser entre 1 y 100 caracteres'
+    })
+    @IsString({
+        message: 'El nombre la direccion debe ser un nombre valido'
+    })
+    @IsNotEmpty({message: 'El nombre la direccion esta vacio'})
+    @Transform(({ value }) => {
+        if (typeof value !== 'string') return value;
+        return toCapitalizeCase(value);
+    })
+    readonly dirreccion: string
+
+    @IsIn(Object.values(AREAS_DE_DOCUMENTO),{
+        message: 'El nombre del tipo debe ser uno de los valores permitidos'
+    })
+    @Length(1,50,{
+        message: 'La longitud del nombre del tipo debe ser entre 1 y 50 caracteres',
+    })
+    @IsString({ message: 'El nombre del tipo debe ser texto' })
+    @IsNotEmpty({ message: 'El nombre del tipo esta vacio' })
+    @Transform(({ value }) => {
+        if (typeof value !== 'string') return value;
+        return value.toUpperCase();
+    })
+    @ApiProperty({
+        description: 'Este es el codigo de area',
+        default: 'ADMINISTRADOR',
+    })
+    readonly tipo: string
+
+    @Length(1,20,{
+        message: 'La longitud debe ser entre 1 y 20 caracteres'
+    })
+    @IsDate({
+        message: 'El formato de fecha es aaaa-mm-dd hh:mm:ss'
+    })
+    @IsNotEmpty({
+        message:'La fecha de inicio esta vacia'
+    })
+    @ApiProperty({
+        description: 'Esta es la fecha de inicio del proyecto',
+        default:'2025-12-31 12:00:00'
+    })
+    readonly fecha_inicio: Date
+    
+    
+    @Length(1,20,{
+        message: 'La longitud debe ser entre 1 y 20 caracteres'
+    })
+    @IsDate({
+        message: 'El formato de fecha es "aaaa-mm-dd hh:mm:ss"'
+    })
+    @IsNotEmpty({
+        message:'La fecha de finalizacion esta vacia'
+    })
+    @ApiProperty({
+        description: 'Esta es la fecha de finalizacion del proyecto',
+        default:'2025-12-31 12:00:00'
+    })
+    readonly fecha_finalizacion: Date
+    
+    
+    @Length(1,20,{
+        message: 'La longitud debe ser entre 1 y 20 caracteres'
+    })
+    @IsDate({
+        message: 'El formato de fecha es "aaaa-mm-dd hh:mm:ss"'
+    })
+    @IsNotEmpty({
+        message:'La fecha de emision esta vacia'
+    })
+    @ApiProperty({
+        description: 'Esta es la fecha de emision del proyecto',
+        default:'2025-12-31 12:00:00'
+    })
+    readonly fecha_emision: Date
+    
+}
+export class obtenerDocumentoPorIdDto {
+    @IsNumber({}, { message: 'Numero correlativo' })
+    @IsNotEmpty({ message: 'El numero esta vacio' })
     @ApiProperty({
         description: 'Este es el numero de documento',
         default: 1101,
     })
     readonly numero: number;
-
-    @Length(1, 70, {
-        message: 'Longitud del email debe ser entre 1 y 70 caracteres',
-    })
-    @IsEmail({}, {
-        message: 'El email debe ser un email valido'
-    })
-    @IsString({ message: 'El email debe ser texto' })
-    @IsNotEmpty({ message: 'El email esta vacio' })
-    @Transform(({ value }) => {
-        if (typeof value !== 'string') return value;
-        return value.toLowerCase();
-    })
-    @ApiProperty({ description: 'Este es el email del usuario' })
-    readonly email: string;
-
-    @Length(1, 50, {
-        message: 'La longitud del nombre debe ser entre 1 y 50 caracteres',
-    })
-    @IsString({ message: 'El nombre debe ser texto' })
-    @IsNotEmpty({ message: 'El nombre esta vacio' })
-    @Transform(({ value }) => {
-        if (typeof value !== 'string') return value;
-        return toCapitalizeCase(value);
-    })
-    @ApiProperty({
-        description: 'Este es el nombre del usuario',
-        default: 'Juan',
-    })
-    readonly nombre: string;
-
-    
 }
-export class obtenerDocumentoPorIdDto extends PickType(CreateDocumentoDto,['numero']){}
 
-export class UpdateDocumentoDto {
-    constructor(parameters) {
-        
-    }
+export class UpdateDocumentoDto extends PickType(obtenerDocumentoPorIdDto, ['numero']){
+
 }
-export class EliminarDocumentoDto extends PickType(CreateDocumentoDto,['numero']){}
+export class EliminarDocumentoDto extends PickType(obtenerDocumentoPorIdDto, ['numero']) { }

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { DocumentosService } from '../services/documentos.service';
-import { CreateDocumentoDto, UpdateDocumentoDto } from '../dto/documento.dto';
+import { CreateDocumentoDto, EliminarDocumentoDto, obtenerDocumentoPorIdDto, UpdateDocumentoDto } from '../dto/documento.dto';
 
 @Controller('documentos')
 export class DocumentosController {
@@ -16,19 +16,19 @@ export class DocumentosController {
     return this.documentosService.obtenerTodos();
   }
 
-  /*
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.documentosService.obtenerPorId(+id);
+  
+  @Get(':numero')
+  findOne(@Param('numero') numero: obtenerDocumentoPorIdDto) {
+    return this.documentosService.obtenerPorId(numero);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDocumentoDto: UpdateDocumentoDto) {
-    return this.documentosService.actualizar(+id, updateDocumentoDto);
+  @Patch(':numero')
+  update(@Body() updateDocumentoDto: UpdateDocumentoDto) {
+    return this.documentosService.actualizar(updateDocumentoDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.documentosService.eliminar(+id);
-  }*/
+  @Delete(':numero')
+  remove(@Param('numero') numero: EliminarDocumentoDto) {
+    return this.documentosService.eliminar(numero);
+  }
 }

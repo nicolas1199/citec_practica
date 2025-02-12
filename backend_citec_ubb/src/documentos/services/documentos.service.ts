@@ -9,13 +9,13 @@ export class DocumentosService extends BaseServices {
 
   async crear(documento: CreateDocumentoDto): Promise<Documentos> {
     const existeDocumento = await Documentos.findOne({
-      where: { numero: documento.numero }
+      where: { nombre: documento.nombre }
     })
     if (existeDocumento) {
-      throw new ConflictException(['Ya existe un usuario con ese email']);
+      throw new ConflictException(['Ya existe un usuario con ese nombre']);
     }
     const documentoCreado = await Documentos.create({
-      ...documento,
+      ...documento
     })
     return documentoCreado;
   }
@@ -36,8 +36,8 @@ export class DocumentosService extends BaseServices {
     return documentos;
   }
 
-  async actualizar(clavePrimaria: obtenerDocumentoPorIdDto, usuario: UpdateDocumentoDto): Promise<Documentos> {
-    const documento = await Documentos.findByPk(clavePrimaria.numero)
+  async actualizar(documento: UpdateDocumentoDto): Promise<Documentos> {
+    const documentoExistente = await Documentos.findByPk(documento.numero)
     const documentoActualizado = Documentos.findByPk()
     return
   }
