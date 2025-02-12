@@ -30,6 +30,11 @@ import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { PagosModule } from './pagos/pagos.module';
 import { DocumentosModule } from './documentos/documentos.module';
+import { AreasModule } from './area-documentos/area-documentos.module';
+import { DocumentosController } from './documentos/controllers/documentos.controller';
+import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
+import { DocumentosService } from './documentos/services/documentos.service';
+import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -59,6 +64,7 @@ import { DocumentosModule } from './documentos/documentos.module';
         SubServiciosModule,
         PagosModule,
         DocumentosModule,
+        AreasModule,
     ],
     controllers: [
         AppController,
@@ -67,6 +73,8 @@ import { DocumentosModule } from './documentos/documentos.module';
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
+        DocumentosController,
+        AreasDocumentosController,
     ],
     providers: [
         AppService,
@@ -79,6 +87,8 @@ import { DocumentosModule } from './documentos/documentos.module';
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
+        DocumentosService,
+        AreasDocumentosService,
     ],
 })
 export class AppModule {}

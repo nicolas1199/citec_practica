@@ -1,8 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsDate, IsIn, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
-import { IsAfter, IsBefore } from 'sequelize-typescript';
-import { TIPOS_DE_DOCUMENTO } from 'src/common/constants/tipos-documentos.constants';
+import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 import { toCapitalizeCase } from 'src/common/utils/capitalize';
 
 export class CreateDocumentoDto {
@@ -63,7 +62,7 @@ export class CreateDocumentoDto {
     })
     readonly dirreccion: string
 
-    @IsIn(Object.values(TIPOS_DE_DOCUMENTO),{
+    @IsIn(Object.values(AREAS_DE_DOCUMENTO),{
         message: 'El nombre del tipo debe ser uno de los valores permitidos'
     })
     @Length(1,50,{

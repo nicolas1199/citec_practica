@@ -3,11 +3,11 @@ import { AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from "seque
 
 
 @Table({
-    tableName: 'Tipos de Documentos',
+    tableName: 'Area de Documentos',
     timestamps: true,
 })
 
-export class TiposDocumentos extends Model<TiposDocumentos>{
+export class AreasDocumentos extends Model<AreasDocumentos>{
 
     @ApiProperty({type:'integer',default:'1'})
     @PrimaryKey
@@ -16,12 +16,12 @@ export class TiposDocumentos extends Model<TiposDocumentos>{
         type: DataType.INTEGER,
         allowNull: false
     })
-    declare num_tipo: number
+    declare num_area: number
 
     @ApiProperty({type:'string',default:'AA'})
     @Column({
         type:DataType.STRING(50),
         allowNull: false
     })
-    declare nombre_tipo: string
+    declare cod_area: string
 }

@@ -2,7 +2,7 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class TiposDocumentosDto {
+export class AreasDocumentosDto {
     @IsString({ message: 'El nombre debe ser texto' })
     @IsNotEmpty({ message: 'El nombre esta vacio' })
     @ApiProperty({
@@ -12,4 +12,4 @@ export class TiposDocumentosDto {
     readonly nombre: string;
 }
 
-export class ObtenerPorIdTiposDto extends PickType(TiposDocumentosDto, ['nombre']) {}
+export class ObtenerPorIdAreasDto extends PickType(AreasDocumentosDto, ['nombre']) {}

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { AutoIncrement, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
-import { TiposDocumentos } from "./tipo-documento.model";
-import { TIPOS_DE_DOCUMENTO } from "src/common/constants/tipos-documentos.constants";
+import { AreasDocumentos } from "./area-documento.model";
+import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
 
 
 @Table({
@@ -48,16 +48,16 @@ export class Documentos extends Model<Documentos> {
     })
     declare direccion: string
 
-    @ApiProperty({ type: 'string', default: TIPOS_DE_DOCUMENTO.OPCION_1 })
-    @ForeignKey(()=> TiposDocumentos)
+    @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
+    @ForeignKey(()=> AreasDocumentos)
     @Column({
-        type: DataType.ENUM(...Object.values(TIPOS_DE_DOCUMENTO)),
+        type: DataType.ENUM(...Object.values(AREAS_DE_DOCUMENTO)),
         allowNull: false,
     })
-    declare tipo_documento: string;
+    declare area_documento: string;
 
-    @BelongsTo(()=> TiposDocumentos)
-    declare tipo: string
+    @BelongsTo(()=> AreasDocumentos)
+    declare area: string
 
 
     @ApiProperty({

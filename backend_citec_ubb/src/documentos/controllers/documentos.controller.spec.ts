@@ -6,7 +6,7 @@ import { getModelToken, SequelizeModule } from '@nestjs/sequelize';
 import Documentos from 'src/database/models/documentos.model';
 import { DocumentosModule } from '../documentos.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TiposDocumentos } from 'src/database/models/tipo-documento.model';
+import { AreasDocumentos } from 'src/database/models/area-documento.model';
 import { parse } from 'csv-parse/.';
 
 describe('DocumentosController', () => {
@@ -21,14 +21,14 @@ describe('DocumentosController', () => {
           storage: ':memory:',
           models: [
             Documentos,
-            TiposDocumentos,
+            AreasDocumentos,
           ],
           autoLoadModels: true,
           synchronize: true
         }),
         SequelizeModule.forFeature([
           Documentos,
-          TiposDocumentos,
+          AreasDocumentos,
         ]),
         DocumentosModule
       ],
@@ -50,13 +50,13 @@ describe('DocumentosController', () => {
     * Crear datos necesarios antes de las pruebas
     */
     const documentoModel = app.get(getModelToken(Documentos))
-    const tiposDocumentosModel = app.get(getModelToken(TiposDocumentos))
+    const areaDocumentosModel = app.get(getModelToken(AreasDocumentos))
 
     const documentos = fs.readFileSync(
       `${__dirname}/../../database/seeders/archives/documentos.csv`, 'utf-8'
     )
 
-    const tiposDocumentos = fs.readFileSync(
+    const areaDocumentos = fs.readFileSync(
       `${__dirname}/../../database/seeders/archives/tipo-documentos.csv`, 'utf-8'
     )
 
@@ -66,15 +66,15 @@ describe('DocumentosController', () => {
       skip_empty_lines: true,
     })
 
-    //insertar datos de tipos de documentos
-    const tiposDocumentosData = parse(tiposDocumentos, {
+    //insertar datos de areas de documentos
+    const areaDocumentosData = parse(areaDocumentos, {
       columns: true,
       skip_empty_lines: true,
     })
 
     await documentoModel.bulkCreate(documentosData)
 
-    await tiposDocumentosModel.bulkCreate(tiposDocumentosData)
+    await areaDocumentosModel.bulkCreate(areaDocumentosData)
 
     
     afterAll(async () => {
