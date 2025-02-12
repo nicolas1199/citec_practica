@@ -29,10 +29,7 @@ import { SubServiciosService } from './sub-servicios/services/sub-servicios.serv
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { PagosModule } from './pagos/pagos.module';
-import { DocumentosModule } from './documentos/documentos.module'; import { EncargadoEmpresaModule } from './encargadosEmpresas/encargadoEmpresa.module';
-import { EncargadosEmpresasController } from './encargadosEmpresas/controllers/encargadosEmpresas.controller';
-import { EncargadosEmpresasService } from './encargadosEmpresas/services/encargadosEmpresas.service';
-import { AreasModule } from './area-documentos/area-documentos.module';
+import { DocumentosModule } from './documentos/documentos.module'; import { AreasModule } from './area-documentos/area-documentos.module';
 import { DocumentosController } from './documentos/controllers/documentos.controller';
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
 import { DocumentosService } from './documentos/services/documentos.service';
@@ -66,7 +63,6 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         SubServiciosModule,
         PagosModule,
         DocumentosModule,
-        EncargadoEmpresaModule,
         AreasModule,
     ],
     controllers: [
@@ -76,7 +72,6 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
-        EncargadosEmpresasController,
         DocumentosController,
         AreasDocumentosController,
     ],
@@ -91,7 +86,6 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
-        EncargadosEmpresasService,
         DocumentosService,
         AreasDocumentosService,
     ],
