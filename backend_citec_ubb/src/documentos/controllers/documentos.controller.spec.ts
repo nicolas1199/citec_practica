@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DocumentosController } from './documentos.controller';
-import { ConfigModule } from '@nestjs/config';
-import * as fs from "fs";
-import { getModelToken, SequelizeModule } from '@nestjs/sequelize';
-import Documentos from 'src/database/models/documentos.model';
-import { DocumentosModule } from '../documentos.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+
+import { DocumentosModule } from '../documentos.module';
+import { getModelToken, SequelizeModule } from '@nestjs/sequelize';
+import { ConfigModule } from '@nestjs/config';
+import Documentos from 'src/database/models/documentos.model';
 import { AreasDocumentos } from 'src/database/models/area-documento.model';
-import { parse } from 'csv-parse/.';
+import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
+import { CrearDocumentoDto } from '../dto/documento.dto';
 
 describe('DocumentosController', () => {
   let app: INestApplication;
@@ -46,39 +46,30 @@ describe('DocumentosController', () => {
 
     await app.init();
 
-    /**
-    * Crear datos necesarios antes de las pruebas
-    */
-    const documentoModel = app.get(getModelToken(Documentos))
-    const areaDocumentosModel = app.get(getModelToken(AreasDocumentos))
-
-    const documentos = fs.readFileSync(
-      `${__dirname}/../../database/seeders/archives/documentos.csv`, 'utf-8'
-    )
-
-    const areaDocumentos = fs.readFileSync(
-      `${__dirname}/../../database/seeders/archives/tipo-documentos.csv`, 'utf-8'
-    )
-
-    //insertar datos de documentos
-    const documentosData = parse(documentos, {
-      columns: true,
-      skip_empty_lines: true,
-    })
-
-    //insertar datos de areas de documentos
-    const areaDocumentosData = parse(areaDocumentos, {
-      columns: true,
-      skip_empty_lines: true,
-    })
-
-    await documentoModel.bulkCreate(documentosData)
-
-    await areaDocumentosModel.bulkCreate(areaDocumentosData)
-
-    
-    afterAll(async () => {
-      await app.close();
-    });
+    const areasModel = app.get(getModelToken(AreasDocumentos));
+    const areas = Object.values(AREAS_DE_DOCUMENTO);
+    for (const area of areas) {
+      await areasModel.create({
+        nombre: area,
+      });
+    }
   });
+
+
+  afterAll(async () => {
+    await app.close();
+  });
+  /*
+    const ruta = '/documentos'
+    describe('crear', () => {
+      const crearDocumento: CrearDocumentoDto = {
+        nombre: 'aux',
+        cliente: 'UBB',
+        ejecutor: 'CITEC UBB',
+        dirreccion: 'CONCEPCION',
+        area_documento: 'AA',
+        fecha_inicio: new Date(2025, 1, 1, 12),
+        fecha_finalizacion: new Date(2025, 1, 1, 12)
+      }
+    })*/
 });

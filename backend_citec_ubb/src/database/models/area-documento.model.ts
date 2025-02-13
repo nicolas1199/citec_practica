@@ -7,9 +7,9 @@ import { AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from "seque
     timestamps: true,
 })
 
-export class AreasDocumentos extends Model<AreasDocumentos>{
+export class AreasDocumentos extends Model<AreasDocumentos> {
 
-    @ApiProperty({type:'integer',default:'1'})
+    @ApiProperty({ type: 'integer', default: '1' })
     @PrimaryKey
     @AutoIncrement
     @Column({
@@ -18,10 +18,11 @@ export class AreasDocumentos extends Model<AreasDocumentos>{
     })
     declare num_area: number
 
-    @ApiProperty({type:'string',default:'AA'})
+    @ApiProperty({ type: 'string', default: 'AA' })
     @Column({
-        type:DataType.STRING(50),
+        type: DataType.STRING(50),
         allowNull: false
     })
     declare cod_area: string
 }
+export default AreasDocumentos;

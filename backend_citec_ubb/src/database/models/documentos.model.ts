@@ -33,15 +33,15 @@ export class Documentos extends Model<Documentos> {
         allowNull: false,
     })
     declare ejecutor: string;
-    
-    @ApiProperty({type: 'string', default: 'S.A.'})
+
+    @ApiProperty({ type: 'string', default: 'S.A.' })
     @Column({
         type: DataType.STRING(100),
         allowNull: false
     })
     declare cliente: string
 
-    @ApiProperty({type: 'string', default: '...'})
+    @ApiProperty({ type: 'string', default: '...' })
     @Column({
         type: DataType.STRING(100),
         allowNull: false
@@ -49,21 +49,22 @@ export class Documentos extends Model<Documentos> {
     declare direccion: string
 
     @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
-    @ForeignKey(()=> AreasDocumentos)
+    @ForeignKey(() => AreasDocumentos)
     @Column({
         type: DataType.ENUM(...Object.values(AREAS_DE_DOCUMENTO)),
         allowNull: false,
     })
     declare area_documento: string;
 
-    @BelongsTo(()=> AreasDocumentos)
-    declare area: string
+    @BelongsTo(() => AreasDocumentos)
+    declare area: AreasDocumentos;
 
 
     @ApiProperty({
-        type:'string',
-        format:'date',
-        default: '2025-12-31 12:00:00'})
+        type: 'string',
+        format: 'date',
+        default: '2025-1-1 12:00:00'
+    })
     @Column({
         type: DataType.DATE,
         allowNull: false,
@@ -71,9 +72,10 @@ export class Documentos extends Model<Documentos> {
     declare fecha_inicio: Date;
 
     @ApiProperty({
-        type:'string',
-        format:'date',
-        default: '2025-12-31 12:00:00'})
+        type: 'string',
+        format: 'date',
+        default: '2025-1-1 12:00:00'
+    })
     @Column({
         type: DataType.DATE,
         allowNull: false,

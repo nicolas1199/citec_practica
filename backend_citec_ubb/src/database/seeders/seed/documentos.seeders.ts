@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import Documentos from "src/database/models/documentos.model";
+import { Documentos } from "../../models/documentos.model";
 import * as fs from 'fs';
 import { parse } from "csv-parse/sync";
 import * as path from "path";
@@ -15,6 +15,7 @@ export class DocumentosSeeder {
         if (!fs.existsSync(archivoDocumentosPath)) {
             throw new Error(`Archivo no encontrado: ${archivoDocumentosPath}`);
         }
+
         const documentosExistentes = await Documentos.count();
 
         if (documentosExistentes > 0) {

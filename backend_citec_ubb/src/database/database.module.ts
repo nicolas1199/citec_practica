@@ -59,8 +59,8 @@ import { AreasDocumentosSeeder } from './seeders/seed/area-documentos.seeders';
         PropuestasDeServiciosSubServicioSeeder,
         GruposDeServiciosSeeder,
         GrupoDeServiciosSubServiciosSeeder,
-        DocumentosSeeder,
         AreasDocumentosSeeder,
+        DocumentosSeeder,
     ],
     exports: [Sequelize],
 })
@@ -68,7 +68,7 @@ export class DatabaseModule implements OnApplicationBootstrap {
     constructor(
         private readonly seederService: SeederService,
         @Inject(config.KEY) private configService: ConfigType<typeof config>,
-    ) {}
+    ) { }
 
     async onApplicationBootstrap() {
         if (
