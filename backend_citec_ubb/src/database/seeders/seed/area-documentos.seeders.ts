@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import Documentos from "src/database/models/documentos.model";
+import { AreasDocumentos } from "src/database/models/area-documento.model";
 import * as fs from 'fs';
 import { parse } from "csv-parse/sync";
 import * as path from "path";
-import { AreasDocumentos } from "src/database/models/area-documento.model";
 
 @Injectable()
 export class AreasDocumentosSeeder {
@@ -16,6 +15,7 @@ export class AreasDocumentosSeeder {
         if (!fs.existsSync(archivoAreasDocumentosPath)) {
             throw new Error(`Archivo no encontrado: ${archivoAreasDocumentosPath}`);
         }
+
         const areaDocumentosExistentes = await AreasDocumentos.count();
 
         if (areaDocumentosExistentes > 0) {
@@ -30,7 +30,7 @@ export class AreasDocumentosSeeder {
             skip_empty_lines: true,
         });
 
-        await Documentos.bulkCreate(areaDocumentos, {
+        await AreasDocumentos.bulkCreate(areaDocumentos, {
             validate: true,
             returning: false,
         });
