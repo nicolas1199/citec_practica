@@ -1,13 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useData } from '../../components/AuthDataContext';
 
 function NotFound() {
-
-    //* Comprobar si el usuario esta autenticado
-    let isAuthenticated = false;
-
-    if(sessionStorage.getItem('token')){
-        isAuthenticated = true;
-    }
+    const { token } = useData();
+    const isAuthenticated = !!token;
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-blue-100 text-blue-900">
