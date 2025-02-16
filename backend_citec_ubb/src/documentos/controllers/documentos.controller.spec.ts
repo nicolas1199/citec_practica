@@ -10,56 +10,48 @@ import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constan
 import { CrearDocumentoDto } from '../dto/documento.dto';
 
 describe('DocumentosController', () => {
-  let app: INestApplication;
+    let app: INestApplication;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot(),
-        SequelizeModule.forRoot({
-          dialect: 'sqlite',
-          storage: ':memory:',
-          models: [
-            Documentos,
-            AreasDocumentos,
-          ],
-          autoLoadModels: true,
-          synchronize: true
-        }),
-        SequelizeModule.forFeature([
-          Documentos,
-          AreasDocumentos,
-        ]),
-        DocumentosModule
-      ],
+    beforeEach(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [
+                ConfigModule.forRoot(),
+                SequelizeModule.forRoot({
+                    dialect: 'sqlite',
+                    storage: ':memory:',
+                    models: [Documentos, AreasDocumentos],
+                    autoLoadModels: true,
+                    synchronize: true,
+                }),
+                SequelizeModule.forFeature([Documentos, AreasDocumentos]),
+                DocumentosModule,
+            ],
+        }).compile();
 
-    }).compile();
+        app = moduleFixture.createNestApplication();
 
-    app = moduleFixture.createNestApplication();
+        app.useGlobalPipes(
+            new ValidationPipe({
+                whitelist: true,
+                forbidNonWhitelisted: true,
+            }),
+        );
 
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
+        await app.init();
 
-    await app.init();
+        const areasModel = app.get(getModelToken(AreasDocumentos));
+        const areas = Object.values(AREAS_DE_DOCUMENTO);
+        for (const area of areas) {
+            await areasModel.create({
+                nombre: area,
+            });
+        }
+    });
 
-    const areasModel = app.get(getModelToken(AreasDocumentos));
-    const areas = Object.values(AREAS_DE_DOCUMENTO);
-    for (const area of areas) {
-      await areasModel.create({
-        nombre: area,
-      });
-    }
-  });
-
-
-  afterAll(async () => {
-    await app.close();
-  });
-  /*
+    afterAll(async () => {
+        await app.close();
+    });
+    /*
     const ruta = '/documentos'
     describe('crear', () => {
       const crearDocumento: CrearDocumentoDto = {

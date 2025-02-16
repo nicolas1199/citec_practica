@@ -12,4 +12,6 @@ export class AreasDocumentosDto {
     readonly nombre: string;
 }
 
-export class ObtenerPorIdAreasDto extends PickType(AreasDocumentosDto, ['nombre']) {}
+export class ObtenerPorIdAreasDto extends PickType(AreasDocumentosDto, [
+    'nombre',
+]) {}

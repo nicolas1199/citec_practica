@@ -15,8 +15,12 @@ export class AreasDocumentosService extends BaseServicesSimple {
         return retornoAreas;
     }
 
-    async obtenerPorId(clavePrimaria: ObtenerPorIdAreasDto): Promise<AreasDocumentos> {
-        const retornoTipo = await AreasDocumentos.findByPk(clavePrimaria.nombre);
+    async obtenerPorId(
+        clavePrimaria: ObtenerPorIdAreasDto,
+    ): Promise<AreasDocumentos> {
+        const retornoTipo = await AreasDocumentos.findByPk(
+            clavePrimaria.nombre,
+        );
 
         if (!retornoTipo) {
             throw new NotFoundException([

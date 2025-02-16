@@ -68,7 +68,7 @@ export class DatabaseModule implements OnApplicationBootstrap {
     constructor(
         private readonly seederService: SeederService,
         @Inject(config.KEY) private configService: ConfigType<typeof config>,
-    ) { }
+    ) {}
 
     async onApplicationBootstrap() {
         if (

@@ -1,6 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ApiRespuestaError, AreaDocumento } from '../../common/utils/decorators';
+import {
+    ApiRespuestaError,
+    AreaDocumento,
+} from '../../common/utils/decorators';
 import { ObtenerPorIdAreasDto } from '../dtos/area-documentos.dto';
 import { BaseControllersSimple } from '../../common/base/base-controllers-simple.class';
 import { AreasDocumentosService } from '../services/areas-documentos.service';

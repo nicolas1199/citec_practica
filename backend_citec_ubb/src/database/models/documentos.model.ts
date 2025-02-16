@@ -1,16 +1,23 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { AutoIncrement, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
-import { AreasDocumentos } from "./area-documento.model";
-import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
-
+import { ApiProperty } from '@nestjs/swagger';
+import {
+    AutoIncrement,
+    BelongsTo,
+    Column,
+    CreatedAt,
+    DataType,
+    ForeignKey,
+    Model,
+    PrimaryKey,
+    Table,
+} from 'sequelize-typescript';
+import { AreasDocumentos } from './area-documento.model';
+import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 
 @Table({
     tableName: 'Documentos',
     timestamps: true,
 })
-
 export class Documentos extends Model<Documentos> {
-
     @ApiProperty({ type: 'number', default: 1 })
     @PrimaryKey
     @AutoIncrement
@@ -37,16 +44,16 @@ export class Documentos extends Model<Documentos> {
     @ApiProperty({ type: 'string', default: 'S.A.' })
     @Column({
         type: DataType.STRING(100),
-        allowNull: false
+        allowNull: false,
     })
-    declare cliente: string
+    declare cliente: string;
 
     @ApiProperty({ type: 'string', default: '...' })
     @Column({
         type: DataType.STRING(100),
-        allowNull: false
+        allowNull: false,
     })
-    declare direccion: string
+    declare direccion: string;
 
     @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
     @ForeignKey(() => AreasDocumentos)
@@ -59,11 +66,10 @@ export class Documentos extends Model<Documentos> {
     @BelongsTo(() => AreasDocumentos)
     declare area: AreasDocumentos;
 
-
     @ApiProperty({
         type: 'string',
         format: 'date',
-        default: '2025-1-1 12:00:00'
+        default: '2025-1-1 12:00:00',
     })
     @Column({
         type: DataType.DATE,
@@ -74,7 +80,7 @@ export class Documentos extends Model<Documentos> {
     @ApiProperty({
         type: 'string',
         format: 'date',
-        default: '2025-1-1 12:00:00'
+        default: '2025-1-1 12:00:00',
     })
     @Column({
         type: DataType.DATE,
@@ -89,6 +95,5 @@ export class Documentos extends Model<Documentos> {
         allowNull: false,
     })
     declare fecha_emision: Date;
-
 }
-export default Documentos
+export default Documentos;
