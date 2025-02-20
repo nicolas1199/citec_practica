@@ -40,7 +40,7 @@ export class SeederService {
         private readonly grupoDeServiciosSubServiciosSeeder: GrupoDeServiciosSubServiciosSeeder,
         private readonly areaDocumentosSeeder: AreasDocumentosSeeder,
         private readonly documentosSeeder: DocumentosSeeder,
-    ) {}
+    ) { }
 
     async run() {
         await this.tiposSeeder.run();

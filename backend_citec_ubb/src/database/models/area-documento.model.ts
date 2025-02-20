@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
 
 
 @Table({
@@ -9,18 +10,10 @@ import { AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from "seque
 
 export class AreasDocumentos extends Model<AreasDocumentos> {
 
-    @ApiProperty({ type: 'integer', default: '1' })
+    @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
     @PrimaryKey
-    @AutoIncrement
     @Column({
-        type: DataType.INTEGER,
-        allowNull: false
-    })
-    declare num_area: number
-
-    @ApiProperty({ type: 'string', default: 'AA' })
-    @Column({
-        type: DataType.STRING(50),
+        type: DataType.ENUM(...Object.values(AREAS_DE_DOCUMENTO)),
         allowNull: false
     })
     declare cod_area: string
