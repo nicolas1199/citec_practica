@@ -36,7 +36,7 @@ export class Documentos extends Model<Documentos> {
 
     @ApiProperty({ type: 'string', default: 'CITEC UBB' })
     @Column({
-        type: DataType.STRING(50),
+        type: DataType.STRING(100),
         allowNull: false,
     })
     declare ejecutor: string;
@@ -48,7 +48,7 @@ export class Documentos extends Model<Documentos> {
     })
     declare cliente: string;
 
-    @ApiProperty({ type: 'string', default: '...' })
+    @ApiProperty({ type: 'string', default: 'Chile' })
     @Column({
         type: DataType.STRING(100),
         allowNull: false,

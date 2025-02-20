@@ -62,8 +62,8 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         GrupoDeServiciosModule,
         SubServiciosModule,
         PagosModule,
-        DocumentosModule,
         AreasModule,
+        DocumentosModule,
     ],
     controllers: [
         AppController,
@@ -72,8 +72,8 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
-        DocumentosController,
         AreasDocumentosController,
+        DocumentosController,
     ],
     providers: [
         AppService,
@@ -86,8 +86,8 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
-        DocumentosService,
         AreasDocumentosService,
+        DocumentosService,
     ],
 })
 export class AppModule { }
