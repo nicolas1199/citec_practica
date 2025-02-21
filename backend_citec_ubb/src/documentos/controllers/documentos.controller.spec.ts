@@ -263,11 +263,11 @@ describe('DocumentosController', () => {
             nueva_fecha_finalizacion: new Date(2025, 1, 12, 12),
             numero: 0,
 
-            nueva_validez_documento: '',
-            validez_documento: ''
+            nueva_validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3,
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2
         }
         it('actualizar documento correctamente', async () => {
-            const crearUsuario = await request(app.getHttpServer())
+            const crearDoc = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
                 .send(crearDocumento);
 
@@ -362,9 +362,32 @@ describe('DocumentosController', () => {
                 expect(res.body.error).toBe('Bad Request');
             }
         });
+        it('verificar transformación de datos: nombre, cliente, ejecutor, direccion y area en mayusculas', async () => {
+            const crearDoc = await request(app.getHttpServer())
+                .post(`${ruta}/crear`)
+                .send(crearDocumento);
+
+            const datosPrueba: any = {
+                ...actualizarDocumento,
+                nombre: 'aUx',
+                nuevo_nombre: 'aUx2',
+                direccion: 'ConcEpcioN',
+                nueva_direccion: 'ConcEpcioN2',
+                area_documento: 'aa',
+                nueva_area_documento: 'eC',
+            }
+            const res = await request(app.getHttpServer())
+                .post(`${ruta}/crear`)
+                .send(datosPrueba);
+            expect(res.status).toBe(200);
+            expect(res.body.nombre).toBe('AUX');
+            expect(res.body.direccion).toBe('CONCEPCION2');
+            expect(res.body.nombre_tipos).toBe('EC');
+        })
     })
 
     afterAll(async () => {
         await app.close();
     });
+
 });
