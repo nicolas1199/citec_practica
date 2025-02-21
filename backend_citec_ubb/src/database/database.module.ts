@@ -21,6 +21,7 @@ import { GruposDeServiciosSeeder } from './seeders/seed/grupos-de-servicios.seed
 import { GrupoDeServiciosSubServiciosSeeder } from './seeders/seed/grupo-de-servicio-sub-servicio.seeders';
 import { AreasDocumentosSeeder } from './seeders/seed/area-documentos.seeders';
 import { DocumentosSeeder } from './seeders/seed/documentos.seeders';
+import { ValidezDocumentosSeeder } from './seeders/seed/validez-de-documentos.seeders';
 @Global()
 @Module({
     providers: [
@@ -60,6 +61,7 @@ import { DocumentosSeeder } from './seeders/seed/documentos.seeders';
         GruposDeServiciosSeeder,
         GrupoDeServiciosSubServiciosSeeder,
         AreasDocumentosSeeder,
+        ValidezDocumentosSeeder,
         DocumentosSeeder,
     ],
     exports: [Sequelize],

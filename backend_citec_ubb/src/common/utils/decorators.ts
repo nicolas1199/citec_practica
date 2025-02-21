@@ -3,6 +3,7 @@ import { TiposDeUsuario } from '../constants/tipos-usuarios.constants';
 import { ApiResponse } from '@nestjs/swagger';
 import { ErrorRespuestaDto } from '../dtos/error-respuesta.dto';
 import { AreaDeDocumento } from '../constants/area-documentos.constants';
+import { ValidezDeDocumento } from '../constants/validez-de-documento.constants';
 export const Public = () => SetMetadata('isPublic', true);
 
 export const TIPOS_DE_USUARIO_KEY = 'tiposDeUsuario';
@@ -12,6 +13,10 @@ export const Tipo = (...tiposDeUsuario: TiposDeUsuario[]) =>
 export const AREAS_DE_DOCUMENTO_KEY = 'areasDeDocumento';
 export const AreaDocumento = (...areasDeDocumento: AreaDeDocumento[]) =>
     SetMetadata(AREAS_DE_DOCUMENTO_KEY, areasDeDocumento);
+
+export const VALIDEZ_DE_DOCUMENTO_KEY = 'validezDeDocumento';
+export const ValidezDocumento = (...validezDeDocumento: ValidezDeDocumento[]) =>
+    SetMetadata(VALIDEZ_DE_DOCUMENTO_KEY, validezDeDocumento);
 
 export function ApiRespuestaError() {
     return applyDecorators(
