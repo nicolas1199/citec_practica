@@ -8,6 +8,7 @@ import Documentos from 'src/database/models/documentos.model';
 import { AreasDocumentos } from 'src/database/models/area-documento.model';
 import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 import { CrearDocumentoDto } from '../dto/documento.dto';
+import { sync } from 'rimraf';
 
 describe('DocumentosController', () => {
     let app: INestApplication;
@@ -51,17 +52,15 @@ describe('DocumentosController', () => {
     afterAll(async () => {
         await app.close();
     });
-    /*
+
     const ruta = '/documentos'
-    describe('crear', () => {
-      const crearDocumento: CrearDocumentoDto = {
-        nombre: 'aux',
-        cliente: 'UBB',
-        ejecutor: 'CITEC UBB',
-        dirreccion: 'CONCEPCION',
-        area_documento: 'AA',
-        fecha_inicio: new Date(2025, 1, 1, 12),
-        fecha_finalizacion: new Date(2025, 1, 1, 12)
-      }
-    })*/
+    describe('Areas', () => {
+
+        it('Deben existir al menos 2 areas', async () => {
+            const areasModel = app.get(getModelToken(AreasDocumentos));
+            const count = await areasModel.count();
+            expect(count).toBeGreaterThanOrEqual(2);
+        });
+
+    })
 });
