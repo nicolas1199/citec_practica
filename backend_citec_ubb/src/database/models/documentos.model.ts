@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 import {
     AutoIncrement,
     BelongsTo,
@@ -9,12 +9,16 @@ import {
     Model,
     PrimaryKey,
     Table,
-} from 'sequelize-typescript';
-import { AreasDocumentos } from './area-documento.model';
-import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
+    UpdatedAt
+} from "sequelize-typescript";
+import { AreasDocumentos } from "./area-documento.model";
+import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
+import ValidezDocumentos from "./validez-documento.model";
+import { VALIDEZ_DE_DOCUMENTO } from "src/common/constants/validez-de-documento.constants";
+
 
 @Table({
-    tableName: 'Documentos',
+    tableName: 'documentos',
     timestamps: true,
 })
 export class Documentos extends Model<Documentos> {
@@ -66,22 +70,14 @@ export class Documentos extends Model<Documentos> {
     @BelongsTo(() => AreasDocumentos)
     declare area: AreasDocumentos;
 
-    @ApiProperty({
-        type: 'string',
-        format: 'date',
-        default: '2025-1-1 12:00:00',
-    })
+    @ApiProperty({ type: 'string', default: '1/1/2025' })
     @Column({
         type: DataType.DATE,
         allowNull: false,
     })
     declare fecha_inicio: Date;
 
-    @ApiProperty({
-        type: 'string',
-        format: 'date',
-        default: '2025-1-1 12:00:00',
-    })
+    @ApiProperty({ type: 'string', default: '1/1/2025' })
     @Column({
         type: DataType.DATE,
         allowNull: false,
@@ -95,5 +91,25 @@ export class Documentos extends Model<Documentos> {
         allowNull: false,
     })
     declare fecha_emision: Date;
+
+    @ApiProperty()
+    @UpdatedAt
+    @Column({
+        type: DataType.DATE,
+        allowNull: false,
+    })
+    declare updatedAt: Date;
+
+    @ApiProperty({ type: 'string', default: VALIDEZ_DE_DOCUMENTO.OPCION_3 })
+    @ForeignKey(() => ValidezDocumentos)
+    @Column({
+        type: DataType.ENUM(...Object.values(VALIDEZ_DE_DOCUMENTO)),
+        allowNull: false,
+    })
+    declare validez_documento: string;
+
+    @BelongsTo(() => ValidezDocumentos)
+    declare validez: ValidezDocumentos;
+
 }
 export default Documentos;

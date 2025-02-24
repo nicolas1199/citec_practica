@@ -4,7 +4,7 @@ import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constan
 
 
 @Table({
-    tableName: 'Area de Documentos',
+    tableName: 'area_de_documentos',
     timestamps: true,
 })
 export class AreasDocumentos extends Model<AreasDocumentos> {

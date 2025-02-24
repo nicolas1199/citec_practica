@@ -19,6 +19,7 @@ import { GrupoDeServiciosSubServiciosSeeder } from '../seed/grupo-de-servicio-su
 import { EnsayosSeeder } from '../seed/ensayos.seeders';
 import { AreasDocumentosSeeder } from '../seed/area-documentos.seeders';
 import { DocumentosSeeder } from '../seed/documentos.seeders';
+import { ValidezDocumentosSeeder } from '../seed/validez-de-documentos.seeders';
 
 @Injectable()
 export class SeederService {
@@ -41,6 +42,7 @@ export class SeederService {
         private readonly grupoDeServiciosSubServiciosSeeder: GrupoDeServiciosSubServiciosSeeder,
         private readonly EnsayosSeeders: EnsayosSeeder,
         private readonly areaDocumentosSeeder: AreasDocumentosSeeder,
+        private readonly validezDocumentosSeeder: ValidezDocumentosSeeder,
         private readonly documentosSeeder: DocumentosSeeder,
     ) { }
 
@@ -62,6 +64,7 @@ export class SeederService {
         await this.grupoDeServiciosSubServiciosSeeder.run();
         await this.EnsayosSeeders.run();
         await this.areaDocumentosSeeder.run();
+        await this.validezDocumentosSeeder.run();
         await this.documentosSeeder.run();
     }
 }

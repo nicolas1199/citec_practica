@@ -37,6 +37,7 @@ import { DocumentosController } from './documentos/controllers/documentos.contro
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
 import { DocumentosService } from './documentos/services/documentos.service';
 import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
+import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-documento.module';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -68,6 +69,7 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         EnsayosModule,
         PagosModule,
         AreasModule,
+        ValidezDeDocumentoModule,
         DocumentosModule,
     ],
     controllers: [
