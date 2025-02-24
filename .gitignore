@@ -27,6 +27,10 @@ src/*.env
 
 
 # compiled output
+/dist
+**/*.js
+**/*.js.map
+**/*.d.ts
 /node_modules
 
 # Logs
