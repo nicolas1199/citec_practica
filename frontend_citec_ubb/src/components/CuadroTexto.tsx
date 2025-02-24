@@ -4,6 +4,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import TextAlign from '@tiptap/extension-text-align';
 import {
     FaAlignCenter,
     FaAlignLeft,
@@ -38,6 +39,37 @@ const CustomImage = Image.extend({
     },
 });
 
+const extensions = [
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle.configure({ types: [ListItem.name] }),
+    StarterKit.configure({
+        heading: {
+            levels: [1],
+            HTMLAttributes: {
+                class: 'text-2xl font-bold my-4',
+            },
+        },
+        bulletList: {
+            HTMLAttributes: {
+                class: 'list-disc pl-8 my-2',
+            },
+        },
+        orderedList: {
+            HTMLAttributes: {
+                class: 'list-decimal pl-8 my-2',
+            },
+        },
+    }),
+    CustomImage.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+            class: '"mx-auto block my-4',
+        },
+    }),
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+];
+
 const MenuBar = () => {
     const { editor } = useCurrentEditor();
 
@@ -45,15 +77,32 @@ const MenuBar = () => {
         return null;
     }
 
-    const updateImageAlignment = (alignmentClass: string) => {
-        if (!editor || !editor.isActive('image')) return;
+    const handleAlignment = (alignment: 'left' | 'center' | 'right') => {
+        if (editor?.isActive('image')) {
+            const currentClass = editor.getAttributes('image').class || '';
+            let newClass = '';
 
-        const currentClass = editor.getAttributes('image').class || '';
-        const newClass = `block my-4 ${alignmentClass}`;
+            switch (alignment) {
+                case 'left':
+                    newClass = 'block my-4 ml-0 mr-auto';
+                    break;
+                case 'center':
+                    newClass = 'block my-4 mx-auto';
+                    break;
+                case 'right':
+                    newClass = 'block my-4 ml-auto mr-0';
+                    break;
+                default:
+                    newClass = 'block my-4 mx-auto';
+            }
 
-        editor.commands.updateAttributes('image', {
-            class: newClass !== currentClass ? newClass : 'block my-4 mx-auto',
-        });
+            editor.commands.updateAttributes('image', {
+                class:
+                    newClass !== currentClass ? newClass : 'block my-4 mx-auto',
+            });
+        } else {
+            editor.chain().focus().setTextAlign(alignment).run();
+        }
     };
 
     const getAlignmentClass = (position: string) => {
@@ -109,12 +158,13 @@ const MenuBar = () => {
                     <FaStrikethrough />
                 </button>
                 <button
+                    type="button"
                     onClick={() =>
                         editor.chain().focus().toggleHeading({ level: 1 }).run()
                     }
                     className={`p-2 hover:bg-gray-100 rounded transition-colors ${
                         editor.isActive('heading', { level: 1 })
-                            ? 'is-active'
+                            ? 'bg-gray-200'
                             : ''
                     }`}
                 >
@@ -134,6 +184,7 @@ const MenuBar = () => {
                 </button>
 
                 <button
+                    type="button"
                     onClick={() =>
                         editor.chain().focus().toggleOrderedList().run()
                     }
@@ -218,21 +269,21 @@ const MenuBar = () => {
             <div className="flex gap-1  pl-2 ml- mb-2">
                 <button
                     type="button"
-                    onClick={() => updateImageAlignment('ml-0 mr-auto')}
+                    onClick={() => handleAlignment('left')}
                     className={getAlignmentClass('left')}
                 >
                     <FaAlignLeft />
                 </button>
                 <button
                     type="button"
-                    onClick={() => updateImageAlignment('mx-auto')}
+                    onClick={() => handleAlignment('center')}
                     className={getAlignmentClass('center')}
                 >
                     <FaAlignCenter />
                 </button>
                 <button
                     type="button"
-                    onClick={() => updateImageAlignment('ml-auto mr-0')}
+                    onClick={() => handleAlignment('right')}
                     className={getAlignmentClass('right')}
                 >
                     <FaAlignRight />
@@ -241,28 +292,6 @@ const MenuBar = () => {
         </div>
     );
 };
-
-const extensions = [
-    Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    TextStyle.configure({ types: [ListItem.name] }),
-    StarterKit.configure({
-        bulletList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-        orderedList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-    }),
-    CustomImage.configure({
-        inline: true,
-        allowBase64: true,
-        HTMLAttributes: {
-            class: '"mx-auto block my-4',
-        },
-    }),
-];
 
 const CuadroTexto: React.FC<CuadroTextoProps> = ({
     onContentChange,
