@@ -121,6 +121,23 @@ export interface PropuestaServicio {
     adjudicado: string;
 }
 
+export interface Ensayo {
+    id: number;
+    nombre: string;
+    id_servicio: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type CrearEnsayo = {
+    nombre: Ensayo['nombre'];
+    id_servicio: Ensayo['id_servicio']
+}
+
+export type ActualizarEnsayo = CrearEnsayo & {
+    id: Ensayo['id']
+};
+
 export type CrearPropuestasDeServiciosDto = {
     año: PropuestaServicio['año'];
     pago: PropuestaServicio['pago'];

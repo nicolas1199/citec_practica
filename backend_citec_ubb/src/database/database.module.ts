@@ -19,6 +19,7 @@ import { PropuestasDeServiciosSubServicioSeeder } from './seeders/seed/propuesta
 import GruposDeServicios from './models/grupos-de-servicios.model';
 import { GruposDeServiciosSeeder } from './seeders/seed/grupos-de-servicios.seeders';
 import { GrupoDeServiciosSubServiciosSeeder } from './seeders/seed/grupo-de-servicio-sub-servicio.seeders';
+import { EnsayosSeeder } from './seeders/seed/ensayos.seeders';
 import { AreasDocumentosSeeder } from './seeders/seed/area-documentos.seeders';
 import { DocumentosSeeder } from './seeders/seed/documentos.seeders';
 @Global()
@@ -59,6 +60,7 @@ import { DocumentosSeeder } from './seeders/seed/documentos.seeders';
         PropuestasDeServiciosSubServicioSeeder,
         GruposDeServiciosSeeder,
         GrupoDeServiciosSubServiciosSeeder,
+        EnsayosSeeder,
         AreasDocumentosSeeder,
         DocumentosSeeder,
     ],

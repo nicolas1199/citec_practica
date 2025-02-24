@@ -28,7 +28,10 @@ import { GrupoDeServiciosModule } from './grupo-de-servicios/grupo-de-servicios.
 import { SubServiciosService } from './sub-servicios/services/sub-servicios.service';
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
+import { EnsayosController } from './ensayos/controllers/ensayo.controller';
 import { PagosModule } from './pagos/pagos.module';
+import { EnsayosModule } from './ensayos/ensayo.module';
+import { EnsayosService } from './ensayos/services/ensayo.service';
 import { DocumentosModule } from './documentos/documentos.module'; import { AreasModule } from './area-documentos/area-documentos.module';
 import { DocumentosController } from './documentos/controllers/documentos.controller';
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
@@ -50,6 +53,7 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
                 DESARROLLADOR_PASS: Joi.string().required(),
             }),
         }),
+        
         DatabaseModule,
         UsuariosModule,
         AutenticacionModule,
@@ -61,6 +65,7 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         TiposModule,
         GrupoDeServiciosModule,
         SubServiciosModule,
+        EnsayosModule,
         PagosModule,
         AreasModule,
         DocumentosModule,
@@ -72,6 +77,7 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
+        EnsayosController,
         AreasDocumentosController,
         DocumentosController,
     ],
@@ -86,6 +92,7 @@ import { AreasDocumentosService } from './area-documentos/services/areas-documen
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
+        EnsayosService,
         AreasDocumentosService,
         DocumentosService,
     ],

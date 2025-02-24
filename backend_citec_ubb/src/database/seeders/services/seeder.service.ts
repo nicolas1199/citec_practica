@@ -16,6 +16,7 @@ import { SubServiciosSeeder } from '../seed/sub-servicios.sedders';
 import { PropuestasDeServiciosSubServicioSeeder } from '../seed/propuestas_de_servicios_sub_servicio.seeders';
 import { GruposDeServiciosSeeder } from '../seed/grupos-de-servicios.seeders';
 import { GrupoDeServiciosSubServiciosSeeder } from '../seed/grupo-de-servicio-sub-servicio.seeders';
+import { EnsayosSeeder } from '../seed/ensayos.seeders';
 import { AreasDocumentosSeeder } from '../seed/area-documentos.seeders';
 import { DocumentosSeeder } from '../seed/documentos.seeders';
 
@@ -38,6 +39,7 @@ export class SeederService {
         private readonly propuestasDeServiciosSubServicioSeeder: PropuestasDeServiciosSubServicioSeeder,
         private readonly gruposDeServiciosSeeder: GruposDeServiciosSeeder,
         private readonly grupoDeServiciosSubServiciosSeeder: GrupoDeServiciosSubServiciosSeeder,
+        private readonly EnsayosSeeders: EnsayosSeeder,
         private readonly areaDocumentosSeeder: AreasDocumentosSeeder,
         private readonly documentosSeeder: DocumentosSeeder,
     ) { }
@@ -58,6 +60,7 @@ export class SeederService {
         await this.propuestasDeServiciosSubServicioSeeder.run();
         await this.gruposDeServiciosSeeder.run();
         await this.grupoDeServiciosSubServiciosSeeder.run();
+        await this.EnsayosSeeders.run();
         await this.areaDocumentosSeeder.run();
         await this.documentosSeeder.run();
     }

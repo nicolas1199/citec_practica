@@ -13,6 +13,7 @@ interface DataAuthContextType {
     comunas: any[] | null;
     giros: any[] | null;
     categorias: any[] | null;
+    ensayos: any[] | null; // Agregado ensayos
 
     token: string | null;
     isAuthenticated: boolean;
@@ -30,9 +31,7 @@ interface DataAuthContextType {
     logout: () => void;
 }
 
-const DataAuthContext = createContext<DataAuthContextType | undefined>(
-    undefined,
-);
+const DataAuthContext = createContext<DataAuthContextType | undefined>(undefined);
 
 export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
     children,
@@ -42,6 +41,7 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
     const [comunas, setComunas] = useState<any[] | null>(null);
     const [giros, setGiros] = useState<any[] | null>(null);
     const [categorias, setCategorias] = useState<any[] | null>(null);
+    const [ensayos, setEnsayos] = useState<any[] | null>(null); // Estado para los ensayos
 
     const [token, setToken] = useState<string | null>(() => {
         return sessionStorage.getItem('token');
@@ -70,6 +70,7 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
                 comunasRes,
                 girosRes,
                 categoriasRes,
+                ensayosRes, // Nueva solicitud para los ensayos
             ] = await Promise.all([
                 axios.get(
                     `${import.meta.env.VITE_BACKEND_URL}/${import.meta.env.VITE_API_KEY}/region/get-all`,
@@ -86,6 +87,9 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
                 axios.get(
                     `${import.meta.env.VITE_BACKEND_URL}/${import.meta.env.VITE_API_KEY}/category/get-all`,
                 ),
+                axios.get(
+                    `${import.meta.env.VITE_BACKEND_URL}/${import.meta.env.VITE_API_KEY}/ensayo/get-all`, // Nueva URL de ensayos
+                ),
             ]);
 
             const regionesData = regionesRes.data.response;
@@ -93,12 +97,14 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
             const comunasData = comunasRes.data.response;
             const girosData = girosRes.data.response;
             const categoriasData = categoriasRes.data.response;
+            const ensayosData = ensayosRes.data.response; // Nueva respuesta para ensayos
 
             setRegiones(regionesData);
             setProvincias(provinciasData);
             setComunas(comunasData);
             setGiros(girosData);
             setCategorias(categoriasData);
+            setEnsayos(ensayosData); // Almacena los ensayos
 
             // Almacena los datos en sessionStorage
             sessionStorage.setItem('regiones', JSON.stringify(regionesData));
@@ -108,10 +114,8 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
             );
             sessionStorage.setItem('comunas', JSON.stringify(comunasData));
             sessionStorage.setItem('giros', JSON.stringify(girosData));
-            sessionStorage.setItem(
-                'categorias',
-                JSON.stringify(categoriasData),
-            );
+            sessionStorage.setItem('categorias', JSON.stringify(categoriasData));
+            sessionStorage.setItem('ensayos', JSON.stringify(ensayosData)); // Almacena los ensayos
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -170,12 +174,14 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
 
     // Cargar datos desde sessionStorage cuando se monta el componente
     useEffect(() => {
+        const ensayosData = sessionStorage.getItem('ensayos');
         const regionesData = sessionStorage.getItem('regiones');
         const provinciasData = sessionStorage.getItem('provincias');
         const comunasData = sessionStorage.getItem('comunas');
         const girosData = sessionStorage.getItem('giros');
         const categoriasData = sessionStorage.getItem('categorias');
 
+        if (ensayosData) setEnsayos(JSON.parse(ensayosData)); // Cargar ensayos
         if (regionesData) setRegiones(JSON.parse(regionesData));
         if (provinciasData) setProvincias(JSON.parse(provinciasData));
         if (comunasData) setComunas(JSON.parse(comunasData));
@@ -191,6 +197,7 @@ export const DataAuthProvider: React.FC<{ children: ReactNode }> = ({
                 comunas,
                 giros,
                 categorias,
+                ensayos, // Incluir ensayos en el contexto
                 token,
                 isAuthenticated,
                 userType,
