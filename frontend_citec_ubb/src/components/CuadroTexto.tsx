@@ -1,10 +1,11 @@
+import { EditorProvider, useCurrentEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
 import TextStyle from '@tiptap/extension-text-style';
-import { EditorProvider, useCurrentEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
+import UnderLine from '@tiptap/extension-underline';
 import {
     FaAlignCenter,
     FaAlignLeft,
@@ -18,6 +19,7 @@ import {
     FaQuoteLeft,
     FaRulerHorizontal,
     FaStrikethrough,
+    FaUnderline,
     FaUndo,
 } from 'react-icons/fa';
 
@@ -40,8 +42,6 @@ const CustomImage = Image.extend({
 });
 
 const extensions = [
-    Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    TextStyle.configure({ types: [ListItem.name] }),
     StarterKit.configure({
         heading: {
             levels: [1],
@@ -60,6 +60,10 @@ const extensions = [
             },
         },
     }),
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle.configure({ types: [ListItem.name] }),
+    ListItem.configure({ types: [TextStyle.name] }),
+    UnderLine.configure({ types: [TextStyle.name] }),
     CustomImage.configure({
         inline: true,
         allowBase64: true,
@@ -143,6 +147,22 @@ const MenuBar = () => {
                     `}
                 >
                     <FaItalic />
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() =>
+                        editor.chain().focus().toggleUnderline().run()
+                    }
+                    disabled={
+                        !editor.can().chain().focus().toggleUnderline().run()
+                    }
+                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                        editor.isActive('underline') ? 'bg-gray-200' : ''
+                    }
+                    `}
+                >
+                    <FaUnderline />
                 </button>
                 <button
                     type="button"
