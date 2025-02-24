@@ -72,5 +72,3 @@ logs/*
 /logs
 logs.txt
 
-# seeders
-src/database/seeders/archives/*
