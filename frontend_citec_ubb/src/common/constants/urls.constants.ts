@@ -46,6 +46,14 @@ export const ENDPOINTS = {
         OBTENER_TODOS: 'sub-servicios/obtener-todos',
         OBTENER_POR_ID: 'sub-servicios/obtener-por-id',
     },
+    ENSAYOS: {
+        CREAR: 'ensayos/crear',
+        ACTUALIZAR: 'ensayos/actualizar',
+        OBTENER_POR_ID: 'ensayos/obtener-por-id',
+        OBTENER_TODOS: 'ensayos/obtener-todos',
+        OBTENER_TODOS_ELIMINADOS: 'ensayos/obtener-todos-eliminados',
+        ELIMINAR: 'ensayos/eliminar',
+    },
     PROPUESTAS_DE_SERVICIOS: {
         CREAR: 'propuestas-de-servicios/crear',
         ACTUALIZAR: 'propuestas-de-servicios/actualizar',

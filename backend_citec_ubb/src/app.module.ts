@@ -28,7 +28,10 @@ import { GrupoDeServiciosModule } from './grupo-de-servicios/grupo-de-servicios.
 import { SubServiciosService } from './sub-servicios/services/sub-servicios.service';
 import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
+import { EnsayosController } from './ensayos/controllers/ensayo.controller';
 import { PagosModule } from './pagos/pagos.module';
+import { EnsayosModule } from './ensayos/ensayo.module';
+import { EnsayosService } from './ensayos/services/ensayo.service';
 
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
@@ -46,6 +49,7 @@ import { PagosModule } from './pagos/pagos.module';
                 DESARROLLADOR_PASS: Joi.string().required(),
             }),
         }),
+        
         DatabaseModule,
         UsuariosModule,
         AutenticacionModule,
@@ -57,6 +61,7 @@ import { PagosModule } from './pagos/pagos.module';
         TiposModule,
         GrupoDeServiciosModule,
         SubServiciosModule,
+        EnsayosModule,
         PagosModule,
     ],
     controllers: [
@@ -66,6 +71,7 @@ import { PagosModule } from './pagos/pagos.module';
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
+        EnsayosController,
     ],
     providers: [
         AppService,
@@ -78,6 +84,11 @@ import { PagosModule } from './pagos/pagos.module';
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
+        EnsayosService,
     ],
 })
-export class AppModule {}
+export class AppModule {
+    constructor() {
+        console.log('🛠️ AppModule ha sido cargado correctamente');
+    }
+}

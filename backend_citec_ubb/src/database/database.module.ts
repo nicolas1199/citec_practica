@@ -18,6 +18,7 @@ import { SubServiciosSeeder } from './seeders/seed/sub-servicios.sedders';
 import { PropuestasDeServiciosSubServicioSeeder } from './seeders/seed/propuestas_de_servicios_sub_servicio.seeders';
 import { GruposDeServiciosSeeder } from './seeders/seed/grupos-de-servicios.seeders';
 import { GrupoDeServiciosSubServiciosSeeder } from './seeders/seed/grupo-de-servicio-sub-servicio.seeders';
+import { EnsayosSeeder } from './seeders/seed/ensayos.seeders';
 @Global()
 @Module({
     providers: [
@@ -56,6 +57,7 @@ import { GrupoDeServiciosSubServiciosSeeder } from './seeders/seed/grupo-de-serv
         PropuestasDeServiciosSubServicioSeeder,
         GruposDeServiciosSeeder,
         GrupoDeServiciosSubServiciosSeeder,
+        EnsayosSeeder,
     ],
     exports: [Sequelize],
 })

@@ -14,7 +14,9 @@ import TablaEmpresas from './components/TablaEmpresas';
 import CrearOrdenTrabajo from './pages/private/Orden de trabajo/CrearOrdenTrabajo';
 import EditarOrdenTrabajo from './pages/private/Orden de trabajo/EditarOrdenTrabajo';
 import TablaOrdenTrabajo from './components/TablaOrdenTrabajo';
-
+import CrearEnsayo from './pages/private/Servicios/CrearEnsayo';
+import EditarEnsayo from './pages/private/Servicios/EditarEnsayo';
+import TablaEnsayos from './components/TablaEnsayos';
 import CrearPropuesta from './pages/private/Servicios/CrearPropuesta';
 import TablaPropuestas from './components/TablaPropuestas';
 import EditarPropuesta from './pages/private/Servicios/EditarPropuesta';
@@ -62,6 +64,14 @@ const App: React.FC = () => {
                                     <Route 
                                         path="editar/:id"
                                         element={<EditarPropuesta />}
+                                    />                                  
+                                </Route>
+                                <Route path="ensayos">
+                                    <Route index element={<TablaEnsayos/>} />
+                                    <Route path="crear" element={<CrearEnsayo/>} />
+                                    <Route 
+                                        path="editar/:id"
+                                        element={<EditarEnsayo/>}
                                     />
                                 </Route>
 

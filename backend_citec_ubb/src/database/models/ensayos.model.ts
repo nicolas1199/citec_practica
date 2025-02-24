@@ -11,8 +11,6 @@ import {
 } from 'sequelize-typescript';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { ESTADOS } from '../../common/constants/estados.constants';
-import { ADJUDICADO } from '../../common/constants/adjudicados.constants';
 import { Transaction } from 'sequelize';
 
 @Table({
@@ -56,20 +54,6 @@ export class Ensayos extends Model<Ensayos> {
         allowNull: false,
     })
     declare fecha: Date;
-
-    @ApiProperty({ type: 'string', default: ESTADOS.OPCION_1 })
-    @Column({
-        type: DataType.ENUM(ESTADOS.OPCION_1, ESTADOS.OPCION_2),
-        allowNull: false,
-    })
-    declare estado: string;
-
-    @ApiProperty({ type: 'string', default: ADJUDICADO.OPCION_1 })
-    @Column({
-        type: DataType.ENUM(ADJUDICADO.OPCION_1, ADJUDICADO.OPCION_2),
-        allowNull: false,
-    })
-    declare adjudicado: string;
 
     @ApiProperty()
     @CreatedAt
