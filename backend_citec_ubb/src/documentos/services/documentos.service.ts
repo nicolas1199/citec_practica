@@ -80,4 +80,10 @@ export class DocumentosService extends BaseServices {
 
     return documentoEliminado;
   }
+  async obtenerTodosEliminados(): Promise<Documentos[]> {
+    const documentos = await Documentos.findAll({
+      where: { validez: VALIDEZ_DE_DOCUMENTO.OPCION_2 },
+    });
+    return documentos;
+  }
 }

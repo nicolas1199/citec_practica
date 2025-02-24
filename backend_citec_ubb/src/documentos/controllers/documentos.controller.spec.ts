@@ -7,7 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import Documentos from 'src/database/models/documentos.model';
 import { AreasDocumentos } from 'src/database/models/area-documento.model';
 import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
-import { ActualizarDocumentoDto, CrearDocumentoDto } from '../dto/documento.dto';
+import {
+    ActualizarDocumentoDto,
+    CrearDocumentoDto,
+    obtenerDocumentoPorIdDto
+} from '../dto/documento.dto';
 import { VALIDEZ_DE_DOCUMENTO } from 'src/common/constants/validez-de-documento.constants';
 import ValidezDocumentos from 'src/database/models/validez-documento.model';
 
@@ -98,7 +102,7 @@ describe('DocumentosController', () => {
         it('Crear documento correctamente', async () => {
             const res = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
-                .send(CrearDocumentoDto);
+                .send(crearDocumento);
 
             expect(res.status).toBe(201);
             expect(res.body).toMatchObject({
@@ -272,7 +276,7 @@ describe('DocumentosController', () => {
                 .send(crearDocumento);
 
             const res = await request(app.getHttpServer())
-                .put(`${ruta}/actualizar`)
+                .patch(`${ruta}/actualizar`)
                 .send(actualizarDocumento);
 
             expect(res.status).toBe(200);
@@ -288,7 +292,7 @@ describe('DocumentosController', () => {
         });
         it('fallar si el documento que intenta actualizar no existe', async () => {
             const res = await request(app.getHttpServer())
-                .put(`${ruta}/actualizar`)
+                .patch(`${ruta}/actualizar`)
                 .send(actualizarDocumento);
 
             expect(res.status).toBe(404);
@@ -354,7 +358,7 @@ describe('DocumentosController', () => {
 
             for (const casoError of camposAProbar) {
                 const res = await request(app.getHttpServer())
-                    .put(`${ruta}/actualizar`)
+                    .patch(`${ruta}/actualizar`)
                     .send(casoError);
                 expect(res.status).toBe(400);
                 expect(Array.isArray(res.body.message)).toBe(true);
@@ -385,6 +389,169 @@ describe('DocumentosController', () => {
             expect(res.body.nombre_tipos).toBe('EC');
         })
     })
+
+    describe('obtener-por-su-numero', () => {
+        const crearDocumento: CrearDocumentoDto = {
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: AREAS_DE_DOCUMENTO.OPCION_1,
+            fecha_inicio: new Date(2025, 1, 1, 12),
+            fecha_finalizacion: new Date(2025, 1, 1, 12),
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3
+        }
+        const obtenerPorNumero: obtenerDocumentoPorIdDto = {
+            numero: 2,
+        }
+        const documento = {
+            numero: 2,
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: expect.any(AREAS_DE_DOCUMENTO),
+            fecha_inicio: expect.any(Date),
+            fecha_finalizacion: expect.any(Date),
+            fecha_emision: expect.any(Date),
+            validez_documento: expect.any(VALIDEZ_DE_DOCUMENTO),
+        }
+        it('Obtener documento correctamente', async () => {
+            const crearDoc = await request(app.getHttpServer())
+                .post(`${ruta}/crear`)
+                .send(crearDocumento);
+            const res = await request(app.getHttpServer())
+                .get(`${ruta}/obtener-por-numero/${obtenerPorNumero.numero}`)
+
+            expect(res.status).toBe(200);
+            expect(res.body).toMatchObject(documento);
+
+            expect(res.body).toHaveProperty('numero');
+            expect(res.body).toHaveProperty('nombre');
+            expect(res.body).toHaveProperty('cliente');
+            expect(res.body).toHaveProperty('ejecutor');
+            expect(res.body).toHaveProperty('area_documento');
+            expect(res.body).toHaveProperty('fecha_inicio');
+            expect(res.body).toHaveProperty('fecha_finalizacion');
+            expect(res.body).toHaveProperty('fecha_emision');
+            expect(res.body).toHaveProperty('validez_documento');
+        })
+        it('fallar si el numero no es valido', async () => {
+            const res = await request(app.getHttpServer())
+                .get(`${ruta}/obtener-por-numero/abc`)
+
+            expect(res.status).toBe(400);
+            expect(Array.isArray(res.body.message)).toBe(true);
+            expect(res.body.statusCode).toBe(400);
+            expect(res.body.error).toBe('Bad Request');
+        })
+        it('fallar si el numero no existe', async () => {
+            const res = await request(app.getHttpServer())
+                .get(`${ruta}/obtener-por-numero/0`)
+
+            expect(res.status).toBe(400);
+            expect(Array.isArray(res.body.message)).toBe(true);
+            expect(res.body.statusCode).toBe(404);
+            expect(res.body.error).toBe('Not Found');
+        })
+    })
+
+    describe('obtener-todos', () => {
+        const crearDocumento: CrearDocumentoDto = {
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: AREAS_DE_DOCUMENTO.OPCION_1,
+            fecha_inicio: new Date(2025, 1, 1, 12),
+            fecha_finalizacion: new Date(2025, 1, 1, 12),
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3
+        }
+        const documento = {
+            numero: 1,
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: expect.any(AREAS_DE_DOCUMENTO),
+            fecha_inicio: expect.any(Date),
+            fecha_finalizacion: expect.any(Date),
+            fecha_emision: expect.any(Date),
+            validez_documento: expect.any(VALIDEZ_DE_DOCUMENTO),
+        }
+        it('Obtener documento correctamente', async () => {
+            const crearDoc = await request(app.getHttpServer())
+                .post(`${ruta}/crear`)
+                .send(crearDocumento);
+            const res = await request(app.getHttpServer())
+                .get(`${ruta}/obtener-todos`)
+
+            expect(res.status).toBe(200);
+            expect(res.body[0]).toMatchObject(documento);
+
+            expect(res.body[0]).toHaveProperty('numero');
+            expect(res.body[0]).toHaveProperty('nombre');
+            expect(res.body[0]).toHaveProperty('cliente');
+            expect(res.body[0]).toHaveProperty('ejecutor');
+            expect(res.body[0]).toHaveProperty('area_documento');
+            expect(res.body[0]).toHaveProperty('fecha_inicio');
+            expect(res.body[0]).toHaveProperty('fecha_finalizacion');
+            expect(res.body[0]).toHaveProperty('fecha_emision');
+            expect(res.body[0]).toHaveProperty('validez_documento');
+        })
+
+    })
+    describe('obtener-todos-no-validos', () => {
+        const crearDocumento: CrearDocumentoDto = {
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: AREAS_DE_DOCUMENTO.OPCION_1,
+            fecha_inicio: new Date(2025, 1, 1, 12),
+            fecha_finalizacion: new Date(2025, 1, 1, 12),
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3
+        }
+        const documento = {
+            numero: 2,
+            nombre: 'AUX',
+            cliente: 'TEST',
+            ejecutor: 'CITEC UBB',
+            direccion: 'CONCEPCION',
+            area_documento: expect.any(AREAS_DE_DOCUMENTO),
+            fecha_inicio: expect.any(Date),
+            fecha_finalizacion: expect.any(Date),
+            fecha_emision: expect.any(Date),
+            validez_documento: expect.any(VALIDEZ_DE_DOCUMENTO),
+        }
+        it('Obtener documento correctamente', async () => {
+            const crearDoc = await request(app.getHttpServer())
+                .post(`${ruta}/crear`)
+                .send(documento);
+            const eliminarDoc = await request(app.getHttpServer())
+                .delete(`${ruta}/eliminar/${documento.numero}`)
+                .send(documento);
+            const res = await request(app.getHttpServer())
+                .get(`${ruta}/obtener-todos-eliminados`)
+
+            expect(res.status).toBe(200);
+            expect(Array.isArray(res.body)).toBe(true);
+            expect(res.body[0]).toMatchObject(documento);
+            expect(res.body[0]).toHaveProperty('numero');
+            expect(res.body[0]).toHaveProperty('nombre');
+            expect(res.body[0]).toHaveProperty('cliente');
+            expect(res.body[0]).toHaveProperty('ejecutor');
+            expect(res.body[0]).toHaveProperty('area_documento');
+            expect(res.body[0]).toHaveProperty('fecha_inicio');
+            expect(res.body[0]).toHaveProperty('fecha_finalizacion');
+            expect(res.body[0]).toHaveProperty('fecha_emision');
+            expect(res.body[0]).toHaveProperty('validez_documento');
+
+            expect(res.body[0].validez_documento).toBe(VALIDEZ_DE_DOCUMENTO.OPCION_2);
+        })
+
+    })
+
 
     afterAll(async () => {
         await app.close();
