@@ -7,6 +7,4 @@ import { EnsayosService } from './services/ensayo.service';
     providers: [EnsayosService],
     exports: [EnsayosService],
 })
-export class EnsayosModule {constructor() {
-    console.log('✅ EnsayosModule cargado');
-  }}
+export class EnsayosModule {}
