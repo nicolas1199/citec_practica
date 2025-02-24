@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -30,9 +30,17 @@ import { SubServiciosModule } from './sub-servicios/sub-servicios.module';
 import { SubServiciosController } from './sub-servicios/controllers/sub-servicios.controller';
 import { EnsayosController } from './ensayos/controllers/ensayo.controller';
 import { PagosModule } from './pagos/pagos.module';
+<<<<<<< HEAD
 import { EnsayosModule } from './ensayos/ensayo.module';
 import { EnsayosService } from './ensayos/services/ensayo.service';
 
+=======
+import { DocumentosModule } from './documentos/documentos.module'; import { AreasModule } from './area-documentos/area-documentos.module';
+import { DocumentosController } from './documentos/controllers/documentos.controller';
+import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
+import { DocumentosService } from './documentos/services/documentos.service';
+import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -63,6 +71,8 @@ import { EnsayosService } from './ensayos/services/ensayo.service';
         SubServiciosModule,
         EnsayosModule,
         PagosModule,
+        AreasModule,
+        DocumentosModule,
     ],
     controllers: [
         AppController,
@@ -71,7 +81,12 @@ import { EnsayosService } from './ensayos/services/ensayo.service';
         ComunasController,
         GrupoDeServiciosController,
         SubServiciosController,
+<<<<<<< HEAD
         EnsayosController,
+=======
+        AreasDocumentosController,
+        DocumentosController,
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd
     ],
     providers: [
         AppService,
@@ -84,6 +99,7 @@ import { EnsayosService } from './ensayos/services/ensayo.service';
         ProvinciasService,
         GrupoDeServiciosService,
         SubServiciosService,
+<<<<<<< HEAD
         EnsayosService,
     ],
 })
@@ -92,3 +108,10 @@ export class AppModule {
         console.log('🛠️ AppModule ha sido cargado correctamente');
     }
 }
+=======
+        AreasDocumentosService,
+        DocumentosService,
+    ],
+})
+export class AppModule { }
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd

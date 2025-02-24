@@ -16,7 +16,12 @@ import { SubServiciosSeeder } from '../seed/sub-servicios.sedders';
 import { PropuestasDeServiciosSubServicioSeeder } from '../seed/propuestas_de_servicios_sub_servicio.seeders';
 import { GruposDeServiciosSeeder } from '../seed/grupos-de-servicios.seeders';
 import { GrupoDeServiciosSubServiciosSeeder } from '../seed/grupo-de-servicio-sub-servicio.seeders';
+<<<<<<< HEAD
 import { EnsayosSeeder } from '../seed/ensayos.seeders';
+=======
+import { AreasDocumentosSeeder } from '../seed/area-documentos.seeders';
+import { DocumentosSeeder } from '../seed/documentos.seeders';
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd
 
 @Injectable()
 export class SeederService {
@@ -37,8 +42,14 @@ export class SeederService {
         private readonly propuestasDeServiciosSubServicioSeeder: PropuestasDeServiciosSubServicioSeeder,
         private readonly gruposDeServiciosSeeder: GruposDeServiciosSeeder,
         private readonly grupoDeServiciosSubServiciosSeeder: GrupoDeServiciosSubServiciosSeeder,
+<<<<<<< HEAD
         private readonly EnsayosSeeders: EnsayosSeeder,
     ) {}
+=======
+        private readonly areaDocumentosSeeder: AreasDocumentosSeeder,
+        private readonly documentosSeeder: DocumentosSeeder,
+    ) { }
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd
 
     async run() {
         await this.tiposSeeder.run();
@@ -56,6 +67,11 @@ export class SeederService {
         await this.propuestasDeServiciosSubServicioSeeder.run();
         await this.gruposDeServiciosSeeder.run();
         await this.grupoDeServiciosSubServiciosSeeder.run();
+<<<<<<< HEAD
         await this.EnsayosSeeders.run();
+=======
+        await this.areaDocumentosSeeder.run();
+        await this.documentosSeeder.run();
+>>>>>>> 7ad2eff0b33867615d58923d4b5a015cfca465dd
     }
 }

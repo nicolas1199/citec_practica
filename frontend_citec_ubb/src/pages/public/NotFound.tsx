@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useData } from '../../components/AuthDataContext';
 
 function NotFound() {
+    const { token } = useData();
+    const isAuthenticated = !!token;
+
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-blue-100 text-blue-900">
             <h1 className="text-6xl font-bold mb-4">404</h1>
@@ -12,10 +16,10 @@ function NotFound() {
                 movida.
             </p>
             <Link
-                to="/"
-                className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+                to={isAuthenticated ? '/dashboard' : '/'}
+                className="px-4 py-2 bg-blue-900 text-white rounded-lg"
             >
-                Volver al Inicio
+                {isAuthenticated ? 'Ir al Dashboard' : 'Ir al Inicio'}
             </Link>
         </div>
     );
