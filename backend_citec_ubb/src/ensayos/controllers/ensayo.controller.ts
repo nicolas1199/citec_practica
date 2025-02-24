@@ -19,14 +19,14 @@ import {
     RetornoEnsayoDto,
 } from '../dtos/ensayo.dto';
 import { ErrorRespuestaDto } from 'src/common/dtos/error-respuesta.dto';
-console.log('EnsayosController cargado');
 
 @ApiTags('Ensayos')
 @Controller('ensayos')
+export class EnsayosController extends BaseControllersSimple {
+    constructor(private ensayosService: EnsayosService) {
+        super();
+    }
 
-export class EnsayosController {
-    constructor(private ensayosService: EnsayosService) {console.log('EnsayosController cargado');}
-    
     @ApiOperation({ summary: 'Obtener todos los ensayos' })
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
