@@ -12,8 +12,7 @@ const CrearEnsayo: React.FC = () => {
     const [ensayo, setEnsayo] = useState<Ensayo[]>([]);
     const [formData, setFormData] = useState<CrearEnsayo>({
         nombre: '',
-        servicio: 0,
-        fecha: new Date().toISOString().split('T')[0],
+        id_servicio: 0,
     });
     
 
@@ -41,9 +40,8 @@ const CrearEnsayo: React.FC = () => {
 
         const formattedData = {
             ...formData,
-            fecha: new Date(formData.fecha).toISOString().split('T')[0], // Format as YYYY-MM-DD
             nombre: String(formData.nombre),
-            servicio: Number(formData.servicio)
+            id_servicio: Number(formData.id_servicio)
         };
 
         try {
@@ -96,24 +94,11 @@ const CrearEnsayo: React.FC = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
-                            Fecha
-                        </label>
-                        <input
-                            type="date"
-                            name="fecha"
-                            value={formData.fecha}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">
                             Id del Servicio
                         </label>
                         <select
                             name="Id del servicio"
-                            value={formData.servicio}
+                            value={formData.id_servicio}
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                             required
                         >

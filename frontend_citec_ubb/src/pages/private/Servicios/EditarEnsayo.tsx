@@ -7,6 +7,7 @@ import { ActualizarEnsayo, Ensayo } from '../../../components/Utils/interfaces';
 import { useData } from '../../../components/AuthDataContext';
 
 const EditarEnsayo: React.FC = () => {
+
     const { id } = useParams();
     const navigate = useNavigate();
     const { token } = useData();
@@ -15,33 +16,48 @@ const EditarEnsayo: React.FC = () => {
     const [formData, setFormData] = useState<ActualizarEnsayo>({
         id: Number(id),
         nombre: '',
-        fecha: '',
-        servicio: 0
+        id_servicio: 0
     });
 
     useEffect(() => {
         const fetchEnsayo = async () => {
+            // ✅ Convertimos el id a número para evitar errores
+            const ensayoId = Number(id);
+
+            if (isNaN(ensayoId) || ensayoId <= 0) {
+                console.error("❌ ID de ensayo inválido:", id);
+                ResponseMessage.show("Error: ID de ensayo inválido");
+                navigate('/dashboard/ensayos');
+                return;
+            }
+
+            // ✅ Verificamos que el token no sea undefined
+            if (!token) {
+                console.error("❌ No hay token disponible");
+                ResponseMessage.show("Error: No hay token disponible");
+                navigate('/dashboard/ensayos');
+                return;
+            }
+
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.OBTENER_POR_ID}/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const url = `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.OBTENER_POR_ID}/${ensayoId}`;
+
+                const response = await axios.get(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
 
                 if (response.data) {
                     setEnsayo(response.data);
                     setFormData({
-                        id: Number(id),
+                        id: ensayoId,
                         nombre: response.data.nombre,
-                        fecha: response.data.fecha,
-                        servicio: response.data.servicio
+                        id_servicio: response.data.servicio
                     });
                 }
             } catch (error) {
-                console.error('Error fetching ensayo:', error);
+                console.error("❌ Error fetching ensayo:", error);
                 ResponseMessage.show('Error al cargar el ensayo');
                 navigate('/dashboard/ensayos');
             }
@@ -56,7 +72,7 @@ const EditarEnsayo: React.FC = () => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'servicio' ? Number(value) : value
+            [name]: name === 'id_servicio' ? Number(value) : value
         }));
     };
 
@@ -65,7 +81,7 @@ const EditarEnsayo: React.FC = () => {
 
         try {
             await axios.put(
-                `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.ACTUALIZAR}`,
+                `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.ACTUALIZAR}/${formData.id}`,
                 formData,
                 {
                     headers: {
@@ -77,7 +93,7 @@ const EditarEnsayo: React.FC = () => {
             ResponseMessage.show('Ensayo actualizado exitosamente');
             navigate('/dashboard/ensayos');
         } catch (error) {
-            console.error('Error updating ensayo:', error);
+            console.error("❌ Error updating ensayo:", error);
             ResponseMessage.show('Error al actualizar el ensayo');
         }
     };
@@ -107,26 +123,12 @@ const EditarEnsayo: React.FC = () => {
 
                 <div className="mb-4">
                     <label className="block mb-2 font-bold">
-                        Fecha <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="date"
-                        name="fecha"
-                        value={formData.fecha.split('T')[0]}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block mb-2 font-bold">
                         Servicio <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="number"
-                        name="servicio"
-                        value={formData.servicio}
+                        name="id_servicio"
+                        value={formData.id_servicio}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         required

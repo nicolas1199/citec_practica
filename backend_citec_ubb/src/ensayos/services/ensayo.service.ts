@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { Op } from 'sequelize';
+import { Ensayos } from 'src/database/models/ensayos.model';
 
 import {
     CrearEnsayoDto,
@@ -9,8 +9,6 @@ import {
     RetornoEnsayoDto,
 } from '../dtos/ensayo.dto';
 
-import { Ensayos } from 'src/database/models/ensayos.model';
-
 @Injectable()
 export class EnsayosService {
     async crear(ensayo: CrearEnsayoDto): Promise<RetornoEnsayoDto> {
@@ -18,19 +16,19 @@ export class EnsayosService {
         const ensayoCreado = await Ensayos.create({
             nombre_ensayo: ensayo.nombre_ensayo,
             tipo_servicio_id: ensayo.tipo_servicio_id,
-        });  // Cast explícito a Ensayos
+        });
 
         return ensayoCreado as RetornoEnsayoDto;
     }
 
-    async actualizar(ensayo: ActualizarEnsayoDto): Promise<RetornoEnsayoDto> {
+    async actualizar(id: number, ensayo: ActualizarEnsayoDto): Promise<RetornoEnsayoDto> {
         // Validar que exista el ensayo
         const ensayoExistente = await Ensayos.findOne({
-            where: { id: ensayo.id },
+            where: { id },
         });
 
         if (!ensayoExistente) {
-            throw new NotFoundException([`Ensayo con id ${ensayo.id} no encontrado`]);
+            throw new NotFoundException([`Ensayo con id ${id} no encontrado`]);
         }
 
         // Actualizar ensayo
@@ -38,13 +36,13 @@ export class EnsayosService {
             {
                 nombre_ensayo: ensayo.nombre_ensayo,
                 tipo_servicio_id: ensayo.tipo_servicio_id,
-            },  // Cast explícito a Ensayos
+            },
             {
-                where: { id: ensayo.id },
+                where: { id },
             },
         );
 
-        return this.obtenerPorId({ id: ensayo.id });
+        return this.obtenerPorId({id}); // Llamamos con el DTO
     }
 
     async eliminar(clavePrimaria: EliminarEnsayoDto): Promise<RetornoEnsayoDto> {
@@ -58,32 +56,31 @@ export class EnsayosService {
 
         try {
             await Ensayos.destroy({ where: { id: clavePrimaria.id } });
-        } catch (error) {
+        } catch (error) {   
             throw new ConflictException([`Error al eliminar ensayo con id ${clavePrimaria.id}`]);
         }
 
-        return this.obtenerPorId({ id: clavePrimaria.id });
+        return this.obtenerPorId(clavePrimaria); // Usamos el DTO para obtener el ensayo después de la eliminación
     }
 
     async obtenerTodos(): Promise<any> {
         const ensayosRetorno = await Ensayos.findAll({
             attributes: ['id', 'nombre_ensayo', 'tipo_servicio_id'],
         });
-    
+
         if (ensayosRetorno.length === 0) {
             throw new NotFoundException(['No hay ensayos disponibles']);
         }
-    
+
         // Log para ver los datos mapeados
         const ensayosMapeados = ensayosRetorno.map((ensayo) => ({
             id: ensayo.id,
             nombre: ensayo.nombre_ensayo,
             id_servicio: ensayo.tipo_servicio_id,
         }));
-    
+
         return ensayosMapeados;
     }
-    
 
     async obtenerPorId(clavePrimaria: ObtenerPorIdEnsayoDto): Promise<RetornoEnsayoDto> {
         const ensayoRetorno = await Ensayos.findOne({

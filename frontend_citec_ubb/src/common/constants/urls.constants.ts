@@ -48,7 +48,7 @@ export const ENDPOINTS = {
     },
     ENSAYOS: {
         CREAR: 'ensayos/crear',
-        ACTUALIZAR: 'ensayos/actualizar',
+        ACTUALIZAR: 'ensayos/editar',
         OBTENER_POR_ID: 'ensayos/obtener-por-id',
         OBTENER_TODOS: 'ensayos/obtener-todos',
         OBTENER_TODOS_ELIMINADOS: 'ensayos/obtener-todos-eliminados',

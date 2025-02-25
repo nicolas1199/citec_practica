@@ -19,13 +19,12 @@ import {
     RetornoEnsayoDto,
 } from '../dtos/ensayo.dto';
 import { ErrorRespuestaDto } from 'src/common/dtos/error-respuesta.dto';
-console.log('EnsayosController cargado');
 
 @ApiTags('Ensayos')
 @Controller('ensayos')
 
 export class EnsayosController {
-    constructor(private ensayosService: EnsayosService) {console.log('EnsayosController cargado');}
+    constructor(private ensayosService: EnsayosService) {}
     
     @ApiOperation({ summary: 'Obtener todos los ensayos' })
     @ApiRespuestaError()
@@ -44,11 +43,20 @@ export class EnsayosController {
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
     @Get('obtener-por-id/:id')
-    obtenerPorId(@Param() params: ObtenerPorIdEnsayoDto) {
-        return this.ensayosService.obtenerPorId(params);
-    }
+    obtenerPorId(@Param('id') id: string) {
 
-    @ApiOperation({ summary: 'Crear un nuevo ensayo' })
+    // Convertir el id de string a número
+    const idNumber = Number(id);
+    
+
+    if (isNaN(idNumber)) {
+        console.error("❌ Error: El ID no es un número válido");
+        throw new Error("ID inválido");
+    }
+    // Pasar el id convertido al servicio
+    return this.ensayosService.obtenerPorId({ id: idNumber });
+}
+    @ApiOperation({ summary: 'Crear un nuevo ensayo' }) 
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
     @Post('crear')
@@ -59,9 +67,17 @@ export class EnsayosController {
     @ApiOperation({ summary: 'Actualizar un ensayo existente' })
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
-    @Put('actualizar')
-    actualizar(@Body() ensayo: ActualizarEnsayoDto) {
-        return this.ensayosService.actualizar(ensayo);
+    @Put('editar/:id') 
+    actualizar(@Param('id') id:number, @Body() ensayo: ActualizarEnsayoDto) {
+    try {
+        console.log('🔄 Actualizando ensayo con ID:', id);
+        console.log('📝 Nuevos datos para el ensayo:', ensayo);
+        
+        return this.ensayosService.actualizar(id, ensayo);
+    } catch (error) {
+        console.error('❌ Error actualizando ensayo:', error);
+        throw error;  // Lanzar el error para que sea manejado en un middleware de error global
+    }
     }
 
     @ApiOperation({ summary: 'Eliminar un ensayo' })
@@ -69,6 +85,6 @@ export class EnsayosController {
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
     @Delete('eliminar/:id')
     eliminar(@Param('id') id: number) {
-        return this.ensayosService.eliminar({ id });
+        return this.ensayosService.eliminar({id});
     }
 }
