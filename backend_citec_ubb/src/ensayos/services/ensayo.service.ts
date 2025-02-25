@@ -45,13 +45,17 @@ export class EnsayosService {
         return this.obtenerPorId({id}); // Llamamos con el DTO
     }
 
-    async eliminar(clavePrimaria: EliminarEnsayoDto): Promise<RetornoEnsayoDto> {
+    async eliminar(
+        clavePrimaria: EliminarEnsayoDto,
+    ): Promise<RetornoEnsayoDto> {
         const ensayo = await Ensayos.findOne({
             where: { id: clavePrimaria.id },
         });
 
         if (!ensayo) {
-            throw new NotFoundException([`Ensayo con id ${clavePrimaria.id} no encontrado`]);
+            throw new NotFoundException([
+                `Ensayo con id ${clavePrimaria.id} no encontrado`,
+            ]);
         }
 
         try {
@@ -82,14 +86,18 @@ export class EnsayosService {
         return ensayosMapeados;
     }
 
-    async obtenerPorId(clavePrimaria: ObtenerPorIdEnsayoDto): Promise<RetornoEnsayoDto> {
+    async obtenerPorId(
+        clavePrimaria: ObtenerPorIdEnsayoDto,
+    ): Promise<RetornoEnsayoDto> {
         const ensayoRetorno = await Ensayos.findOne({
             where: { id: clavePrimaria.id },
             attributes: ['id', 'nombre_ensayo', 'tipo_servicio_id'],
         });
 
         if (!ensayoRetorno) {
-            throw new NotFoundException([`Ensayo con id ${clavePrimaria.id} no encontrado`]);
+            throw new NotFoundException([
+                `Ensayo con id ${clavePrimaria.id} no encontrado`,
+            ]);
         }
 
         return ensayoRetorno;

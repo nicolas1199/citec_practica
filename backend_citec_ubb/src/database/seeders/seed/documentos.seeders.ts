@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { Documentos } from "../../models/documentos.model";
+import { Injectable } from '@nestjs/common';
+import { Documentos } from '../../models/documentos.model';
 import * as fs from 'fs';
-import { parse } from "csv-parse/sync";
-import * as path from "path";
+import { parse } from 'csv-parse/sync';
+import * as path from 'path';
 
 @Injectable()
 export class DocumentosSeeder {
@@ -19,11 +19,16 @@ export class DocumentosSeeder {
         const documentosExistentes = await Documentos.count();
 
         if (documentosExistentes > 0) {
-            console.log('Los documentos ya están cargados en la base de datos.');
+            console.log(
+                'Los documentos ya están cargados en la base de datos.',
+            );
             return;
         }
 
-        const archivoDocumentos = fs.readFileSync(archivoDocumentosPath, 'utf-8');
+        const archivoDocumentos = fs.readFileSync(
+            archivoDocumentosPath,
+            'utf-8',
+        );
 
         const documentos = parse(archivoDocumentos, {
             columns: true,

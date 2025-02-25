@@ -23,9 +23,11 @@ import { ErrorRespuestaDto } from 'src/common/dtos/error-respuesta.dto';
 @ApiTags('Ensayos')
 @Controller('ensayos')
 
-export class EnsayosController {
-    constructor(private ensayosService: EnsayosService) {}
-    
+export class EnsayosController extends BaseControllersSimple {
+    constructor(private ensayosService: EnsayosService) {
+        super();
+    }
+
     @ApiOperation({ summary: 'Obtener todos los ensayos' })
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)

@@ -20,6 +20,7 @@ import TablaEnsayos from './components/TablaEnsayos';
 import CrearPropuesta from './pages/private/Servicios/CrearPropuesta';
 import TablaPropuestas from './components/TablaPropuestas';
 import EditarPropuesta from './pages/private/Servicios/EditarPropuesta';
+import CrearInformeServicio from './pages/private/Servicios/CrearInformeServicio';
 
 const App: React.FC = () => {
     return (
@@ -59,24 +60,36 @@ const App: React.FC = () => {
                                 </Route>
 
                                 <Route path="propuestas">
-                                    <Route index element={<TablaPropuestas />} />
-                                    <Route path="crear" element={<CrearPropuesta />} />
-                                    <Route 
+                                    <Route
+                                        index
+                                        element={<TablaPropuestas />}
+                                    />
+                                    <Route
+                                        path="crear"
+                                        element={<CrearPropuesta />}
+                                    />
+                                    <Route
                                         path="editar/:id"
                                         element={<EditarPropuesta />}
-                                    />                                  
+                                    />
                                 </Route>
                                 <Route path="ensayos">
-                                    <Route index element={<TablaEnsayos/>} />
-                                    <Route path="crear" element={<CrearEnsayo/>} />
-                                    <Route 
+                                    <Route index element={<TablaEnsayos />} />
+                                    <Route
+                                        path="crear"
+                                        element={<CrearEnsayo />}
+                                    />
+                                    <Route
                                         path="editar/:id"
-                                        element={<EditarEnsayo/>}
+                                        element={<EditarEnsayo />}
                                     />
                                 </Route>
 
                                 <Route path="orden-trabajo">
-                                    <Route index element={<TablaOrdenTrabajo />} />
+                                    <Route
+                                        index
+                                        element={<TablaOrdenTrabajo />}
+                                    />
                                     <Route
                                         path="crear"
                                         element={<CrearOrdenTrabajo />}
@@ -84,6 +97,10 @@ const App: React.FC = () => {
                                     <Route
                                         path="editar/:numero_folio"
                                         element={<EditarOrdenTrabajo />}
+                                    />
+                                    <Route
+                                        path="crear-informe"
+                                        element={<CrearInformeServicio />}
                                     />
                                 </Route>
                             </Route>
