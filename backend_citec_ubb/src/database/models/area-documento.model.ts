@@ -8,7 +8,7 @@ import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constan
     timestamps: true,
 })
 
-export class AreasDocumentos extends Model<AreasDocumentos> {
+export class AreasDocumentosModel extends Model<AreasDocumentosModel> {
 
     @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
     @PrimaryKey
@@ -17,5 +17,12 @@ export class AreasDocumentos extends Model<AreasDocumentos> {
         allowNull: false
     })
     declare cod_area: string
+
+    @ApiProperty({ type: 'string', default: 'ACONDICIONAMIENTO AMBIENTAL' })
+    @Column({
+        type: DataType.STRING(50),
+        allowNull: false
+    })
+    declare nombre_area: string
 }
-export default AreasDocumentos;
+export default AreasDocumentosModel;

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { AreasDocumentos } from "src/database/models/area-documento.model";
+import { AreasDocumentosModel } from "src/database/models/area-documento.model";
 import * as fs from 'fs';
 import { parse } from "csv-parse/sync";
 import * as path from "path";
@@ -16,7 +16,7 @@ export class AreasDocumentosSeeder {
             throw new Error(`Archivo no encontrado: ${archivoAreasDocumentosPath}`);
         }
 
-        const areaDocumentosExistentes = await AreasDocumentos.count();
+        const areaDocumentosExistentes = await AreasDocumentosModel.count();
 
         if (areaDocumentosExistentes > 0) {
             console.log('Los codigos de area ya están cargadas en la base de datos.');
@@ -30,7 +30,7 @@ export class AreasDocumentosSeeder {
             skip_empty_lines: true,
         });
 
-        await AreasDocumentos.bulkCreate(areaDocumentos, {
+        await AreasDocumentosModel.bulkCreate(areaDocumentos, {
             validate: true,
             returning: false,
         });

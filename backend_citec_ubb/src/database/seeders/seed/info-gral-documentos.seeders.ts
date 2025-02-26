@@ -1,25 +1,25 @@
 import { Injectable } from "@nestjs/common";
-import { DocumentosModel } from "../../models/documentos.model";
 import * as fs from 'fs';
 import { parse } from "csv-parse/sync";
 import * as path from "path";
+import InfoGralDocumentosModel from "src/database/models/info-gral-documento.model";
 
 @Injectable()
-export class DocumentosSeeder {
+export class InfoGralDocumentosSeeder {
     async run() {
         const archivoDocumentosPath = path.resolve(
             __dirname,
-            '../archives/documentos.csv',
+            '../archives/info-gral-documentos.csv',
         );
 
         if (!fs.existsSync(archivoDocumentosPath)) {
             throw new Error(`Archivo no encontrado: ${archivoDocumentosPath}`);
         }
 
-        const documentosExistentes = await DocumentosModel.count();
+        const infoExistente = InfoGralDocumentosModel.count();
 
-        if (documentosExistentes > 0) {
-            console.log('Los documentos ya están cargados en la base de datos.');
+        if (await infoExistente > 0) {
+            console.log('La informacion general de los documentos ya están cargados en la base de datos.');
             return;
         }
 
@@ -30,11 +30,11 @@ export class DocumentosSeeder {
             skip_empty_lines: true,
         });
 
-        await DocumentosModel.bulkCreate(documentos, {
+        await InfoGralDocumentosModel.bulkCreate(documentos, {
             validate: true,
             returning: false,
         });
 
-        console.log('DocumentosModel importados desde CSV exitosamente.');
+        console.log('Informacion general de los documentos importados desde CSV exitosamente.');
     }
 }

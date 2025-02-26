@@ -4,8 +4,8 @@ import * as request from 'supertest';
 import { DocumentosModule } from '../documentos.module';
 import { getModelToken, SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import Documentos from 'src/database/models/documentos.model';
-import { AreasDocumentos } from 'src/database/models/area-documento.model';
+import DocumentosModel from 'src/database/models/documentos.model';
+import { AreasDocumentosModel } from 'src/database/models/area-documento.model';
 import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 import {
     ActualizarDocumentoDto,
@@ -26,15 +26,15 @@ describe('DocumentosController', () => {
                     dialect: 'sqlite',
                     storage: ':memory:',
                     models: [
-                        Documentos,
-                        AreasDocumentos,
+                        DocumentosModel,
+                        AreasDocumentosModel,
                     ],
                     autoLoadModels: true,
                     synchronize: true
                 }),
                 SequelizeModule.forFeature([
-                    Documentos,
-                    AreasDocumentos,
+                    DocumentosModel,
+                    AreasDocumentosModel,
                 ]),
                 DocumentosModule
             ],
@@ -55,7 +55,7 @@ describe('DocumentosController', () => {
         /**
         * Crear datos necesarios antes de las pruebas
         */
-        const areasModel = app.get(getModelToken(AreasDocumentos));
+        const areasModel = app.get(getModelToken(AreasDocumentosModel));
         const areas = Object.values(AREAS_DE_DOCUMENTO);
         for (const area of areas) {
             await areasModel.create({
@@ -75,7 +75,7 @@ describe('DocumentosController', () => {
 
     describe('Areas', () => {
         it('Deben existir al menos 2 areas', async () => {
-            const areasModel = app.get(getModelToken(AreasDocumentos));
+            const areasModel = app.get(getModelToken(AreasDocumentosModel));
             const count = await areasModel.count();
             expect(count).toBeGreaterThanOrEqual(2);
         });

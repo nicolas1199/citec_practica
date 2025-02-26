@@ -7,7 +7,11 @@ import {
   ActualizarDocumentoDto
 } from '../dto/documento.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ApiRespuestaError, AreaDocumento, ValidezDocumento } from 'src/common/utils/decorators';
+import {
+  ApiRespuestaError,
+  AreaDocumento,
+  ValidezDocumento
+} from 'src/common/utils/decorators';
 import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
 import { BaseControllers } from 'src/common/base/base-controllers.class';
 import { VALIDEZ_DE_DOCUMENTO } from 'src/common/constants/validez-de-documento.constants';
@@ -35,7 +39,6 @@ export class DocumentosController extends BaseControllers {
     return this.documentosService.obtenerTodos();
   }
 
-
   @ApiOperation({ summary: 'Obtener a documentos segun su clave primaria' })
   @ApiRespuestaError()
   @AreaDocumento(AREAS_DE_DOCUMENTO.OPCION_1, AREAS_DE_DOCUMENTO.OPCION_2)
@@ -53,6 +56,7 @@ export class DocumentosController extends BaseControllers {
   actualizar(@Body() numero: ActualizarDocumentoDto) {
     return this.documentosService.actualizar(numero);
   }
+
   @ApiOperation({ summary: 'Eliminar Documento' })
   @ApiRespuestaError()
   @AreaDocumento(AREAS_DE_DOCUMENTO.OPCION_1, AREAS_DE_DOCUMENTO.OPCION_2)

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, CreatedAt, DataType, HasOne, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { VALIDEZ_DE_DOCUMENTO } from "src/common/constants/validez-de-documento.constants";
-import Documentos from "./documentos.model";
+import DocumentosModel from "./documentos.model";
 
 
 @Table({
@@ -11,16 +11,16 @@ import Documentos from "./documentos.model";
 
 export class ValidezDocumentos extends Model<ValidezDocumentos> {
 
-    @ApiProperty({ type: 'string', default: VALIDEZ_DE_DOCUMENTO.OPCION_1 })
+    @ApiProperty({ type: 'string', default: VALIDEZ_DE_DOCUMENTO.OPCION_3 })
     @PrimaryKey
     @Column({
         type: DataType.ENUM(...Object.values(VALIDEZ_DE_DOCUMENTO)),
         allowNull: false
     })
-    declare nombre: string;
+    declare nombre_v: string;
 
-    @HasOne(() => Documentos)
-    declare documento: Documentos;
+    @HasOne(() => DocumentosModel)
+    declare documento: DocumentosModel;
 
 }
 export default ValidezDocumentos;

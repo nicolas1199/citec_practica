@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ObtenerPorIdAreasDto } from '../dtos/area-documentos.dto';
 import { BaseServicesSimple } from '../../common/base/base-services-simple.class';
-import { AreasDocumentos } from 'src/database/models/area-documento.model';
+import { AreasDocumentosModel } from 'src/database/models/area-documento.model';
 
 @Injectable()
 export class AreasDocumentosService extends BaseServicesSimple {
-    async obtenerTodos(): Promise<AreasDocumentos[]> {
-        const retornoAreas = await AreasDocumentos.findAll();
+    async obtenerTodos(): Promise<AreasDocumentosModel[]> {
+        const retornoAreas = await AreasDocumentosModel.findAll();
 
         if (retornoAreas.length === 0) {
             throw new NotFoundException([`No hay areas de documentos activos`]);
@@ -15,8 +15,8 @@ export class AreasDocumentosService extends BaseServicesSimple {
         return retornoAreas;
     }
 
-    async obtenerPorId(clavePrimaria: ObtenerPorIdAreasDto): Promise<AreasDocumentos> {
-        const retornoTipo = await AreasDocumentos.findByPk(clavePrimaria.nombre);
+    async obtenerPorId(clavePrimaria: ObtenerPorIdAreasDto): Promise<AreasDocumentosModel> {
+        const retornoTipo = await AreasDocumentosModel.findByPk(clavePrimaria.nombre);
 
         if (!retornoTipo) {
             throw new NotFoundException([

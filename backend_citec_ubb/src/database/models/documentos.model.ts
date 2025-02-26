@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AutoIncrement, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { AreasDocumentos } from "./area-documento.model";
+import { AutoIncrement, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasOne, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { AreasDocumentosModel } from "./area-documento.model";
 import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
 import ValidezDocumentos from "./validez-documento.model";
 import { VALIDEZ_DE_DOCUMENTO } from "src/common/constants/validez-de-documento.constants";
+import { InfoGralDocumentosModel } from "./info-gral-documento.model";
 
 
 @Table({
@@ -11,7 +12,7 @@ import { VALIDEZ_DE_DOCUMENTO } from "src/common/constants/validez-de-documento.
     timestamps: true,
 })
 
-export class Documentos extends Model<Documentos> {
+export class DocumentosModel extends Model<DocumentosModel> {
 
     @ApiProperty({ type: 'number', default: 1 })
     @PrimaryKey
@@ -21,6 +22,9 @@ export class Documentos extends Model<Documentos> {
         allowNull: false,
     })
     declare numero: number;
+
+    @HasOne(() => InfoGralDocumentosModel)
+    declare num_gral: number
 
     @ApiProperty({ type: 'string', default: 'INFORME' })
     @Column({
@@ -51,15 +55,15 @@ export class Documentos extends Model<Documentos> {
     declare direccion: string
 
     @ApiProperty({ type: 'string', default: AREAS_DE_DOCUMENTO.OPCION_1 })
-    @ForeignKey(() => AreasDocumentos)
+    @ForeignKey(() => AreasDocumentosModel)
     @Column({
         type: DataType.ENUM(...Object.values(AREAS_DE_DOCUMENTO)),
         allowNull: false,
     })
     declare area_documento: string;
 
-    @BelongsTo(() => AreasDocumentos)
-    declare area: AreasDocumentos;
+    @BelongsTo(() => AreasDocumentosModel)
+    declare area: AreasDocumentosModel;
 
 
     @ApiProperty({ type: 'string', default: '1/1/2025' })
@@ -104,4 +108,4 @@ export class Documentos extends Model<Documentos> {
     declare validez: ValidezDocumentos;
 
 }
-export default Documentos
+export default DocumentosModel
