@@ -7,21 +7,21 @@ import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import UnderLine from '@tiptap/extension-underline';
 import {
-    FaAlignCenter,
-    FaAlignLeft,
-    FaAlignRight,
-    FaBold,
-    FaHeading,
-    FaImage,
-    FaItalic,
-    FaListOl,
-    FaListUl,
-    FaQuoteLeft,
-    FaRulerHorizontal,
-    FaStrikethrough,
-    FaUnderline,
-    FaUndo,
-} from 'react-icons/fa';
+    IconAlignBoxCenterTop,
+    IconAlignBoxLeftStretch,
+    IconAlignBoxRightStretch,
+    IconArrowBackUp,
+    IconBold,
+    IconHeading,
+    IconItalic,
+    IconList,
+    IconListNumbers,
+    IconPhoto,
+    IconQuoteFilled,
+    IconRuler3,
+    IconStrikethrough,
+    IconUnderline,
+} from '@tabler/icons-react';
 
 interface CuadroTextoProps {
     onContentChange?: (content: string) => void;
@@ -33,7 +33,7 @@ const CustomImage = Image.extend({
         return {
             ...this.parent?.(),
             class: {
-                default: 'block my-4 mx-auto', // Centro por defecto
+                default: 'block my-4 mx-auto',
                 parseHTML: (element) => element.getAttribute('class'),
                 renderHTML: (attributes) => ({ class: attributes.class }),
             },
@@ -122,7 +122,7 @@ const MenuBar = () => {
 
     return (
         <div>
-            <div>
+            <div className="flex items-center">
                 <button
                     type="button"
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -132,7 +132,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaBold />
+                    <IconBold stroke={2} />
                 </button>
 
                 <button
@@ -146,7 +146,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaItalic />
+                    <IconItalic />
                 </button>
 
                 <button
@@ -162,7 +162,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaUnderline />
+                    <IconUnderline />
                 </button>
                 <button
                     type="button"
@@ -175,7 +175,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaStrikethrough />
+                    <IconStrikethrough />
                 </button>
                 <button
                     type="button"
@@ -188,7 +188,7 @@ const MenuBar = () => {
                             : ''
                     }`}
                 >
-                    <FaHeading />
+                    <IconHeading />
                 </button>
 
                 <button
@@ -200,7 +200,7 @@ const MenuBar = () => {
                         editor.isActive('bulletList') ? 'bg-gray-200' : ''
                     }`}
                 >
-                    <FaListUl />
+                    <IconList />
                 </button>
 
                 <button
@@ -213,7 +213,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaListOl />
+                    <IconListNumbers />
                 </button>
 
                 <button
@@ -226,7 +226,7 @@ const MenuBar = () => {
                     }
                     `}
                 >
-                    <FaQuoteLeft />
+                    <IconQuoteFilled />
                 </button>
 
                 <button
@@ -238,7 +238,7 @@ const MenuBar = () => {
                         editor.chain().focus().setHorizontalRule().run()
                     }
                 >
-                    <FaRulerHorizontal />
+                    <IconRuler3 />
                 </button>
 
                 <button
@@ -249,7 +249,7 @@ const MenuBar = () => {
                     onClick={() => editor.chain().focus().undo().run()}
                     disabled={!editor.can().chain().focus().undo().run()}
                 >
-                    <FaUndo />
+                    <IconArrowBackUp />
                 </button>
 
                 <button
@@ -257,9 +257,9 @@ const MenuBar = () => {
                     onClick={() =>
                         document.getElementById('file-input')?.click()
                     }
-                    className="relative"
+                    className="p-2 hover:bg-gray-100 rounded transition-colors relative"
                 >
-                    <FaImage />
+                    <IconPhoto />
                     <input
                         id="file-input"
                         type="file"
@@ -286,27 +286,29 @@ const MenuBar = () => {
                 </button>
             </div>
 
-            <div className="flex gap-1  pl-2 ml- mb-2">
+            <div className="flex items-center mt-2">
                 <button
                     type="button"
                     onClick={() => handleAlignment('left')}
-                    className={getAlignmentClass('left')}
+                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('left')}`}
                 >
-                    <FaAlignLeft />
+                    <IconAlignBoxLeftStretch />
                 </button>
+
                 <button
                     type="button"
                     onClick={() => handleAlignment('center')}
-                    className={getAlignmentClass('center')}
+                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('center')}`}
                 >
-                    <FaAlignCenter />
+                    <IconAlignBoxCenterTop />
                 </button>
+
                 <button
                     type="button"
                     onClick={() => handleAlignment('right')}
-                    className={getAlignmentClass('right')}
+                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('right')}`}
                 >
-                    <FaAlignRight />
+                    <IconAlignBoxRightStretch />
                 </button>
             </div>
         </div>
