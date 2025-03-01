@@ -1,4 +1,5 @@
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
+import React from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
@@ -26,6 +27,7 @@ import {
 interface CuadroTextoProps {
     onContentChange?: (content: string) => void;
     initialContent?: string;
+    storageKey?: string;
 }
 
 const CustomImage = Image.extend({
@@ -62,7 +64,6 @@ const extensions = [
     }),
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     TextStyle.configure({ types: [ListItem.name] }),
-    ListItem.configure({ types: [TextStyle.name] }),
     UnderLine.configure({ types: [TextStyle.name] }),
     CustomImage.configure({
         inline: true,
@@ -122,194 +123,241 @@ const MenuBar = () => {
 
     return (
         <div>
-            <div className="flex items-center">
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    disabled={!editor.can().chain().focus().toggleBold().run()}
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('bold') ? 'bg-gray-200' : ''
-                    }
+            <div className="flex items-center gap-1">
+                <div className="flex border-r pr-1">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleBold().run()
+                        }
+                        disabled={
+                            !editor.can().chain().focus().toggleBold().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('bold') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconBold stroke={2} />
-                </button>
+                        aria-label="Negrita"
+                    >
+                        <IconBold stroke={2} />
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    disabled={
-                        !editor.can().chain().focus().toggleItalic().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('italic') ? 'bg-gray-200' : ''
-                    }
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleItalic().run()
+                        }
+                        disabled={
+                            !editor.can().chain().focus().toggleItalic().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('italic') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconItalic />
-                </button>
+                        aria-label="Cursiva"
+                    >
+                        <IconItalic />
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        editor.chain().focus().toggleUnderline().run()
-                    }
-                    disabled={
-                        !editor.can().chain().focus().toggleUnderline().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('underline') ? 'bg-gray-200' : ''
-                    }
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleUnderline().run()
+                        }
+                        disabled={
+                            !editor
+                                .can()
+                                .chain()
+                                .focus()
+                                .toggleUnderline()
+                                .run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('underline') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconUnderline />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
-                    disabled={
-                        !editor.can().chain().focus().toggleStrike().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('strike') ? 'bg-gray-200' : ''
-                    }
+                        aria-label="Subrayado"
+                    >
+                        <IconUnderline />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleStrike().run()
+                        }
+                        disabled={
+                            !editor.can().chain().focus().toggleStrike().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('strike') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconStrikethrough />
-                </button>
-                <button
-                    type="button"
-                    onClick={() =>
-                        editor.chain().focus().toggleHeading({ level: 1 }).run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('heading', { level: 1 })
-                            ? 'bg-gray-200'
-                            : ''
-                    }`}
-                >
-                    <IconHeading />
-                </button>
+                        aria-label="Tachado"
+                    >
+                        <IconStrikethrough />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor
+                                .chain()
+                                .focus()
+                                .toggleHeading({ level: 1 })
+                                .run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('heading', { level: 1 })
+                                ? 'bg-gray-200'
+                                : ''
+                        }`}
+                        aria-label="Encabezado"
+                    >
+                        <IconHeading />
+                    </button>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        editor.chain().focus().toggleBulletList().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('bulletList') ? 'bg-gray-200' : ''
-                    }`}
-                >
-                    <IconList />
-                </button>
+                <div className="flex border-r pr-1">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleBulletList().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('bulletList') ? 'bg-gray-200' : ''
+                        }`}
+                        aria-label="Lista"
+                    >
+                        <IconList />
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        editor.chain().focus().toggleOrderedList().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('orderedList') ? 'bg-gray-200' : ''
-                    }
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleOrderedList().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('orderedList') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconListNumbers />
-                </button>
+                        aria-label="Lista numerada"
+                    >
+                        <IconListNumbers />
+                    </button>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        editor.chain().focus().toggleBlockquote().run()
-                    }
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${
-                        editor.isActive('blockquote') ? 'bg-gray-200' : ''
-                    }
+                <div className="flex border-r pr-1">
+                    <button
+                        type="button"
+                        onClick={() => handleAlignment('left')}
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass(
+                            'left',
+                        )}`}
+                        aria-label="Alinear a la izquierda"
+                    >
+                        <IconAlignBoxLeftStretch />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => handleAlignment('center')}
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass(
+                            'center',
+                        )}`}
+                        aria-label="Centrar"
+                    >
+                        <IconAlignBoxCenterTop />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => handleAlignment('right')}
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass(
+                            'right',
+                        )}`}
+                        aria-label="Alinear a la derecha"
+                    >
+                        <IconAlignBoxRightStretch />
+                    </button>
+                </div>
+
+                <div className="flex">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            editor.chain().focus().toggleBlockquote().run()
+                        }
+                        className={`p-2 hover:bg-gray-100 rounded transition-colors ${
+                            editor.isActive('blockquote') ? 'bg-gray-200' : ''
+                        }
                     `}
-                >
-                    <IconQuoteFilled />
-                </button>
+                        aria-label="Cita"
+                    >
+                        <IconQuoteFilled />
+                    </button>
 
-                <button
-                    type="button"
-                    className={
-                        'p-2 hover:bg-gray-100 rounded transition-colors'
-                    }
-                    onClick={() =>
-                        editor.chain().focus().setHorizontalRule().run()
-                    }
-                >
-                    <IconRuler3 />
-                </button>
+                    <button
+                        type="button"
+                        className={
+                            'p-2 hover:bg-gray-100 rounded transition-colors'
+                        }
+                        onClick={() =>
+                            editor.chain().focus().setHorizontalRule().run()
+                        }
+                        aria-label="Línea horizontal"
+                    >
+                        <IconRuler3 />
+                    </button>
 
-                <button
-                    type="button"
-                    className={
-                        'p-2 hover:bg-gray-100 rounded transition-colors'
-                    }
-                    onClick={() => editor.chain().focus().undo().run()}
-                    disabled={!editor.can().chain().focus().undo().run()}
-                >
-                    <IconArrowBackUp />
-                </button>
+                    <button
+                        type="button"
+                        className={
+                            'p-2 hover:bg-gray-100 rounded transition-colors'
+                        }
+                        onClick={() => editor.chain().focus().undo().run()}
+                        disabled={!editor.can().chain().focus().undo().run()}
+                        aria-label="Deshacer"
+                    >
+                        <IconArrowBackUp />
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        document.getElementById('file-input')?.click()
-                    }
-                    className="p-2 hover:bg-gray-100 rounded transition-colors relative"
-                >
-                    <IconPhoto />
-                    <input
-                        id="file-input"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (event) => {
-                                    const base64 = event.target?.result;
-                                    if (base64) {
-                                        editor
-                                            .chain()
-                                            .focus()
-                                            .setImage({ src: base64 })
-                                            .run();
+                    <button
+                        type="button"
+                        onClick={() =>
+                            document.getElementById('file-input')?.click()
+                        }
+                        className="p-2 hover:bg-gray-100 rounded transition-colors relative"
+                        aria-label="Insertar imagen"
+                    >
+                        <IconPhoto />
+                        <input
+                            id="file-input"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    if (file.size > 5000000) {
+                                        alert('La imagen es demasiado grande');
+                                        return;
                                     }
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        }}
-                    />
-                </button>
-            </div>
-
-            <div className="flex items-center mt-2">
-                <button
-                    type="button"
-                    onClick={() => handleAlignment('left')}
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('left')}`}
-                >
-                    <IconAlignBoxLeftStretch />
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => handleAlignment('center')}
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('center')}`}
-                >
-                    <IconAlignBoxCenterTop />
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => handleAlignment('right')}
-                    className={`p-2 hover:bg-gray-100 rounded transition-colors ${getAlignmentClass('right')}`}
-                >
-                    <IconAlignBoxRightStretch />
-                </button>
+                                    const reader = new FileReader();
+                                    reader.onload = (event) => {
+                                        const base64 = event.target?.result;
+                                        if (base64) {
+                                            editor
+                                                .chain()
+                                                .focus()
+                                                .setImage({ src: base64 })
+                                                .run();
+                                        }
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                        />
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -318,17 +366,26 @@ const MenuBar = () => {
 const CuadroTexto: React.FC<CuadroTextoProps> = ({
     onContentChange,
     initialContent,
+    storageKey = 'editor-draft',
 }) => {
+    React.useEffect(() => {
+        const savedContent = localStorage.getItem(storageKey);
+        if (savedContent && !initialContent) {
+            onContentChange?.(savedContent);
+        }
+    }, [onContentChange, initialContent, storageKey]);
+
     return (
         <EditorProvider
             slotBefore={<MenuBar />}
             extensions={extensions}
             content={initialContent || ''}
             onUpdate={({ editor }) => {
-                onContentChange?.(editor.getHTML());
+                const html = editor.getHTML();
+                onContentChange?.(html);
+                localStorage.setItem(storageKey, html);
             }}
         />
     );
 };
-
 export default CuadroTexto;
