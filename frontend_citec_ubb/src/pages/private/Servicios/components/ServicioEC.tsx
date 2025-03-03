@@ -24,16 +24,18 @@ const ServicioEC: React.FC<ServicioECProps> = ({ informe, setInforme }) => {
                 />
             </div>
             <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">II Observaciones</h4>
+                <h4 className="text-lg font-bold mb-2">
+                    II Objetivo del ensayo
+                </h4>
                 <CuadroTexto
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            observaciones_EC: content,
+                            objetivo_ensayo_EC: content,
                         }))
                     }
-                    initialContent={informe.observaciones_EC}
-                    storageKey="editor-draft-observaciones-EC"
+                    initialContent={informe.objetivo_ensayo_EC}
+                    storageKey="editor-draft-objetivo_ensayo-EC"
                 />
             </div>
             <div className="mb-4">
@@ -62,7 +64,7 @@ const ServicioEC: React.FC<ServicioECProps> = ({ informe, setInforme }) => {
                             procedencia_producto: content,
                         }))
                     }
-                    initialContent={informe.especificaciones_tecnicas}
+                    initialContent={informe.procedencia_producto}
                     storageKey="editor-draft-procedencia_producto"
                 />
             </div>
@@ -75,7 +77,7 @@ const ServicioEC: React.FC<ServicioECProps> = ({ informe, setInforme }) => {
                             norma_aplicada: content,
                         }))
                     }
-                    initialContent={informe.materiales_metodos}
+                    initialContent={informe.norma_aplicada}
                     storageKey="editor-draft-norma_aplicada"
                 />
             </div>
@@ -102,10 +104,10 @@ const ServicioEC: React.FC<ServicioECProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            condiciones_ensayo_AC: content,
+                            condiciones_ensayo_EC: content,
                         }))
                     }
-                    initialContent={informe.condiciones_ensayo_AC}
+                    initialContent={informe.condiciones_ensayo_EC}
                     storageKey="editor-draft-condiciones_ensayo-EC"
                 />
             </div>

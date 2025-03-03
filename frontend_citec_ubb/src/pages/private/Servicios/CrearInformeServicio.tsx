@@ -11,29 +11,75 @@ import ServicioEC from './components/ServicioEC';
 const CrearInformeServicio: React.FC = () => {
     const { token } = useData();
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
-    const [informe, setInforme] = useState({
+
+    const initialInformeState = {
         // Campos comunes
         id_servicio: '',
         fecha_informe: '',
         rut_receptor: '',
         fecha_inicio: '',
         fecha_termino: '',
-        antecedentes: '',
-        identificacion_producto: '',
 
         // Campos específicos de AA
+        antecedentes_AA: '',
+        objetivo_ensayo_AA: '',
+        identificacion_producto_AA: '',
         metodos_equipos: '',
-        condiciones_ensayo: '',
+        condiciones_ensayo_AA: '',
         definiciones: '',
-        resultados: '',
+        resultados_AA: '',
         conclusiones: '',
         elementos_verificacion: '',
-        observaciones: '',
+        observaciones_AA: '',
 
         // Campos específicos de EC
-        especificaciones_tecnicas: '',
-        materiales_metodos: '',
-    });
+        antecedentes_EC: '',
+        objetivo_ensayo_EC: '',
+        identificacion_producto_EC: '',
+        procedencia_producto: '',
+        norma_aplicada: '',
+        metodologia_ensayo: '',
+        condiciones_ensayo_EC: '',
+        fecha_ensayo: '',
+        operador_equipamiento: '',
+        resultados_EC: '',
+        comentarios: '',
+        observaciones_EC: '',
+    };
+
+    const [informe, setInforme] = useState(initialInformeState);
+
+    const clearLocalStorageDrafts = () => {
+        const storageKeys = [
+            // AA
+            'editor-draft-antecedentes-AA',
+            'editor-draft-objetivo_ensayo-AA',
+            'editor-draft-identificacion_producto-AA',
+            'editor-draft-metodos_equipos',
+            'editor-draft-condiciones_ensayo-AA',
+            'editor-draft-definiciones',
+            'editor-draft-resultados-AA',
+            'editor-draft-conclusiones',
+            'editor-draft-elementos_verificacion',
+            'editor-draft-observaciones-AA',
+
+            // EC
+            'editor-draft-antecedentes-EC',
+            'editor-draft-objetivo_ensayo-EC',
+            'editor-draft-identificacion_producto-EC',
+            'editor-draft-procedencia_producto',
+            'editor-draft-norma_aplicada',
+            'editor-draft-metodologia_ensayo',
+            'editor-draft-condiciones_ensayo-EC',
+            'editor-draft-fecha_ensayo',
+            'editor-draft-operador_equipamiento',
+            'editor-draft-resultados-EC',
+            'editor-draft-comentarios',
+            'editor-draft-observaciones-EC',
+        ];
+
+        storageKeys.forEach((key) => localStorage.removeItem(key));
+    };
 
     useEffect(() => {
         const fetchEmpresas = async () => {
@@ -67,7 +113,16 @@ const CrearInformeServicio: React.FC = () => {
         e.preventDefault();
 
         try {
+            if (!informe.id_servicio) {
+                throw new Error('Por favor, seleccione un servicio');
+            }
+
             console.log('Datos del formulario:', informe);
+
+            ResponseMessage.show('Informe creado exitosamente');
+
+            clearLocalStorageDrafts();
+            setInforme(initialInformeState);
         } catch (error) {
             console.error('Error al crear el informe:', error);
             ResponseMessage.show('Error al crear el informe');

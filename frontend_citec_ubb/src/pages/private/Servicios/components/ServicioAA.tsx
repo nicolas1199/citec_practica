@@ -16,24 +16,26 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            antecedentes_AC: content,
+                            antecedentes_AA: content,
                         }))
                     }
-                    initialContent={informe.antecedentes_AC}
-                    storageKey="editor-draft-antecedentes-AC"
+                    initialContent={informe.antecedentes_AA}
+                    storageKey="editor-draft-antecedentes-AA"
                 />
             </div>
             <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">II Observaciones</h4>
+                <h4 className="text-lg font-bold mb-2">
+                    II Objetivo del ensayo
+                </h4>
                 <CuadroTexto
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            observaciones_AC: content,
+                            objetivo_ensayo_AA: content,
                         }))
                     }
-                    initialContent={informe.observaciones_AC}
-                    storageKey="editor-draft-observaciones-AC"
+                    initialContent={informe.objetivo_ensayo_AA}
+                    storageKey="editor-draft-objetivo_ensayo-AA"
                 />
             </div>
             <div className="mb-4">
@@ -44,11 +46,11 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            identificacion_producto_AC: content,
+                            identificacion_producto_AA: content,
                         }))
                     }
-                    initialContent={informe.identificacion_producto_AC}
-                    storageKey="editor-draft-identificacion_producto-AC"
+                    initialContent={informe.identificacion_producto_AA}
+                    storageKey="editor-draft-identificacion_producto-AA"
                 />
             </div>
             <div className="mb-4">
@@ -74,11 +76,11 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev) => ({
                             ...prev,
-                            condiciones_ensayo_AC: content,
+                            condiciones_ensayo_AA: content,
                         }))
                     }
-                    initialContent={informe.condiciones_ensayo_AC}
-                    storageKey="editor-draft-condiciones_ensayo-AC"
+                    initialContent={informe.condiciones_ensayo_AA}
+                    storageKey="editor-draft-condiciones_ensayo-AA"
                 />
             </div>
 
@@ -104,11 +106,11 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev) => ({
                             ...prev,
-                            resultados_AC: content,
+                            resultados_AA: content,
                         }))
                     }
-                    initialContent={informe.resultados_AC}
-                    storageKey="editor-draft-resultados-AC"
+                    initialContent={informe.resultados_AA}
+                    storageKey="editor-draft-resultados-AA"
                 />
             </div>
 
@@ -154,11 +156,11 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev) => ({
                             ...prev,
-                            observaciones_AC: content,
+                            observaciones_AA: content,
                         }))
                     }
-                    initialContent={informe.observaciones_AC}
-                    storageKey="editor-draft-observaciones-AC"
+                    initialContent={informe.observaciones_AA}
+                    storageKey="editor-draft-observaciones-AA"
                 />
             </div>
         </>
