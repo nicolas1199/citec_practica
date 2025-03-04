@@ -17,6 +17,8 @@ export class EnsayosService {
             nombre_ensayo: ensayo.nombre_ensayo,
             tipo_servicio_id: ensayo.tipo_servicio_id,
         });
+        await ensayoCreado.save(); // 🔹 Guarda en la base de datos
+        console.log('✅ Ensayo guardado en la BD:', ensayoCreado);
 
         return ensayoCreado as RetornoEnsayoDto;
     }
@@ -47,25 +49,27 @@ export class EnsayosService {
 
     async eliminar(
         clavePrimaria: EliminarEnsayoDto,
-    ): Promise<RetornoEnsayoDto> {
+    ): Promise<{ mensaje: string }> {
         const ensayo = await Ensayos.findOne({
             where: { id: clavePrimaria.id },
         });
-
+    
         if (!ensayo) {
             throw new NotFoundException([
                 `Ensayo con id ${clavePrimaria.id} no encontrado`,
             ]);
         }
-
+    
         try {
             await Ensayos.destroy({ where: { id: clavePrimaria.id } });
+            return { mensaje: `Ensayo con id ${clavePrimaria.id} eliminado correctamente` }; // ✅ Respuesta correcta
         } catch (error) {   
-            throw new ConflictException([`Error al eliminar ensayo con id ${clavePrimaria.id}`]);
+            throw new ConflictException([
+                `Error al eliminar ensayo con id ${clavePrimaria.id}`,
+            ]);
         }
-
-        return this.obtenerPorId(clavePrimaria); // Usamos el DTO para obtener el ensayo después de la eliminación
     }
+    
 
     async obtenerTodos(): Promise<any> {
         const ensayosRetorno = await Ensayos.findAll({

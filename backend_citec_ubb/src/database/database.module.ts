@@ -80,7 +80,11 @@ export class DatabaseModule implements OnApplicationBootstrap {
             this.configService.node.env === 'prod'
         ) {
             console.log('Ejecutando seeders en entorno de desarrollo...');
-            await this.seederService.run();
+            const ejecutarSeeders = false; // Cambiar a 'true' solo si necesitas recargar los datos
+            if (ejecutarSeeders) {
+                await this.seederService.run();
+            }
+
         }
     }
 }

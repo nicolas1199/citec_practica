@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import type { Ensayo, CrearEnsayo } from '../../../components/Utils/interfaces';
+import type { CrearEnsayo } from '../../../components/Utils/interfaces';
 import { ENDPOINTS } from "../../../common/constants/urls.constants";
 import { useData } from '../../../components/AuthDataContext';
 import ResponseMessage from '../../../components/ResponseMessage';
@@ -9,45 +9,28 @@ import ResponseMessage from '../../../components/ResponseMessage';
 const CrearEnsayo: React.FC = () => {
     const navigate = useNavigate();
     const { token } = useData();
-    const [ensayo, setEnsayo] = useState<Ensayo[]>([]);
-    const [formData, setFormData] = useState<CrearEnsayo>({
-        nombre: '',
-        id_servicio: 0,
-    });
     
+    const [formData, setFormData] = useState<CrearEnsayo>({
+        nombre_ensayo: '', 
+        tipo_servicio_id: 0, // ID del servicio
+    });
 
-    useEffect(() => {
-        const fetchEnsayos = async () => {
-            try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.OBTENER_TODOS}`,
-                    {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }
-                );
-                setEnsayo(response.data);
-            } catch (error) {
-                console.error('Error al obtener los ensayos:', error);
-                ResponseMessage.show('Error al cargar los ensayos');
-            }
-        };
-
-        fetchEnsayos();
-    }, [token]);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.name === "tipo_servicio_id"
+                ? Number(e.target.value) || 0  // Asegura que sea un número
+                : e.target.value,
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const formattedData = {
-            ...formData,
-            nombre: String(formData.nombre),
-            id_servicio: Number(formData.id_servicio)
-        };
-
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.CREAR}`,
-                formattedData,
+                formData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -67,7 +50,7 @@ const CrearEnsayo: React.FC = () => {
                     message: error.message,
                     response: error.response?.data,
                     status: error.response?.status,
-                    data: formattedData
+                    data: formData
                 });
             }
         }
@@ -81,12 +64,13 @@ const CrearEnsayo: React.FC = () => {
                 <div className="grid grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
-                            Nombre
+                            Nombre del Ensayo
                         </label>
                         <input
-                            type="string"
-                            name="Nombre"
-                            value={formData.nombre}
+                            type="text"
+                            name="nombre_ensayo"  // <-- Debe coincidir con `CrearEnsayo`
+                            value={formData.nombre_ensayo}
+                            onChange={handleChange}
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                             required
                         />
@@ -94,17 +78,17 @@ const CrearEnsayo: React.FC = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
-                            Id del Servicio
+                            ID del Servicio
                         </label>
-                        <select
-                            name="Id del servicio"
-                            value={formData.id_servicio}
+                        <input
+                            type="number"
+                            name="tipo_servicio_id"  // <-- Debe coincidir con `CrearEnsayo`
+                            value={formData.tipo_servicio_id}
+                            onChange={handleChange}
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                             required
-                        >
-                            <option value="NO">No</option>
-                            <option value="SI">Sí</option>
-                        </select>
+                            min={1} // Evita números negativos o cero
+                        />
                     </div>
                 </div>
 

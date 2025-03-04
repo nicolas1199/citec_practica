@@ -61,9 +61,9 @@ const extensions = [
         },
     }),
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    TextStyle.configure({ types: [ListItem.name] }),
-    ListItem.configure({ types: [TextStyle.name] }),
-    UnderLine.configure({ types: [TextStyle.name] }),
+    TextStyle.configure(),
+    ListItem.configure(),
+    UnderLine.configure(),
     CustomImage.configure({
         inline: true,
         allowBase64: true,
@@ -275,7 +275,7 @@ const MenuBar = () => {
                                         editor
                                             .chain()
                                             .focus()
-                                            .setImage({ src: base64 })
+                                            .setImage({ src: base64 as string})
                                             .run();
                                     }
                                 };

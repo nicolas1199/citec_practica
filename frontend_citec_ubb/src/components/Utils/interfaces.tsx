@@ -123,15 +123,15 @@ export interface PropuestaServicio {
 
 export interface Ensayo {
     id: number;
-    nombre: string;
-    id_servicio: number;
+    nombre_ensayo: string;
+    tipo_servicio_id: number;
     createdAt: string;
     updatedAt: string;
 }
 
 export type CrearEnsayo = {
-    nombre: Ensayo['nombre'];
-    id_servicio: Ensayo['id_servicio']
+    nombre_ensayo: Ensayo['nombre_ensayo'];
+    tipo_servicio_id: Ensayo['tipo_servicio_id']
 }
 
 export type ActualizarEnsayo = CrearEnsayo & {

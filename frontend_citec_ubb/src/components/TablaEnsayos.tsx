@@ -30,13 +30,26 @@ const TablaEnsayos = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            setEnsayos(response.data || []);
+    
+            console.log("Datos recibidos:", response.data); // 🔍 Verifica la estructura en la consola
+    
+            // Asegurar que los datos coincidan con la interfaz Ensayo
+            const ensayosFormateados = response.data.map((ensayo: any) => ({
+                id: ensayo.id,
+                nombre_ensayo: ensayo.nombre ?? ensayo.nombre_ensayo, // Manejar ambas opciones
+                tipo_servicio_id: ensayo.id_servicio ?? ensayo.tipo_servicio_id,
+                createdAt: ensayo.createdAt,
+                updatedAt: ensayo.updatedAt,
+            }));
+    
+            setEnsayos(ensayosFormateados);
         } catch (error) {
             ResponseMessage.show('Error al cargar los ensayos');
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchEnsayos();
@@ -59,17 +72,24 @@ const TablaEnsayos = () => {
         if (!confirmDelete) return;
 
         try {
+            console.log('Intentando eliminar en:', `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.ELIMINAR}/${id}`);
             await axios.delete(
+                
                 `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.ELIMINAR}/${id}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            setEnsayos((prev) => prev.filter((ensayo) => ensayo.id !== id));
+            setEnsayos((prevEnsayos) => {
+                const nuevaLista = prevEnsayos.filter((ensayo) => ensayo.id !== id);
+                console.log("Lista de ensayos después de eliminar:", nuevaLista); // 🔍 Depuración
+                return nuevaLista;
+            });
             ResponseMessage.show('Ensayo eliminado correctamente');
             handleCloseDetails();
         } catch (error) {
             ResponseMessage.show('Error al eliminar el ensayo');
+            console.error('Error eliminando ensayo:', error);  // ✅ Agregado para depuración
         }
     };
 
@@ -78,11 +98,11 @@ const TablaEnsayos = () => {
             header: () => 'ID Ensayo',
             cell: (info) => info.getValue() ?? 'N/A',
         }),
-        columnHelper.accessor('nombre', {
+        columnHelper.accessor('nombre_ensayo', {  // ✅ Corregido el nombre de la propiedad
             header: () => 'Nombre del Ensayo',
             cell: (info) => info.getValue() ?? 'N/A',
         }),
-        columnHelper.accessor('id_servicio', {
+        columnHelper.accessor('tipo_servicio_id', {  // ✅ Corregido el nombre de la propiedad
             header: () => 'ID Servicio',
             cell: (info) => info.getValue() ?? 'N/A',
         }),
@@ -147,8 +167,8 @@ const TablaEnsayos = () => {
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 className="text-lg font-semibold mb-2">Detalles del Ensayo</h3>
                         <p><strong>ID:</strong> {selectedEnsayo.id}</p>
-                        <p><strong>Nombre:</strong> {selectedEnsayo.nombre}</p>
-                        <p><strong>ID Servicio:</strong> {selectedEnsayo.id_servicio}</p>
+                        <p><strong>Nombre:</strong> {selectedEnsayo.nombre_ensayo}</p>  {/* ✅ Corregido el nombre */}
+                        <p><strong>ID Servicio:</strong> {selectedEnsayo.tipo_servicio_id}</p>  {/* ✅ Corregido el nombre */}
 
                         <div className="mt-4 flex justify-between">
                             <button
