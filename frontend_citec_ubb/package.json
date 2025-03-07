@@ -27,6 +27,9 @@
         "@tiptap/starter-kit": "^2.11.5",
         "animejs": "^3.2.2",
         "axios": "^1.7.3",
+        "datatables.net": "^2.2.2",
+        "datatables.net-dt": "^2.2.2",
+        "datatables.net-react": "^1.0.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-id-swiper": "^4.0.0",
@@ -36,6 +39,7 @@
     },
     "devDependencies": {
         "@types/animejs": "^3.1.12",
+        "@types/node": "^22.13.9",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@typescript-eslint/eslint-plugin": "^7.15.0",

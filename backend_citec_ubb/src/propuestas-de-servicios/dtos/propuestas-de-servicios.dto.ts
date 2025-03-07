@@ -17,7 +17,7 @@ import {
 import { ESTADOS, Estados } from '../../common/constants/estados.constants';
 import { Transform, Type } from 'class-transformer';
 // Remove GruposDeServicios import
-import SubServicios from 'src/database/models/sub-servicios.model';
+import Ensayos from 'src/database/models/ensayos.model';
 import { RetornoEmpresasDto } from '../../empresas/dtos/empresas.dto';
 import { rutRegex } from '../../common/utils/regex';
 
