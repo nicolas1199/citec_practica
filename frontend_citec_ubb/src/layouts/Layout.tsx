@@ -380,17 +380,6 @@ function Layout() {
                                                     Ver Servicios
                                                 </Link>
                                             </li>
-
-                                            <li>
-                                                <Link
-                                                    to={
-                                                        '/dashboard/orden-trabajo/crear-informe'
-                                                    }
-                                                    className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
-                                                >
-                                                    Crear Informe
-                                                </Link>
-                                            </li>
                                         </ul>
                                     )}
                                 </div>
@@ -458,6 +447,16 @@ function Layout() {
                                                     className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
                                                 >
                                                     Ver Ensayos
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    to={
+                                                        '/dashboard/orden-trabajo/crear-informe'
+                                                    }
+                                                    className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
+                                                >
+                                                    Crear Informe
                                                 </Link>
                                             </li>
                                         </ul>

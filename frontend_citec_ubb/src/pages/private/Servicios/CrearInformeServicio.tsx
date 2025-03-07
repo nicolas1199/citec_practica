@@ -155,9 +155,7 @@ const CrearInformeServicio: React.FC = () => {
             className="p-6 w-10/12 mx-auto bg-white shadow-md rounded-md my-10"
             onSubmit={handleSubmit}
         >
-            <h1 className="text-2xl font-bold mb-4">
-                Crear Informe de Servicio
-            </h1>
+            <h1 className="text-2xl font-bold mb-4">Crear Informe de Ensayo</h1>
 
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
