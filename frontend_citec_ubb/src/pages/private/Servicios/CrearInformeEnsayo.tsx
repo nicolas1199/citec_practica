@@ -11,7 +11,11 @@ import ServicioEC from './components/ServicioEC';
 const CrearInformeEnsayo: React.FC = () => {
     const { token } = useData();
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
+    const [aaTipoServicio, setAATipoServicio] = useState<
+        'maquinaria' | 'estructural'
+    >('maquinaria');
 
+    // Estados de los campos de los formularios
     const initialCommonState = {
         id_servicio: '',
         fecha_informe: '',
@@ -20,25 +24,37 @@ const CrearInformeEnsayo: React.FC = () => {
         fecha_termino: '',
     };
 
-    const initialAAState = {
+    // Estados de los campos del formulario de AA Maquinaria
+    const initialAAMaquinariaState = {
         antecedentes: '',
         objetivo_ensayo: '',
         identificacion_producto: '',
-        condiciones_ensayo: '',
-        resultados: '',
-        observaciones: '',
-        metodos_equipos: '',
-        definiciones: '',
-        conclusiones: '',
-        elementos_verificacion: '',
         procedencia_producto: '',
         norma_aplicada: '',
         metodologia_ensayo: '',
+        condiciones_ensayo: '',
         fecha_ensayo: '',
         operador_equipamiento: '',
+        resultados: '',
         comentarios: '',
+        observaciones: '',
     };
 
+    // Estados de los campos del formulario de AA Estructural
+    const initialAAEstructuralState = {
+        antecedentes: '',
+        objetivo_ensayo: '',
+        identificacion_producto: '',
+        metodos_equipos: '',
+        condiciones_ensayo: '',
+        definiciones: '',
+        resultados: '',
+        conclusiones: '',
+        elementos_verificacion: '',
+        observaciones: '',
+    };
+
+    // Estados de los campos del formulario de EC
     const initialECState = {
         antecedentes: '',
         materiales_caracteristicas: '',
@@ -54,54 +70,41 @@ const CrearInformeEnsayo: React.FC = () => {
     };
 
     const [commonFields, setCommonFields] = useState(initialCommonState);
-    const [aaFields, setAAFields] = useState(initialAAState);
+    const [aaMaquinariaFields, setAAMaquinariaFields] = useState(
+        initialAAMaquinariaState,
+    );
+    const [aaEstructuralFields, setAAEstructuralFields] = useState(
+        initialAAEstructuralState,
+    );
     const [ecFields, setECFields] = useState(initialECState);
 
     const clearLocalStorageDrafts = () => {
-        const storageKeys = [
-            // AA Estructural
-            'editor-draft-antecedentes-AA',
-            'editor-draft-objetivo_ensayo-AA',
-            'editor-draft-identificacion_producto-AA',
-            'editor-draft-metodos_equipos',
-            'editor-draft-condiciones_ensayo-AA',
-            'editor-draft-definiciones',
-            'editor-draft-resultados-AA',
-            'editor-draft-conclusiones',
-            'editor-draft-elementos_verificacion',
-            'editor-draft-observaciones-AA',
+        const allKeys = Object.keys(localStorage);
 
-            // AA Maquinaria
-            'editor-draft-procedencia_producto-maquinaria',
-            'editor-draft-norma_aplicada-maquinaria',
-            'editor-draft-metodologia_ensayo-maquinaria',
-            'editor-draft-condiciones_ensayo-maquinaria',
-            'editor-draft-fecha_ensayo-maquinaria',
-            'editor-draft-operador_equipamiento-maquinaria',
-            'editor-draft-resultados-maquinaria',
-            'editor-draft-comentarios-maquinaria',
-            'editor-draft-observaciones-maquinaria',
+        const draftKeys = allKeys.filter((key) =>
+            key.startsWith('editor-draft-'),
+        );
 
-            // EC
-            'editor-draft-antecedentes-EC',
-            'editor-draft-materiales-caracteristicas-EC',
-            'editor-draft-fecha-ensayo-detalle-EC',
-            'editor-draft-dimensiones-EC',
-            'editor-draft-normativa-utilizada-EC',
-            'editor-draft-otros-datos-EC',
-            'editor-draft-aplicacion-carga-EC',
-            'editor-draft-resultados-EC',
-            'editor-draft-modos-falla-EC',
-            'editor-draft-conclusiones-EC',
-            'editor-draft-observaciones-EC',
-        ];
-
-        storageKeys.forEach((key) => localStorage.removeItem(key));
+        draftKeys.forEach((key) => {
+            localStorage.removeItem(key);
+        });
     };
 
     const getActiveFields = () => {
         if (commonFields.id_servicio === '1') {
-            return { ...commonFields, ...aaFields };
+            if (aaTipoServicio === 'maquinaria') {
+                return {
+                    ...commonFields,
+                    ...aaMaquinariaFields,
+                    tipo_aa: 'maquinaria',
+                };
+            } else {
+                return {
+                    ...commonFields,
+                    ...aaEstructuralFields,
+                    tipo_aa: 'estructural',
+                };
+            }
         } else if (commonFields.id_servicio === '2') {
             return { ...commonFields, ...ecFields };
         }
@@ -134,6 +137,24 @@ const CrearInformeEnsayo: React.FC = () => {
             ...commonFields,
             [e.target.name]: e.target.value,
         });
+
+        if (
+            e.target.name === 'aa_tipo' &&
+            (e.target.value === 'maquinaria' ||
+                e.target.value === 'estructural')
+        ) {
+            if (aaTipoServicio === 'maquinaria') {
+                setAAMaquinariaFields(aaMaquinariaFields);
+            } else {
+                setAAEstructuralFields(aaEstructuralFields);
+            }
+
+            setAATipoServicio(e.target.value as 'maquinaria' | 'estructural');
+
+            requestAnimationFrame(() => {
+                console.log('Type changed to:', e.target.value);
+            });
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -147,12 +168,16 @@ const CrearInformeEnsayo: React.FC = () => {
             const formData = getActiveFields();
             console.log('Datos del formulario:', formData);
 
-            ResponseMessage.show('Informe creado exitosamente');
-
+            // Limpiar drafts de localStorage
             clearLocalStorageDrafts();
+
+            // Reestablecer los campos a sus valores iniciales
             setCommonFields(initialCommonState);
-            setAAFields(initialAAState);
+            setAAMaquinariaFields(initialAAMaquinariaState);
+            setAAEstructuralFields(initialAAEstructuralState);
             setECFields(initialECState);
+
+            ResponseMessage.show('Informe creado exitosamente');
         } catch (error) {
             console.error('Error al crear el informe:', error);
             ResponseMessage.show('Error al crear el informe');
@@ -168,7 +193,36 @@ const CrearInformeEnsayo: React.FC = () => {
         switch (commonFields.id_servicio) {
             case '1':
                 return (
-                    <ServicioAA informe={aaFields} setInforme={setAAFields} />
+                    <>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">
+                                Tipo de AA
+                            </label>
+                            <select
+                                name="aa_tipo"
+                                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
+                                onChange={handleInputChange}
+                                value={aaTipoServicio}
+                            >
+                                <option value="maquinaria">Maquinaria</option>
+                                <option value="estructural">Estructural</option>
+                            </select>
+                        </div>
+                        <ServicioAA
+                            key={`aa-${aaTipoServicio}`}
+                            informe={
+                                aaTipoServicio === 'maquinaria'
+                                    ? aaMaquinariaFields
+                                    : aaEstructuralFields
+                            }
+                            setInforme={
+                                aaTipoServicio === 'maquinaria'
+                                    ? setAAMaquinariaFields
+                                    : setAAEstructuralFields
+                            }
+                            tipoAA={aaTipoServicio}
+                        />
+                    </>
                 );
             case '2':
                 return (

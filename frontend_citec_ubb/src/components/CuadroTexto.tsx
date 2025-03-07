@@ -1,5 +1,5 @@
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
@@ -116,10 +116,12 @@ const extensions = [
 ];
 
 const TableMenu = ({ editor }) => {
+    const [showTableOptions, setShowTableOptions] = useState(false);
+
     if (!editor) return null;
 
     const isTableSelected = editor.isActive('table');
-    const [showTableOptions, setShowTableOptions] = useState(false);
+
     const createTable = () => {
         if (isTableSelected) {
             setShowTableOptions(!showTableOptions);
@@ -633,17 +635,24 @@ const CuadroTexto: React.FC<CuadroTextoProps> = ({
     initialContent,
     storageKey = 'editor-draft',
 }) => {
-    React.useEffect(() => {
+    const [content, setContent] = useState(initialContent || '');
+    const editorKey = useRef(Math.random().toString(36).substring(7));
+
+    useEffect(() => {
         const savedContent = localStorage.getItem(storageKey);
         if (savedContent && !initialContent) {
+            setContent(savedContent);
             onContentChange?.(savedContent);
+        } else if (initialContent !== content) {
+            setContent(initialContent || '');
         }
-    }, [onContentChange, initialContent, storageKey]);
+    }, [onContentChange, initialContent, storageKey, content]);
 
     return (
         <EditorProvider
+            key={`editor-${storageKey}-${editorKey.current}`}
             extensions={extensions}
-            content={initialContent || ''}
+            content={content}
             slotBefore={<MenuBar />}
             onUpdate={({ editor }) => {
                 const html = editor.getHTML();

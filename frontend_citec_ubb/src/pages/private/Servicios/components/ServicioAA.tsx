@@ -1,35 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CuadroTexto from '../../../../components/CuadroTexto';
 
 interface ServicioAAProps {
     informe: any;
     setInforme: React.Dispatch<React.SetStateAction<any>>;
+    tipoAA: 'maquinaria' | 'estructural';
     storageKey?: string;
 }
 
-const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
-    const [tipoServicio, setTipoServicio] = useState<string>('estructural');
-
-    const handleTipoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setTipoServicio(e.target.value);
-    };
+const ServicioAA: React.FC<ServicioAAProps> = ({
+    informe,
+    setInforme,
+    tipoAA,
+}) => {
+    const getStorageKey = (baseKey: string) =>
+        `editor-draft-${baseKey}-${tipoAA}`;
 
     return (
         <>
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                    Tipo de Servicio AA
-                </label>
-                <select
-                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
-                    value={tipoServicio}
-                    onChange={handleTipoChange}
-                >
-                    <option value="estructural">Estructural</option>
-                    <option value="maquinaria">Maquinaria</option>
-                </select>
-            </div>
-
             <div className="mb-4">
                 <h4 className="text-lg font-bold mb-2">I Antecedentes </h4>
                 <CuadroTexto
@@ -40,7 +28,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                         }))
                     }
                     initialContent={informe.antecedentes}
-                    storageKey="editor-draft-antecedentes-AA"
+                    storageKey={getStorageKey('antecedentes')}
                 />
             </div>
             <div className="mb-4">
@@ -55,7 +43,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                         }))
                     }
                     initialContent={informe.objetivo_ensayo}
-                    storageKey="editor-draft-objetivo_ensayo-AA"
+                    storageKey={getStorageKey('objetivo_ensayo')}
                 />
             </div>
             <div className="mb-4">
@@ -70,11 +58,11 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                         }))
                     }
                     initialContent={informe.identificacion_producto}
-                    storageKey="editor-draft-identificacion_producto-AA"
+                    storageKey={getStorageKey('identificacion_producto')}
                 />
             </div>
 
-            {tipoServicio === 'estructural' ? (
+            {tipoAA === 'estructural' ? (
                 // Secciones específicas para Estructural
                 <>
                     <div className="mb-4">
@@ -89,7 +77,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.metodos_equipos}
-                            storageKey="editor-draft-metodos_equipos"
+                            storageKey={getStorageKey('metodos_equipos')}
                         />
                     </div>
                     <div className="mb-4">
@@ -104,7 +92,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.condiciones_ensayo}
-                            storageKey="editor-draft-condiciones_ensayo-AA"
+                            storageKey={getStorageKey('condiciones_ensayo')}
                         />
                     </div>
                     <div className="mb-4">
@@ -119,7 +107,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.definiciones}
-                            storageKey="editor-draft-definiciones"
+                            storageKey={getStorageKey('definiciones')}
                         />
                     </div>
                     <div className="mb-4">
@@ -134,7 +122,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.resultados}
-                            storageKey="editor-draft-resultados-AA"
+                            storageKey={getStorageKey('resultados')}
                         />
                     </div>
                     <div className="mb-4">
@@ -149,7 +137,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.conclusiones}
-                            storageKey="editor-draft-conclusiones"
+                            storageKey={getStorageKey('conclusiones')}
                         />
                     </div>
                     <div className="mb-4">
@@ -164,7 +152,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.elementos_verificacion}
-                            storageKey="editor-draft-elementos_verificacion"
+                            storageKey={getStorageKey('elementos_verificacion')}
                         />
                     </div>
                     <div className="mb-4">
@@ -179,7 +167,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.observaciones}
-                            storageKey="editor-draft-observaciones-AA"
+                            storageKey={getStorageKey('observaciones')}
                         />
                     </div>
                 </>
@@ -198,7 +186,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.procedencia_producto}
-                            storageKey="editor-draft-procedencia_producto-maquinaria"
+                            storageKey={getStorageKey('procedencia_producto')}
                         />
                     </div>
                     <div className="mb-4">
@@ -213,7 +201,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.norma_aplicada}
-                            storageKey="editor-draft-norma_aplicada-maquinaria"
+                            storageKey={getStorageKey('norma_aplicada')}
                         />
                     </div>
                     <div className="mb-4">
@@ -228,7 +216,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.metodologia_ensayo}
-                            storageKey="editor-draft-metodologia_ensayo-maquinaria"
+                            storageKey={getStorageKey('metodologia_ensayo')}
                         />
                     </div>
                     <div className="mb-4">
@@ -243,7 +231,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.condiciones_ensayo}
-                            storageKey="editor-draft-condiciones_ensayo-maquinaria"
+                            storageKey={getStorageKey('condiciones_ensayo')}
                         />
                     </div>
                     <div className="mb-4">
@@ -258,7 +246,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.fecha_ensayo}
-                            storageKey="editor-draft-fecha_ensayo-maquinaria"
+                            storageKey={getStorageKey('fecha_ensayo')}
                         />
                     </div>
                     <div className="mb-4">
@@ -274,7 +262,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.operador_equipamiento}
-                            storageKey="editor-draft-operador_equipamiento-maquinaria"
+                            storageKey={getStorageKey('operador_equipamiento')}
                         />
                     </div>
                     <div className="mb-4">
@@ -287,7 +275,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.resultados}
-                            storageKey="editor-draft-resultados-maquinaria"
+                            storageKey={getStorageKey('resultados')}
                         />
                     </div>
                     <div className="mb-4">
@@ -302,7 +290,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.comentarios}
-                            storageKey="editor-draft-comentarios-maquinaria"
+                            storageKey={getStorageKey('comentarios')}
                         />
                     </div>
                     <div className="mb-4">
@@ -317,7 +305,7 @@ const ServicioAA: React.FC<ServicioAAProps> = ({ informe, setInforme }) => {
                                 }))
                             }
                             initialContent={informe.observaciones}
-                            storageKey="editor-draft-observaciones-maquinaria"
+                            storageKey={getStorageKey('observaciones')}
                         />
                     </div>
                 </>
