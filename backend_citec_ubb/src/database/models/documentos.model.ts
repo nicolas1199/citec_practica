@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 import {
     AutoIncrement,
     BelongsTo,
@@ -9,13 +9,12 @@ import {
     Model,
     PrimaryKey,
     Table,
-    UpdatedAt
-} from "sequelize-typescript";
-import { AreasDocumentos } from "./area-documento.model";
-import { AREAS_DE_DOCUMENTO } from "src/common/constants/area-documentos.constants";
-import ValidezDocumentos from "./validez-documento.model";
-import { VALIDEZ_DE_DOCUMENTO } from "src/common/constants/validez-de-documento.constants";
-
+    UpdatedAt,
+} from 'sequelize-typescript';
+import { AreasDocumentos } from './area-documento.model';
+import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
+import ValidezDocumentos from './validez-documento.model';
+import { VALIDEZ_DE_DOCUMENTO } from 'src/common/constants/validez-de-documento.constants';
 
 @Table({
     tableName: 'documentos',
@@ -110,6 +109,5 @@ export class Documentos extends Model<Documentos> {
 
     @BelongsTo(() => ValidezDocumentos)
     declare validez: ValidezDocumentos;
-
 }
 export default Documentos;
