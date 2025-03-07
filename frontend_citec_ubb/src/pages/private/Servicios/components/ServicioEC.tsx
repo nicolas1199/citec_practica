@@ -16,173 +16,176 @@ const ServicioEC: React.FC<ServicioECProps> = ({ informe, setInforme }) => {
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            antecedentes_EC: content,
+                            antecedentes: content,
                         }))
                     }
-                    initialContent={informe.antecedentes_EC}
+                    initialContent={informe.antecedentes}
                     storageKey="editor-draft-antecedentes-EC"
                 />
             </div>
+
             <div className="mb-4">
                 <h4 className="text-lg font-bold mb-2">
-                    II Objetivo del ensayo
+                    II Identificación de la probeta a ensayar
                 </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            objetivo_ensayo_EC: content,
-                        }))
-                    }
-                    initialContent={informe.objetivo_ensayo_EC}
-                    storageKey="editor-draft-objetivo_ensayo-EC"
-                />
-            </div>
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">
-                    III Identificación del producto sometido a ensayo
-                </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            identificacion_producto_EC: content,
-                        }))
-                    }
-                    initialContent={informe.identificacion_producto_EC}
-                    storageKey="editor-draft-identificacion_producto-EC"
-                />
-            </div>
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">
-                    IV Procedencia del producto
-                </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            procedencia_producto: content,
-                        }))
-                    }
-                    initialContent={informe.procedencia_producto}
-                    storageKey="editor-draft-procedencia_producto"
-                />
-            </div>
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">V Norma aplicada</h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            norma_aplicada: content,
-                        }))
-                    }
-                    initialContent={informe.norma_aplicada}
-                    storageKey="editor-draft-norma_aplicada"
-                />
-            </div>
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">
-                    VI Metodologia de ensayo
-                </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            metodologia_ensayo: content,
-                        }))
-                    }
-                    initialContent={informe.metodologia_ensayo}
-                    storageKey="editor-draft-metodologia_ensayo"
-                />
-            </div>
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">
-                    VII Condiciones de ensayo
-                </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            condiciones_ensayo_EC: content,
-                        }))
-                    }
-                    initialContent={informe.condiciones_ensayo_EC}
-                    storageKey="editor-draft-condiciones_ensayo-EC"
-                />
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        2.1 Materiales y características
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                materiales_caracteristicas: content,
+                            }))
+                        }
+                        initialContent={
+                            informe.materiales_caracteristicas || ''
+                        }
+                        storageKey="editor-draft-materiales-caracteristicas-EC"
+                    />
+                </div>
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        2.2 Fecha de ensayo
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                fecha_ensayo_detalle: content,
+                            }))
+                        }
+                        initialContent={informe.fecha_ensayo_detalle || ''}
+                        storageKey="editor-draft-fecha-ensayo-detalle-EC"
+                    />
+                </div>
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        2.3 Dimensiones
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                dimensiones: content,
+                            }))
+                        }
+                        initialContent={informe.dimensiones || ''}
+                        storageKey="editor-draft-dimensiones-EC"
+                    />
+                </div>
             </div>
 
             <div className="mb-4">
                 <h4 className="text-lg font-bold mb-2">
-                    VIII Fecha de ensayo{' '}
+                    III Características del ensayo
                 </h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            fecha_ensayo: content,
-                        }))
-                    }
-                    initialContent={informe.fecha_ensayo}
-                    storageKey="editor-draft-fecha_ensayo"
-                />
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        3.1 Normativa Utilizada
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                normativa_utilizada: content,
+                            }))
+                        }
+                        initialContent={informe.normativa_utilizada || ''}
+                        storageKey="editor-draft-normativa-utilizada-EC"
+                    />
+                </div>
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        3.2 Otros Datos
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                otros_datos: content,
+                            }))
+                        }
+                        initialContent={informe.otros_datos || ''}
+                        storageKey="editor-draft-otros-datos-EC"
+                    />
+                </div>
+
+                <div className="ml-4 mb-2">
+                    <h5 className="text-md font-semibold mb-1">
+                        3.3 Aplicación de la carga y medición
+                    </h5>
+                    <CuadroTexto
+                        onContentChange={(content) =>
+                            setInforme((prev: any) => ({
+                                ...prev,
+                                aplicacion_carga: content,
+                            }))
+                        }
+                        initialContent={informe.aplicacion_carga || ''}
+                        storageKey="editor-draft-aplicacion-carga-EC"
+                    />
+                </div>
             </div>
 
             <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">
-                    IX Operador, equipamiento experimental y materiales de
-                    laboratorio
-                </h4>
+                <h4 className="text-lg font-bold mb-2">IV Resultados</h4>
                 <CuadroTexto
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            operador_equipamiento: content,
+                            resultados: content,
                         }))
                     }
-                    initialContent={informe.operador_equipamiento}
-                    storageKey="editor-draft-operador_equipamiento"
-                />
-            </div>
-
-            <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">X Resultados</h4>
-                <CuadroTexto
-                    onContentChange={(content) =>
-                        setInforme((prev: any) => ({
-                            ...prev,
-                            resultados_EC: content,
-                        }))
-                    }
-                    initialContent={informe.resultados_EC}
+                    initialContent={informe.resultados}
                     storageKey="editor-draft-resultados-EC"
                 />
             </div>
 
             <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">XI Comentarios</h4>
+                <h4 className="text-lg font-bold mb-2">V Modos de falla</h4>
                 <CuadroTexto
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            comentarios: content,
+                            modos_falla: content,
                         }))
                     }
-                    initialContent={informe.comentarios}
-                    storageKey="editor-draft-comentarios"
+                    initialContent={informe.modos_falla || ''}
+                    storageKey="editor-draft-modos-falla-EC"
                 />
             </div>
 
             <div className="mb-4">
-                <h4 className="text-lg font-bold mb-2">XII Observaciones</h4>
+                <h4 className="text-lg font-bold mb-2">VI Conclusiones</h4>
                 <CuadroTexto
                     onContentChange={(content) =>
                         setInforme((prev: any) => ({
                             ...prev,
-                            observaciones_EC: content,
+                            conclusiones: content,
                         }))
                     }
-                    initialContent={informe.observaciones_EC}
+                    initialContent={informe.conclusiones || ''}
+                    storageKey="editor-draft-conclusiones-EC"
+                />
+            </div>
+
+            <div className="mb-4">
+                <h4 className="text-lg font-bold mb-2">VII Observaciones</h4>
+                <CuadroTexto
+                    onContentChange={(content) =>
+                        setInforme((prev: any) => ({
+                            ...prev,
+                            observaciones: content,
+                        }))
+                    }
+                    initialContent={informe.observaciones}
                     storageKey="editor-draft-observaciones-EC"
                 />
             </div>
