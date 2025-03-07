@@ -20,7 +20,7 @@ import TablaEnsayos from './components/TablaEnsayos';
 import CrearPropuesta from './pages/private/Servicios/CrearPropuesta';
 import TablaPropuestas from './components/TablaPropuestas';
 import EditarPropuesta from './pages/private/Servicios/EditarPropuesta';
-import CrearInformeServicio from './pages/private/Servicios/CrearInformeServicio';
+import CrearInformeEnsayo from './pages/private/Servicios/CrearInformeEnsayo';
 
 const App: React.FC = () => {
     return (
@@ -100,7 +100,7 @@ const App: React.FC = () => {
                                     />
                                     <Route
                                         path="crear-informe"
-                                        element={<CrearInformeServicio />}
+                                        element={<CrearInformeEnsayo />}
                                     />
                                 </Route>
                             </Route>
