@@ -1,25 +1,20 @@
-
 import { useEffect, useState } from 'react';
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ENDPOINTS } from "../common/constants/urls.constants";
 import { Ensayo } from '../components/Utils/interfaces';
 import ResponseMessage from './ResponseMessage';
 import { useData } from './AuthDataContext';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 
-const columnHelper = createColumnHelper<Ensayo>();
 
 const TablaEnsayos = () => {
     const navigate = useNavigate();
     const [ensayos, setEnsayos] = useState<Ensayo[]>([]);
     const [selectedEnsayo, setSelectedEnsayo] = useState<Ensayo | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const { token } = useData();
 
     const fetchEnsayos = async () => {
@@ -30,13 +25,25 @@ const TablaEnsayos = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            setEnsayos(response.data || []);
+    
+            console.log("Datos recibidos:", response.data); // 🔍 Verifica la estructura en la consola
+    
+            const ensayosFormateados = response.data.map((ensayo: any) => ({
+                id: ensayo.id,
+                nombre_ensayo: ensayo.nombre ?? ensayo.nombre_ensayo, 
+                tipo_servicio_id: ensayo.id_servicio ?? ensayo.tipo_servicio_id,
+                createdAt: ensayo.createdAt,
+                updatedAt: ensayo.updatedAt,
+            }));
+    
+            setEnsayos(ensayosFormateados);
         } catch (error) {
             ResponseMessage.show('Error al cargar los ensayos');
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchEnsayos();
@@ -65,7 +72,9 @@ const TablaEnsayos = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            setEnsayos((prev) => prev.filter((ensayo) => ensayo.id !== id));
+            setEnsayos((prevEnsayos) => {
+                return prevEnsayos.filter((ensayo) => ensayo.id !== id);
+            });
             ResponseMessage.show('Ensayo eliminado correctamente');
             handleCloseDetails();
         } catch (error) {
@@ -73,38 +82,39 @@ const TablaEnsayos = () => {
         }
     };
 
-    const columns = [
-        columnHelper.accessor('id', {
-            header: () => 'ID Ensayo',
-            cell: (info) => info.getValue() ?? 'N/A',
-        }),
-        columnHelper.accessor('nombre', {
-            header: () => 'Nombre del Ensayo',
-            cell: (info) => info.getValue() ?? 'N/A',
-        }),
-        columnHelper.accessor('id_servicio', {
-            header: () => 'ID Servicio',
-            cell: (info) => info.getValue() ?? 'N/A',
-        }),
-        columnHelper.display({
-            id: 'acciones',
-            header: () => 'Acciones',
-            cell: (props) => (
-                <button
-                    onClick={() => handleOpenDetails(props.row.original)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                >
-                    Detalles
-                </button>
-            ),
-        }),
-    ];
-
-    const tabla = useReactTable({
-        data: ensayos,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
+    useEffect(() => {
+        if (ensayos.length > 0) {
+            // Inicializamos DataTable después de que los datos hayan sido cargados
+            $(document).ready(function () {
+                $('#tablaEnsayos').DataTable({
+                    paging: true, // Habilitar paginación
+                    pageLength: 10, // Mostrar 5 ensayos por página
+                    searching: true, // Habilitar la búsqueda
+                    ordering: true, // Habilitar el ordenamiento de las columnas
+                    language: {
+                        search: "Buscar:",
+                        lengthMenu: "Mostrar _MENU_ registros por página",
+                        paginate: {
+                            next: "Siguiente",
+                            previous: "Anterior"
+                        },
+                        zeroRecords: "No se encontraron registros",
+                        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                        infoFiltered: "(filtrado de _MAX_ registros)"
+                    },
+                    lengthMenu: [5, 10, 15, 20], // Opciones para el número de entradas por página
+                    columnDefs: [
+                        {
+                            targets: [0, 1], // Indicar columnas donde se quiere ordenar
+                            orderable: true, // Permitir ordenar por esas columnas
+                        },
+                    ],
+                });
+            });
+        }
+    }, [ensayos]);
+    
 
     return (
         <div className="container mx-auto w-11/12 my-10">
@@ -115,26 +125,29 @@ const TablaEnsayos = () => {
                 ) : ensayos.length === 0 ? (
                     <div className="text-center py-4">No hay ensayos disponibles</div>
                 ) : (
-                    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <table id="tablaEnsayos" className="display min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                         <thead className="bg-gray-200 text-gray-700 uppercase text-sm">
-                            {tabla.getHeaderGroups().map((headerGroup) => (
-                                <tr key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => (
-                                        <th key={header.id} className="px-4 py-2 text-left">
-                                            {flexRender(header.column.columnDef.header, header.getContext())}
-                                        </th>
-                                    ))}
-                                </tr>
-                            ))}
+                            <tr>
+                                <th>ID Ensayo</th>
+                                <th>Nombre del Ensayo</th>
+                                <th>ID Servicio</th>
+                                <th>Acciones</th>
+                            </tr>
                         </thead>
                         <tbody className="text-gray-600 text-sm">
-                            {tabla.getRowModel().rows.map((row) => (
-                                <tr key={row.id} className="border-t hover:bg-gray-100 transition-colors">
-                                    {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-2">
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
+                            {ensayos.map((ensayo) => (
+                                <tr key={ensayo.id} className="border-t hover:bg-gray-100 transition-colors">
+                                    <td>{ensayo.id}</td>
+                                    <td>{ensayo.nombre_ensayo ?? 'N/A'}</td>
+                                    <td>{ensayo.tipo_servicio_id ?? 'N/A'}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleOpenDetails(ensayo)}
+                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                        >
+                                            Detalles
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -147,8 +160,8 @@ const TablaEnsayos = () => {
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 className="text-lg font-semibold mb-2">Detalles del Ensayo</h3>
                         <p><strong>ID:</strong> {selectedEnsayo.id}</p>
-                        <p><strong>Nombre:</strong> {selectedEnsayo.nombre}</p>
-                        <p><strong>ID Servicio:</strong> {selectedEnsayo.id_servicio}</p>
+                        <p><strong>Nombre:</strong> {selectedEnsayo.nombre_ensayo}</p>
+                        <p><strong>ID Servicio:</strong> {selectedEnsayo.tipo_servicio_id}</p>
 
                         <div className="mt-4 flex justify-between">
                             <button

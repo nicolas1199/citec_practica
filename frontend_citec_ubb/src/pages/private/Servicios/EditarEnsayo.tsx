@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import ResponseMessage from '../../../components/ResponseMessage';
 import { ENDPOINTS } from '../../../common/constants/urls.constants';
-import { ActualizarEnsayo, Ensayo } from '../../../components/Utils/interfaces';
+import { ActualizarEnsayo ,Ensayo } from '../../../components/Utils/interfaces';
 import { useData } from '../../../components/AuthDataContext';
 
 const EditarEnsayo: React.FC = () => {
@@ -15,13 +15,12 @@ const EditarEnsayo: React.FC = () => {
     const [ensayo, setEnsayo] = useState<Ensayo | null>(null);
     const [formData, setFormData] = useState<ActualizarEnsayo>({
         id: Number(id),
-        nombre: '',
-        id_servicio: 0
+        nombre_ensayo: '',
+        tipo_servicio_id: 0
     });
 
     useEffect(() => {
         const fetchEnsayo = async () => {
-            // ✅ Convertimos el id a número para evitar errores
             const ensayoId = Number(id);
 
             if (isNaN(ensayoId) || ensayoId <= 0) {
@@ -31,7 +30,6 @@ const EditarEnsayo: React.FC = () => {
                 return;
             }
 
-            // ✅ Verificamos que el token no sea undefined
             if (!token) {
                 console.error("❌ No hay token disponible");
                 ResponseMessage.show("Error: No hay token disponible");
@@ -41,7 +39,6 @@ const EditarEnsayo: React.FC = () => {
 
             try {
                 const url = `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.OBTENER_POR_ID}/${ensayoId}`;
-
                 const response = await axios.get(url, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -52,8 +49,8 @@ const EditarEnsayo: React.FC = () => {
                     setEnsayo(response.data);
                     setFormData({
                         id: ensayoId,
-                        nombre: response.data.nombre,
-                        id_servicio: response.data.servicio
+                        nombre_ensayo: response.data.nombre_ensayo,
+                        tipo_servicio_id: response.data.tipo_servicio_id
                     });
                 }
             } catch (error) {
@@ -72,7 +69,7 @@ const EditarEnsayo: React.FC = () => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'id_servicio' ? Number(value) : value
+            [name]: name === 'tipo_servicio_id' ? Number(value) : value
         }));
     };
 
@@ -82,7 +79,11 @@ const EditarEnsayo: React.FC = () => {
         try {
             await axios.put(
                 `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.ACTUALIZAR}/${formData.id}`,
-                formData,
+                {
+                    id: formData.id,
+                    nombre_ensayo: formData.nombre_ensayo,
+                    tipo_servicio_id: formData.tipo_servicio_id
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -113,8 +114,8 @@ const EditarEnsayo: React.FC = () => {
                     </label>
                     <input
                         type="text"
-                        name="nombre"
-                        value={formData.nombre}
+                        name="nombre_ensayo"
+                        value={formData.nombre_ensayo}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         required
@@ -127,8 +128,8 @@ const EditarEnsayo: React.FC = () => {
                     </label>
                     <input
                         type="number"
-                        name="id_servicio"
-                        value={formData.id_servicio}
+                        name="tipo_servicio_id"
+                        value={formData.tipo_servicio_id}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         required

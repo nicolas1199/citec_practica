@@ -32,28 +32,14 @@ export class Ensayos extends Model<Ensayos> {
         type: DataType.STRING,
         allowNull: false,
     })
-    declare nombre_ensayo: string;  // ✅ Agregado al modelo
+    declare nombre_ensayo: string;
 
     @ApiProperty({ type: 'number' })
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    declare tipo_servicio_id: number;  // ✅ Agregado al modelo
-
-    @ApiProperty({ type: 'number', default: 2024 })
-    @Column({
-        type: DataType.INTEGER,
-        allowNull: false,
-    })
-    declare año: number;
-
-    @ApiProperty({ type: 'string', format: 'date' })
-    @Column({
-        type: DataType.DATE,
-        allowNull: false,
-    })
-    declare fecha: Date;
+    declare tipo_servicio_id: number;
 
     @ApiProperty()
     @CreatedAt
@@ -71,19 +57,16 @@ export class Ensayos extends Model<Ensayos> {
     })
     declare updatedAt: Date;
 
-    @BeforeCreate
-    static async asignarID(instance: Ensayos, options: any) {
-        const añoActual = instance.año;
-        await Ensayos.sequelize?.transaction(
-            async (t: Transaction) => {
-                const ultimoId = ((await Ensayos.max('id', {
-                    where: { año: añoActual },
-                    transaction: t,
-                })) || 0) as number;
-                instance.id = ultimoId + 1;
-            },
-        );
-    }
+    // @BeforeCreate
+    // static async asignarID(instance: Ensayos, options: any) {
+    //     await Ensayos.sequelize?.transaction(
+    //         async (t: Transaction) => {
+    //             const ultimoId = ((await Ensayos.max('id', { transaction: t })) || 0) as number;
+    //             instance.id = ultimoId + 1;
+    //         },
+    //     );
+    // }
+
 }
 
 export default Ensayos;

@@ -5,6 +5,7 @@ import {
     Post,
     Body,
     Put,
+    ParseIntPipe,
     Delete,
 } from '@nestjs/common';
 import { BaseControllersSimple } from '../../common/base/base-controllers-simple.class';
@@ -86,7 +87,8 @@ export class EnsayosController extends BaseControllersSimple {
     @ApiRespuestaError()
     @Tipo(TIPOS_DE_USUARIO.OPCION_1, TIPOS_DE_USUARIO.OPCION_3)
     @Delete('eliminar/:id')
-    eliminar(@Param('id') id: number) {
-        return this.ensayosService.eliminar({id});
-    }
+    eliminar(@Param('id', ParseIntPipe) id: number) {
+    console.log('🗑️ Eliminando ensayo con ID:', id);
+    return this.ensayosService.eliminar({ id });
+}
 }
