@@ -32,14 +32,13 @@ import { EnsayosController } from './ensayos/controllers/ensayo.controller';
 import { PagosModule } from './pagos/pagos.module';
 import { EnsayosModule } from './ensayos/ensayo.module';
 import { EnsayosService } from './ensayos/services/ensayo.service';
-import { DocumentosModule } from './documentos/documentos.module'; import { AreasModule } from './area-documentos/area-documentos.module';
-import { DocumentosController } from './documentos/controllers/documentos.controller';
+import { DocumentosModule } from './documentos/documentos.module';
+import { AreasModule } from './area-documentos/area-documentos.module';
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
-import { DocumentosService } from './documentos/services/documentos.service';
 import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
 import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-documento.module';
+import { CommonModule } from './common/common.module';
 
-//En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -47,15 +46,18 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
             load: [config],
             isGlobal: true,
             validationSchema: Joi.object({
-                //Aqui se validan las variables de entorno
                 DATABASE_URL: Joi.string().required(),
                 FRONTEND_URL: Joi.string().required(),
                 JWT_SECRET: Joi.string().required(),
                 DESARROLLADOR_PASS: Joi.string().required(),
             }),
         }),
-        
+
+        // Core modules
         DatabaseModule,
+        CommonModule,
+
+        // Feature modules
         UsuariosModule,
         AutenticacionModule,
         EmpresasModule,
@@ -81,7 +83,6 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
         SubServiciosController,
         EnsayosController,
         AreasDocumentosController,
-        DocumentosController,
     ],
     providers: [
         AppService,
@@ -96,7 +97,6 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
         SubServiciosService,
         EnsayosService,
         AreasDocumentosService,
-        DocumentosService,
     ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -14,6 +14,11 @@ const CrearInformeEnsayo: React.FC = () => {
     const [aaTipoServicio, setAATipoServicio] = useState<
         'maquinaria' | 'estructural'
     >('maquinaria');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [generatedPdf, setGeneratedPdf] = useState<{
+        fileName: string;
+        filePath: string;
+    } | null>(null);
 
     // Estados de los campos de los formularios
     const initialCommonState = {
@@ -159,6 +164,7 @@ const CrearInformeEnsayo: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
         try {
             if (!commonFields.id_servicio) {
@@ -168,20 +174,95 @@ const CrearInformeEnsayo: React.FC = () => {
             const formData = getActiveFields();
             console.log('Datos del formulario:', formData);
 
+            // Determinar el tipo de servicio para el backend
+            let tipoServicio = '';
+            if (commonFields.id_servicio === '1') {
+                // AA
+                tipoServicio =
+                    aaTipoServicio === 'maquinaria'
+                        ? 'AA_MAQUINARIA'
+                        : 'AA_ESTRUCTURAL';
+            } else if (commonFields.id_servicio === '2') {
+                // EC
+                tipoServicio = 'EC';
+            }
+
+            // Crear un título para el informe
+            const empresaSeleccionada = empresas.find(
+                (emp) => emp.rut === commonFields.rut_receptor,
+            );
+            const nombreEmpresa =
+                empresaSeleccionada?.razon_social || 'Cliente';
+            const fecha = commonFields.fecha_informe
+                ? new Date(commonFields.fecha_informe).toLocaleDateString()
+                : new Date().toLocaleDateString();
+
+            const titulo = `Informe de ${
+                commonFields.id_servicio === '1'
+                    ? `Análisis Acústico - ${aaTipoServicio === 'maquinaria' ? 'Maquinaria' : 'Estructural'}`
+                    : 'Ensayo de Compresión'
+            } - ${nombreEmpresa} - ${fecha}`;
+
+            // Enviar los datos al backend para generar el PDF
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_NESTJS_URL}/documentos/generar-pdf`,
+                {
+                    contenido: formData,
+                    titulo: titulo,
+                    tipoServicio: tipoServicio,
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                },
+            );
+
+            // Guardar la referencia al PDF generado
+            setGeneratedPdf(response.data);
+
             // Limpiar drafts de localStorage
             clearLocalStorageDrafts();
 
-            // Reestablecer los campos a sus valores iniciales
+            // Devolver a estado inicial
             setCommonFields(initialCommonState);
             setAAMaquinariaFields(initialAAMaquinariaState);
             setAAEstructuralFields(initialAAEstructuralState);
             setECFields(initialECState);
 
-            ResponseMessage.show('Informe creado exitosamente');
+            ResponseMessage.show('Informe generado exitosamente');
         } catch (error) {
-            console.error('Error al crear el informe:', error);
-            ResponseMessage.show('Error al crear el informe');
+            console.error('Error al generar el informe:', error);
+            ResponseMessage.show('Error al generar el informe');
+        } finally {
+            setIsSubmitting(false);
         }
+    };
+
+    const handleDownloadPdf = () => {
+        if (!generatedPdf) return;
+
+        fetch(
+            `${import.meta.env.VITE_BACKEND_NESTJS_URL}/documentos/descargar-pdf/${generatedPdf.fileName}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        )
+            .then((response) => response.blob())
+            .then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = generatedPdf.fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            })
+            .catch((error) => {
+                console.error('Error al descargar el PDF:', error);
+                ResponseMessage.show('Error al descargar el PDF');
+            });
     };
 
     const servicios = [
@@ -359,13 +440,37 @@ const CrearInformeEnsayo: React.FC = () => {
 
             {renderServicioForm()}
 
-            <button
-                type="submit"
-                className="bg-primary-600 text-white font-bold py-2 px-4 rounded-md hover:bg-primary-700 transition-colors"
-                disabled={!commonFields.id_servicio}
-            >
-                Crear Informe
-            </button>
+            <div className="flex gap-4 mt-6">
+                <button
+                    type="submit"
+                    className="bg-primary-600 text-white font-bold py-2 px-4 rounded-md hover:bg-primary-700 transition-colors"
+                    disabled={!commonFields.id_servicio || isSubmitting}
+                >
+                    {isSubmitting ? 'Generando...' : 'Generar Informe'}
+                </button>
+
+                {generatedPdf && (
+                    <button
+                        type="button"
+                        onClick={handleDownloadPdf}
+                        className="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+                    >
+                        Ver/Descargar PDF
+                    </button>
+                )}
+            </div>
+
+            {generatedPdf && (
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-green-800 font-medium">
+                        ¡Informe generado correctamente!
+                    </p>
+                    <p className="text-sm text-green-700">
+                        Haga clic en "Ver/Descargar PDF" para visualizar o
+                        guardar el documento.
+                    </p>
+                </div>
+            )}
         </form>
     );
 };
