@@ -169,13 +169,9 @@ export class DocumentosService extends BaseServices {
             },
         );
 
-        // Guardar el PDF temporalmente
-        const filePath =
-            await this.pdfGeneratorService.savePdfToFile(pdfBuffer);
-        const fileName = path.basename(filePath);
-
         // Crear o actualizar el documento en la base de datos
         let documento: Documentos | null = null;
+        let customFileName: string;
 
         // Si tenemos datos suficientes, guardamos en la DB
         if (generarPdfDto.documentoData) {
@@ -197,7 +193,7 @@ export class DocumentosService extends BaseServices {
                         generarPdfDto.documentoId,
                     );
                     if (documento) {
-                        documento.pdf_path = fileName;
+                        documento.pdf_path = 'pendiente'; // Lo actualizaremos después
                         documento.contenido_json = JSON.stringify(
                             generarPdfDto.contenido,
                         );
@@ -234,17 +230,62 @@ export class DocumentosService extends BaseServices {
                             ? new Date(fecha_finalizacion)
                             : new Date(),
                         validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3, // Válido por defecto
-                        pdf_path: fileName,
+                        pdf_path: 'pendiente', // Lo actualizaremos después
                         contenido_json: JSON.stringify(generarPdfDto.contenido),
                         tipo_servicio: generarPdfDto.tipoServicio,
                         empresa_rut: empresa_rut || null,
                     });
+                }
+
+                // Generar el nombre personalizado para el archivo PDF
+                if (documento) {
+                    // Obtener el número de informe
+                    const numInforme = documento.numero?.toString() || 'SIN';
+
+                    // Obtener el nombre del cliente (limpiar caracteres especiales y espacios)
+                    const clienteNombre = (cliente || 'Cliente')
+                        .replace(/[^a-zA-Z0-9]/g, '_')
+                        .substring(0, 15);
+
+                    // Obtener nombre corto del ensayo según el tipo de servicio
+                    let tipoEnsayoCorto;
+                    switch (generarPdfDto.tipoServicio) {
+                        case 'AA_MAQUINARIA':
+                            tipoEnsayoCorto = 'AA_MAQ';
+                            break;
+                        case 'AA_ESTRUCTURAL':
+                            tipoEnsayoCorto = 'AA_EST';
+                            break;
+                        case 'EC':
+                            tipoEnsayoCorto = 'EC';
+                            break;
+                        default:
+                            tipoEnsayoCorto = 'DOC';
+                    }
+
+                    // Crear nombre del archivo con el formato solicitado
+                    customFileName = `${numInforme}-${clienteNombre}-${tipoEnsayoCorto}.pdf`;
+
+                    // Guardar la ruta del archivo en el documento
+                    documento.pdf_path = customFileName;
+                    await documento.save();
                 }
             } catch (error) {
                 console.error('Error al guardar el documento:', error);
                 // No lanzamos excepción para permitir generar el PDF aunque falle el guardado en DB
             }
         }
+
+        // Guardar el PDF temporalmente con el nombre personalizado si existe,
+        // o con un nombre generado automáticamente si no
+        const filePath = customFileName
+            ? await this.pdfGeneratorService.savePdfToFile(
+                  pdfBuffer,
+                  customFileName,
+              )
+            : await this.pdfGeneratorService.savePdfToFile(pdfBuffer);
+
+        const fileName = path.basename(filePath);
 
         return {
             filePath,

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PdfGeneratorService {
@@ -29,7 +28,7 @@ export class PdfGeneratorService {
         },
     ): Promise<Buffer> {
         const browser = await puppeteer.launch({
-            headless: true, // Cambiar 'new' a true para compatibilidad
+            headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
         const page = await browser.newPage();
@@ -44,7 +43,7 @@ export class PdfGeneratorService {
 
         // Generar el PDF
         const pdfBuffer = await page.pdf({
-            format: paperFormat as puppeteer.PaperFormat, // Corrige el tipo usando casting
+            format: paperFormat as puppeteer.PaperFormat,
             printBackground: true,
             margin: options?.margin || {
                 top: '2cm',
@@ -67,20 +66,27 @@ export class PdfGeneratorService {
     }
 
     /**
-     * Guarda un PDF temporalmente en el sistema de archivos y devuelve la ruta
-     * @param pdfBuffer Buffer del PDF a guardar
+     * Guarda el PDF en un archivo temporal
+     * @param pdfBuffer Buffer del PDF
+     * @param customFileName Nombre personalizado del archivo (opcional)
      * @returns Ruta del archivo guardado
      */
-    async savePdfToFile(pdfBuffer: Buffer): Promise<string> {
+    async savePdfToFile(
+        pdfBuffer: Buffer,
+        customFileName?: string,
+    ): Promise<string> {
         const uploadsDir = path.join(process.cwd(), 'uploads', 'temp');
 
-        // Crear el directorio si no existe
+        // Asegurarse de que el directorio existe
         if (!fs.existsSync(uploadsDir)) {
             fs.mkdirSync(uploadsDir, { recursive: true });
         }
 
-        const filename = `${uuidv4()}.pdf`;
-        const filePath = path.join(uploadsDir, filename);
+        // Usar nombre personalizado si se proporciona, de lo contrario generar uno aleatorio
+        const fileName =
+            customFileName ||
+            `${Date.now()}-${Math.round(Math.random() * 1e9)}.pdf`;
+        const filePath = path.join(uploadsDir, fileName);
 
         await fs.promises.writeFile(filePath, pdfBuffer);
         return filePath;
