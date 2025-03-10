@@ -12,6 +12,7 @@ import {
 import Documentos from 'src/database/models/documentos.model';
 import { BaseServices } from 'src/common/base/base-services.class';
 import { VALIDEZ_DE_DOCUMENTO } from 'src/common/constants/validez-de-documento.constants';
+import { ValidezDocumentos } from 'src/database/models/validez-documento.model';
 import { PdfGeneratorService } from '../../common/services/pdf-generator.service';
 import { GenerarPdfDto } from '../dto/generar-pdf.dto';
 import * as path from 'path';
@@ -117,13 +118,13 @@ export class DocumentosService extends BaseServices {
     }
 
     /**
-     * Genera un informe PDF basado en el contenido HTML
+     * Genera un informe PDF basado en el contenido HTML y guarda la información en la base de datos
      * @param generarPdfDto Datos para la generación del PDF
-     * @returns URL del archivo PDF generado
+     * @returns URL del archivo PDF generado y el documento creado
      */
     async generarPdf(
         generarPdfDto: GenerarPdfDto,
-    ): Promise<{ filePath: string; fileName: string }> {
+    ): Promise<{ filePath: string; fileName: string; documento?: Documentos }> {
         // Construir el HTML basado en el tipo de servicio y el contenido
         let htmlContent = '';
 
@@ -174,20 +175,82 @@ export class DocumentosService extends BaseServices {
             await this.pdfGeneratorService.savePdfToFile(pdfBuffer);
         const fileName = path.basename(filePath);
 
-        // Si existe un ID de documento, podríamos actualizarlo con la ruta del PDF generado
-        if (generarPdfDto.documentoId) {
-            const documento = await Documentos.findByPk(
-                generarPdfDto.documentoId,
-            );
-            if (documento) {
-                // Aquí podríamos agregar lógica para guardar la ruta al PDF
-                // Por ejemplo, si añadiéramos un campo 'pdf_path' a la tabla documentos
+        // Crear o actualizar el documento en la base de datos
+        let documento: Documentos | null = null;
+
+        // Si tenemos datos suficientes, guardamos en la DB
+        if (generarPdfDto.documentoData) {
+            try {
+                const {
+                    nombre,
+                    ejecutor,
+                    cliente,
+                    direccion,
+                    area_documento,
+                    fecha_inicio,
+                    fecha_finalizacion,
+                    empresa_rut,
+                } = generarPdfDto.documentoData;
+
+                // Si hay un documentoId, actualizamos el documento existente
+                if (generarPdfDto.documentoId) {
+                    documento = await Documentos.findByPk(
+                        generarPdfDto.documentoId,
+                    );
+                    if (documento) {
+                        documento.pdf_path = fileName;
+                        documento.contenido_json = JSON.stringify(
+                            generarPdfDto.contenido,
+                        );
+                        documento.tipo_servicio = generarPdfDto.tipoServicio;
+                        await documento.save();
+                    }
+                } else {
+                    // Verificar que el valor de validez_documento existe en la tabla
+                    const validezValida = await ValidezDocumentos.findByPk(
+                        VALIDEZ_DE_DOCUMENTO.OPCION_3,
+                    );
+                    if (!validezValida) {
+                        // Si no existe, crear el registro en la tabla validez_de_documentos
+                        await ValidezDocumentos.create({
+                            nombre: VALIDEZ_DE_DOCUMENTO.OPCION_3,
+                            descripcion: 'Documento válido',
+                        });
+                        console.log(
+                            `Creado valor de validez: ${VALIDEZ_DE_DOCUMENTO.OPCION_3}`,
+                        );
+                    }
+
+                    // Sino, creamos uno nuevo
+                    documento = await Documentos.create({
+                        nombre: nombre || generarPdfDto.titulo,
+                        ejecutor: ejecutor || 'CITEC UBB',
+                        cliente: cliente || '',
+                        direccion: direccion || '',
+                        area_documento: area_documento || 'AA', // Valor predeterminado
+                        fecha_inicio: fecha_inicio
+                            ? new Date(fecha_inicio)
+                            : new Date(),
+                        fecha_finalizacion: fecha_finalizacion
+                            ? new Date(fecha_finalizacion)
+                            : new Date(),
+                        validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3, // Válido por defecto
+                        pdf_path: fileName,
+                        contenido_json: JSON.stringify(generarPdfDto.contenido),
+                        tipo_servicio: generarPdfDto.tipoServicio,
+                        empresa_rut: empresa_rut || null,
+                    });
+                }
+            } catch (error) {
+                console.error('Error al guardar el documento:', error);
+                // No lanzamos excepción para permitir generar el PDF aunque falle el guardado en DB
             }
         }
 
         return {
             filePath,
             fileName,
+            documento,
         };
     }
 

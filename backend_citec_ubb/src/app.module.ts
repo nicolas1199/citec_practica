@@ -33,12 +33,13 @@ import { PagosModule } from './pagos/pagos.module';
 import { EnsayosModule } from './ensayos/ensayo.module';
 import { EnsayosService } from './ensayos/services/ensayo.service';
 import { DocumentosModule } from './documentos/documentos.module';
-import { AreasModule } from './area-documentos/area-documentos.module';
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
 import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
 import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-documento.module';
 import { CommonModule } from './common/common.module';
+import { ValidezDocumentosSeeder } from './database/seeders/validez-documentos.seeder';
 
+//En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -46,6 +47,7 @@ import { CommonModule } from './common/common.module';
             load: [config],
             isGlobal: true,
             validationSchema: Joi.object({
+                //Aqui se validan las variables de entorno
                 DATABASE_URL: Joi.string().required(),
                 FRONTEND_URL: Joi.string().required(),
                 JWT_SECRET: Joi.string().required(),
@@ -53,11 +55,8 @@ import { CommonModule } from './common/common.module';
             }),
         }),
 
-        // Core modules
         DatabaseModule,
         CommonModule,
-
-        // Feature modules
         UsuariosModule,
         AutenticacionModule,
         EmpresasModule,
@@ -70,7 +69,6 @@ import { CommonModule } from './common/common.module';
         SubServiciosModule,
         EnsayosModule,
         PagosModule,
-        AreasModule,
         ValidezDeDocumentoModule,
         DocumentosModule,
     ],
@@ -97,6 +95,7 @@ import { CommonModule } from './common/common.module';
         SubServiciosService,
         EnsayosService,
         AreasDocumentosService,
+        ValidezDocumentosSeeder,
     ],
 })
 export class AppModule {}

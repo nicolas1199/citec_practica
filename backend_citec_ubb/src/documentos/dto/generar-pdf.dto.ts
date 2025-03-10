@@ -34,4 +34,20 @@ export class GenerarPdfDto {
     })
     @IsOptional()
     readonly documentoId?: number;
+
+    @IsOptional()
+    @ApiProperty({
+        description: 'Datos para crear un documento',
+        required: false,
+    })
+    readonly documentoData?: {
+        nombre?: string;
+        ejecutor?: string;
+        cliente?: string;
+        direccion?: string;
+        area_documento?: string;
+        fecha_inicio?: string;
+        fecha_finalizacion?: string;
+        empresa_rut?: string;
+    };
 }

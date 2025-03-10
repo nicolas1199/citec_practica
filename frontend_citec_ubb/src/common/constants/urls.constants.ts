@@ -72,6 +72,10 @@ export const ENDPOINTS = {
         GENERAR_PDF: 'documentos/generar-pdf',
         DESCARGAR_PDF: 'documentos/descargar-pdf',
     },
+    AREAS_DOCUMENTOS: {
+        OBTENER_TODOS: 'area-documentos/obtener-todos',
+        OBTENER_POR_ID: 'area-documentos/obtener-por-id',
+    },
 } as const;
 
 /**
