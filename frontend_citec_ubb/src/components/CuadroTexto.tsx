@@ -88,14 +88,14 @@ const extensions = [
         inline: true,
         allowBase64: true,
         HTMLAttributes: {
-            class: '"mx-auto block my-4',
+            class: 'mx-auto block my-4',
         },
     }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
     Table.configure({
         resizable: true,
         HTMLAttributes: {
-            class: 'border-collapse border border-gray-300 w-[90%] my-4 table-auto mx-auto',
+            class: 'border-collapse border border-gray-300 w-[90] my-2 table-auto mx-auto',
         },
     }),
     TableRow.configure({
@@ -186,6 +186,7 @@ const TableMenu = ({ editor }) => {
                             </h4>
                             <div className="flex gap-1">
                                 <button
+                                    type="button"
                                     onClick={tableActions.addRowBefore}
                                     className="flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs flex-1"
                                     title="Añadir fila antes"
@@ -194,6 +195,7 @@ const TableMenu = ({ editor }) => {
                                     <span>↑ Antes</span>
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.addRowAfter}
                                     className="flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs flex-1"
                                     title="Añadir fila después"
@@ -202,6 +204,7 @@ const TableMenu = ({ editor }) => {
                                     <span>↓ Después</span>
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.deleteRow}
                                     className="flex flex-col items-center justify-center bg-red-50 hover:bg-red-100 rounded p-1 text-xs flex-1 text-red-600"
                                     title="Eliminar fila"
@@ -218,6 +221,7 @@ const TableMenu = ({ editor }) => {
                             </h4>
                             <div className="flex gap-1">
                                 <button
+                                    type="button"
                                     onClick={tableActions.addColumnBefore}
                                     className="flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs flex-1"
                                     title="Añadir columna antes"
@@ -226,6 +230,7 @@ const TableMenu = ({ editor }) => {
                                     <span>← Antes</span>
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.addColumnAfter}
                                     className="flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs flex-1"
                                     title="Añadir columna después"
@@ -234,6 +239,7 @@ const TableMenu = ({ editor }) => {
                                     <span>→ Después</span>
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.deleteColumn}
                                     className="flex flex-col items-center justify-center bg-red-50 hover:bg-red-100 rounded p-1 text-xs flex-1 text-red-600"
                                     title="Eliminar columna"
@@ -250,6 +256,7 @@ const TableMenu = ({ editor }) => {
                             </h4>
                             <div className="flex flex-col gap-1">
                                 <button
+                                    type="button"
                                     onClick={tableActions.toggleHeaderRow}
                                     className="flex items-center justify-between bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs"
                                     title="Convertir fila en encabezado"
@@ -258,6 +265,7 @@ const TableMenu = ({ editor }) => {
                                     <IconTableRow size={16} />
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.toggleHeaderColumn}
                                     className="flex items-center justify-between bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs"
                                     title="Convertir columna en encabezado"
@@ -274,6 +282,7 @@ const TableMenu = ({ editor }) => {
                             </h4>
                             <div className="flex flex-col gap-1">
                                 <button
+                                    type="button"
                                     onClick={tableActions.mergeCells}
                                     className="flex items-center justify-between bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs"
                                     title="Fusionar celdas"
@@ -282,6 +291,7 @@ const TableMenu = ({ editor }) => {
                                     <IconTablePlus size={16} />
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={tableActions.splitCell}
                                     className="flex items-center justify-between bg-gray-50 hover:bg-gray-100 rounded p-1 text-xs"
                                     title="Dividir celda"
@@ -297,6 +307,7 @@ const TableMenu = ({ editor }) => {
 
                         <div className="col-span-2 pt-1">
                             <button
+                                type="button"
                                 onClick={tableActions.deleteTable}
                                 className="w-full flex items-center justify-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 rounded p-1.5 text-sm font-medium"
                                 title="Eliminar tabla"
