@@ -1,33 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ObtenerPorIdAreasDto } from '../dtos/area-documentos.dto';
-import { BaseServicesSimple } from '../../common/base/base-services-simple.class';
+import { BaseServices } from 'src/common/base/base-services.class';
 import { AreasDocumentos } from 'src/database/models/area-documento.model';
+import { ObtenerPorIdAreasDto } from '../dtos/area-documentos.dto';
 
 @Injectable()
-export class AreasDocumentosService extends BaseServicesSimple {
-    async obtenerTodos(): Promise<AreasDocumentos[]> {
-        const retornoAreas = await AreasDocumentos.findAll();
-
-        if (retornoAreas.length === 0) {
-            throw new NotFoundException([`No hay areas de documentos activos`]);
-        }
-
-        return retornoAreas;
+export class AreasDocumentosService extends BaseServices {
+    constructor() {
+        super();
     }
 
-    async obtenerPorId(
-        clavePrimaria: ObtenerPorIdAreasDto,
-    ): Promise<AreasDocumentos> {
-        const retornoTipo = await AreasDocumentos.findByPk(
-            clavePrimaria.nombre,
-        );
-
-        if (!retornoTipo) {
-            throw new NotFoundException([
-                `No existe el tipo de usuario con el nombre ${clavePrimaria.nombre}`,
-            ]);
+    async obtenerTodos(): Promise<AreasDocumentos[]> {
+        const areas = await AreasDocumentos.findAll();
+        if (areas.length === 0) {
+            throw new NotFoundException(['No existen áreas de documentos']);
         }
+        return areas;
+    }
 
-        return retornoTipo;
+    async obtenerPorId(nombre: ObtenerPorIdAreasDto): Promise<AreasDocumentos> {
+        const area = await AreasDocumentos.findByPk(nombre.nombre);
+        if (!area) {
+            throw new NotFoundException([`Área de documento no encontrada`]);
+        }
+        return area;
+    }
+
+    async crear(area: AreasDocumentos): Promise<AreasDocumentos> {
+        return await AreasDocumentos.create(area);
+    }
+
+    async actualizar(cod_area: string): Promise<AreasDocumentos> {
+        const area = await AreasDocumentos.findByPk(cod_area);
+        if (!area) {
+            throw new NotFoundException([`Área de documento no encontrada`]);
+        }
+        return await area.save();
+    }
+
+    async eliminar(cod_area: string): Promise<number> {
+        return await AreasDocumentos.destroy({
+            where: {
+                cod_area,
+            },
+        });
     }
 }

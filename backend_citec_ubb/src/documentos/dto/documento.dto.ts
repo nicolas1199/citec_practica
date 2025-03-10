@@ -174,9 +174,9 @@ export class ActualizarDocumentoDto extends CrearDocumentoDto {
     @IsIn(Object.values(AREAS_DE_DOCUMENTO), {
         message: 'El area debe ser uno de los valores permitidos',
     })
-    @Length(1, 50, {
+    @Length(1, 255, {
         message:
-            'La longitud del nombre del tipo debe ser entre 1 y 50 caracteres',
+            'La longitud del nombre del tipo debe ser entre 1 y 255 caracteres',
     })
     @IsString({ message: 'El codigo del area debe ser texto' })
     @IsNotEmpty({ message: 'El codigo del area esta vacio' })

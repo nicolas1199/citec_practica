@@ -32,12 +32,12 @@ import { EnsayosController } from './ensayos/controllers/ensayo.controller';
 import { PagosModule } from './pagos/pagos.module';
 import { EnsayosModule } from './ensayos/ensayo.module';
 import { EnsayosService } from './ensayos/services/ensayo.service';
-import { DocumentosModule } from './documentos/documentos.module'; import { AreasModule } from './area-documentos/area-documentos.module';
-import { DocumentosController } from './documentos/controllers/documentos.controller';
+import { DocumentosModule } from './documentos/documentos.module';
 import { AreasDocumentosController } from './area-documentos/controllers/area-documentos.controller';
-import { DocumentosService } from './documentos/services/documentos.service';
 import { AreasDocumentosService } from './area-documentos/services/areas-documentos.service';
 import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-documento.module';
+import { CommonModule } from './common/common.module';
+import { ValidezDocumentosSeeder } from './database/seeders/validez-documentos.seeder';
 
 //En imports se insertan los modulos o carpetas que se van a utilizar
 @Module({
@@ -54,8 +54,9 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
                 DESARROLLADOR_PASS: Joi.string().required(),
             }),
         }),
-        
+
         DatabaseModule,
+        CommonModule,
         UsuariosModule,
         AutenticacionModule,
         EmpresasModule,
@@ -68,7 +69,6 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
         SubServiciosModule,
         EnsayosModule,
         PagosModule,
-        AreasModule,
         ValidezDeDocumentoModule,
         DocumentosModule,
     ],
@@ -81,7 +81,6 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
         SubServiciosController,
         EnsayosController,
         AreasDocumentosController,
-        DocumentosController,
     ],
     providers: [
         AppService,
@@ -96,7 +95,7 @@ import { ValidezDeDocumentoModule } from './validez-de-documento/validez-de-docu
         SubServiciosService,
         EnsayosService,
         AreasDocumentosService,
-        DocumentosService,
+        ValidezDocumentosSeeder,
     ],
 })
-export class AppModule { }
+export class AppModule {}

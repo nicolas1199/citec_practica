@@ -59,8 +59,22 @@ export const ENDPOINTS = {
         ACTUALIZAR: 'propuestas-de-servicios/actualizar',
         OBTENER_POR_ID: 'propuestas-de-servicios/obtener-por-id',
         OBTENER_TODOS: 'propuestas-de-servicios/obtener-todos',
-        OBTENER_TODOS_ELIMINADOS: 'propuestas-de-servicios/obtener-todos-eliminados',
+        OBTENER_TODOS_ELIMINADOS:
+            'propuestas-de-servicios/obtener-todos-eliminados',
         ELIMINAR: 'propuestas-de-servicios/eliminar',
+    },
+    DOCUMENTOS: {
+        CREAR: 'documentos/crear',
+        ACTUALIZAR: 'documentos/actualizar',
+        OBTENER_POR_ID: 'documentos/obtener-por-id',
+        OBTENER_TODOS: 'documentos/obtener-todos',
+        ELIMINAR: 'documentos/eliminar',
+        GENERAR_PDF: 'documentos/generar-pdf',
+        DESCARGAR_PDF: 'documentos/descargar-pdf',
+    },
+    AREAS_DOCUMENTOS: {
+        OBTENER_TODOS: 'area-documentos/obtener-todos',
+        OBTENER_POR_ID: 'area-documentos/obtener-por-id',
     },
 } as const;
 
