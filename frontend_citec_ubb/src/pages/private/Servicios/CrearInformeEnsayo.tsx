@@ -27,6 +27,8 @@ const CrearInformeEnsayo: React.FC = () => {
         filePath: string;
         documento?: any;
     } | null>(null);
+    const [tipoServicio, setTipoServicio] = useState<string>('');
+    const [tipoEnsayo, setTipoEnsayo] = useState<string>('');
 
     // Función para obtener la fecha actual en formato chileno
     const getChileanFormattedDate = () => {
@@ -221,6 +223,13 @@ const CrearInformeEnsayo: React.FC = () => {
     ) => {
         const { name, value } = e.target;
 
+        // Manejar cambios en los campos adicionales
+        if (name === 'tipo_servicio') {
+            setTipoServicio(value);
+        } else if (name === 'ensayo') {
+            setTipoEnsayo(value);
+        }
+
         // Manejo especial para fechas
         if (name === 'fecha_inicio' || name === 'fecha_termino') {
             const today = new Date(getChileanFormattedDate());
@@ -362,6 +371,9 @@ const CrearInformeEnsayo: React.FC = () => {
             setAAMaquinariaFields(initialAAMaquinariaState);
             setAAEstructuralFields(initialAAEstructuralState);
             setECFields(initialECState);
+            setTipoServicio('');
+            setTipoEnsayo('');
+            setAATipoServicio('maquinaria');
 
             ResponseMessage.show('Informe generado exitosamente');
         } catch (error) {
@@ -508,6 +520,7 @@ const CrearInformeEnsayo: React.FC = () => {
                         name="tipo_servicio"
                         className="w-100 mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                         onChange={handleInputChange}
+                        value={tipoServicio}
                     >
                         <option value="">Seleccione un tipo de servicio</option>
                         <option value="1">Ensayo</option>
@@ -524,6 +537,7 @@ const CrearInformeEnsayo: React.FC = () => {
                         name="ensayo"
                         className="w-100 mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                         onChange={handleInputChange}
+                        value={tipoEnsayo}
                     >
                         <option value="">Seleccione un tipo de ensayo</option>
                         {ensayos.map((ensayo) => (
