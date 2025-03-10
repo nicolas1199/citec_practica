@@ -28,10 +28,47 @@ const CrearInformeEnsayo: React.FC = () => {
         documento?: any;
     } | null>(null);
 
+    // Función para obtener la fecha actual en formato chileno
+    const getChileanFormattedDate = () => {
+        const now = new Date();
+        // Configurar para zona horaria de Chile (UTC-3/UTC-4)
+        const chileanDate = new Date(
+            now.toLocaleString('en-US', { timeZone: 'America/Santiago' }),
+        );
+
+        // Formatear como YYYY-MM-DD
+        const year = chileanDate.getFullYear();
+        const month = String(chileanDate.getMonth() + 1).padStart(2, '0');
+        const day = String(chileanDate.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
+    // Función para validar las fechas
+    const validateDates = (fechaInicio: string, fechaTermino: string) => {
+        if (!fechaInicio || !fechaTermino) return true;
+
+        const today = new Date(getChileanFormattedDate());
+        const inicio = new Date(fechaInicio);
+        const termino = new Date(fechaTermino);
+
+        // Validar que ninguna fecha sea futura
+        if (inicio > today || termino > today) {
+            return false;
+        }
+
+        // Validar que la fecha de inicio no sea posterior a la fecha de término
+        if (inicio > termino) {
+            return false;
+        }
+
+        return true;
+    };
+
     // Estados de los campos de los formularios
     const initialCommonState = {
         id_servicio: '',
-        fecha_informe: '',
+        fecha_informe: getChileanFormattedDate(),
         rut_receptor: '',
         fecha_inicio: '',
         fecha_termino: '',
@@ -162,7 +199,7 @@ const CrearInformeEnsayo: React.FC = () => {
         fetchEnsayos();
     }, [token]);
 
-    // Nuevo efecto para cargar áreas de documento desde la API
+    // Cargar las areas de servicio
     useEffect(() => {
         const fetchAreasDocumento = async () => {
             try {
@@ -182,15 +219,50 @@ const CrearInformeEnsayo: React.FC = () => {
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => {
+        const { name, value } = e.target;
+
+        // Manejo especial para fechas
+        if (name === 'fecha_inicio' || name === 'fecha_termino') {
+            const today = new Date(getChileanFormattedDate());
+            const selectedDate = new Date(value);
+
+            // Validar que la fecha no sea futura
+            if (selectedDate > today) {
+                ResponseMessage.show('No se permiten fechas futuras');
+                return;
+            }
+
+            // Si estamos cambiando fecha_inicio, verificamos contra fecha_termino
+            if (name === 'fecha_inicio' && commonFields.fecha_termino) {
+                const termino = new Date(commonFields.fecha_termino);
+                if (selectedDate > termino) {
+                    ResponseMessage.show(
+                        'La fecha de inicio no puede ser posterior a la fecha de término',
+                    );
+                    return;
+                }
+            }
+
+            // Si estamos cambiando fecha_termino, verificamos contra fecha_inicio
+            if (name === 'fecha_termino' && commonFields.fecha_inicio) {
+                const inicio = new Date(commonFields.fecha_inicio);
+                if (selectedDate < inicio) {
+                    ResponseMessage.show(
+                        'La fecha de término no puede ser anterior a la fecha de inicio',
+                    );
+                    return;
+                }
+            }
+        }
+
         setCommonFields({
             ...commonFields,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
 
         if (
-            e.target.name === 'aa_tipo' &&
-            (e.target.value === 'maquinaria' ||
-                e.target.value === 'estructural')
+            name === 'aa_tipo' &&
+            (value === 'maquinaria' || value === 'estructural')
         ) {
             if (aaTipoServicio === 'maquinaria') {
                 setAAMaquinariaFields(aaMaquinariaFields);
@@ -198,12 +270,24 @@ const CrearInformeEnsayo: React.FC = () => {
                 setAAEstructuralFields(aaEstructuralFields);
             }
 
-            setAATipoServicio(e.target.value as 'maquinaria' | 'estructural');
+            setAATipoServicio(value as 'maquinaria' | 'estructural');
         }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Validar las fechas antes de enviar
+        if (
+            !validateDates(
+                commonFields.fecha_inicio,
+                commonFields.fecha_termino,
+            )
+        ) {
+            ResponseMessage.show('Por favor, verifique las fechas ingresadas');
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -396,21 +480,7 @@ const CrearInformeEnsayo: React.FC = () => {
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Fecha del Informe
-                    </label>
-
-                    <input
-                        type="date"
-                        name="fecha_informe"
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
-                        onChange={handleInputChange}
-                        value={commonFields.fecha_informe}
-                    />
-                </div>
-
-                <div className="col-span-2">
+                <div className="col-span-1">
                     <label className="block text-sm font-medium text-gray-700">
                         Empresa
                     </label>
@@ -474,6 +544,7 @@ const CrearInformeEnsayo: React.FC = () => {
                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                         onChange={handleInputChange}
                         value={commonFields.fecha_inicio}
+                        max={getChileanFormattedDate()}
                     />
                 </div>
                 <div className="mb-4">
@@ -486,6 +557,8 @@ const CrearInformeEnsayo: React.FC = () => {
                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                         onChange={handleInputChange}
                         value={commonFields.fecha_termino}
+                        max={getChileanFormattedDate()}
+                        min={commonFields.fecha_inicio}
                     />
                 </div>
             </div>
