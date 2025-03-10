@@ -314,6 +314,11 @@ const TableMenu = ({ editor }) => {
 
 const MenuBar = () => {
     const { editor } = useCurrentEditor();
+    const fileInputId = React.useMemo(
+        () =>
+            `file-input-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
+        [],
+    );
 
     if (!editor) {
         return null;
@@ -401,6 +406,7 @@ const MenuBar = () => {
                         }
                     `}
                         aria-label="Negrita"
+                        title="Negrita"
                     >
                         <IconBold stroke={2} />
                     </button>
@@ -418,6 +424,7 @@ const MenuBar = () => {
                         }
                     `}
                         aria-label="Cursiva"
+                        title="Cursiva"
                     >
                         <IconItalic />
                     </button>
@@ -440,6 +447,7 @@ const MenuBar = () => {
                         }
                     `}
                         aria-label="Subrayado"
+                        title="Subrayado"
                     >
                         <IconUnderline />
                     </button>
@@ -456,6 +464,7 @@ const MenuBar = () => {
                         }
                     `}
                         aria-label="Tachado"
+                        title="Tachado"
                     >
                         <IconStrikethrough />
                     </button>
@@ -474,6 +483,7 @@ const MenuBar = () => {
                                 : ''
                         }`}
                         aria-label="Encabezado"
+                        title="Encabezado"
                     >
                         <IconHeading />
                     </button>
@@ -489,6 +499,7 @@ const MenuBar = () => {
                             editor.isActive('bulletList') ? 'bg-gray-200' : ''
                         }`}
                         aria-label="Lista"
+                        title="Lista con viñetas"
                     >
                         <IconList />
                     </button>
@@ -503,6 +514,7 @@ const MenuBar = () => {
                         }
                     `}
                         aria-label="Lista numerada"
+                        title="Lista numerada"
                     >
                         <IconListNumbers />
                     </button>
@@ -516,6 +528,7 @@ const MenuBar = () => {
                             'left',
                         )}`}
                         aria-label="Alinear a la izquierda"
+                        title="Alinear a la izquierda"
                     >
                         <IconAlignBoxLeftStretch />
                     </button>
@@ -527,6 +540,7 @@ const MenuBar = () => {
                             'center',
                         )}`}
                         aria-label="Centrar"
+                        title="Centrar"
                     >
                         <IconAlignBoxCenterTop />
                     </button>
@@ -538,6 +552,7 @@ const MenuBar = () => {
                             'right',
                         )}`}
                         aria-label="Alinear a la derecha"
+                        title="Alinear a la derecha"
                     >
                         <IconAlignBoxRightStretch />
                     </button>
@@ -567,6 +582,7 @@ const MenuBar = () => {
                             editor.chain().focus().setHorizontalRule().run()
                         }
                         aria-label="Línea horizontal"
+                        title="Insertar línea horizontal"
                     >
                         <IconRuler3 />
                     </button>
@@ -579,6 +595,7 @@ const MenuBar = () => {
                         onClick={() => editor.chain().focus().undo().run()}
                         disabled={!editor.can().chain().focus().undo().run()}
                         aria-label="Deshacer"
+                        title="Deshacer"
                     >
                         <IconArrowBackUp />
                     </button>
@@ -586,14 +603,15 @@ const MenuBar = () => {
                     <button
                         type="button"
                         onClick={() =>
-                            document.getElementById('file-input')?.click()
+                            document.getElementById(fileInputId)?.click()
                         }
                         className="p-2 hover:bg-gray-100 rounded transition-colors relative"
                         aria-label="Insertar imagen"
+                        title="Insertar imagen"
                     >
                         <IconPhoto />
                         <input
-                            id="file-input"
+                            id={fileInputId}
                             type="file"
                             accept="image/*"
                             className="hidden"
@@ -619,6 +637,8 @@ const MenuBar = () => {
                                     };
                                     reader.readAsDataURL(file);
                                 }
+
+                                e.target.value = '';
                             }}
                         />
                     </button>
@@ -649,17 +669,24 @@ const CuadroTexto: React.FC<CuadroTextoProps> = ({
     }, [onContentChange, initialContent, storageKey, content]);
 
     return (
-        <EditorProvider
-            key={`editor-${storageKey}-${editorKey.current}`}
-            extensions={extensions}
-            content={content}
-            slotBefore={<MenuBar />}
-            onUpdate={({ editor }) => {
-                const html = editor.getHTML();
-                localStorage.setItem(storageKey, html);
-                onContentChange?.(html);
-            }}
-        />
+        <div className="border border-gray-300 rounded-md shadow-sm hover:shadow-md transition-shadow">
+            <EditorProvider
+                key={`editor-${storageKey}-${editorKey.current}`}
+                extensions={extensions}
+                content={content}
+                slotBefore={<MenuBar />}
+                onUpdate={({ editor }) => {
+                    const html = editor.getHTML();
+                    localStorage.setItem(storageKey, html);
+                    onContentChange?.(html);
+                }}
+                editorProps={{
+                    attributes: {
+                        class: 'p-4 prose max-w-none focus:outline-none min-h-[100px]',
+                    },
+                }}
+            />
+        </div>
     );
 };
 
