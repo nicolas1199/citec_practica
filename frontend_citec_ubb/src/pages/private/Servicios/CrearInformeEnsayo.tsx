@@ -217,13 +217,11 @@ const CrearInformeEnsayo: React.FC = () => {
             // Determinar el tipo de servicio para el backend
             let tipoServicio = '';
             if (commonFields.id_servicio === '1') {
-                // AA
                 tipoServicio =
                     aaTipoServicio === 'maquinaria'
                         ? 'AA_MAQUINARIA'
                         : 'AA_ESTRUCTURAL';
             } else if (commonFields.id_servicio === '2') {
-                // EC
                 tipoServicio = 'EC';
             }
 
@@ -262,7 +260,7 @@ const CrearInformeEnsayo: React.FC = () => {
                     contenido: formData,
                     titulo: titulo,
                     tipoServicio: tipoServicio,
-                    documentoData: documentoData, // Enviar datos para el documento
+                    documentoData: documentoData,
                 },
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -317,12 +315,6 @@ const CrearInformeEnsayo: React.FC = () => {
                 ResponseMessage.show('Error al descargar el PDF');
             });
     };
-
-    // Define fixed service areas
-    const areasDeServicio = [
-        { id: 1, nombre: 'AA' },
-        { id: 2, nombre: 'EC' },
-    ];
 
     const renderServicioForm = () => {
         switch (commonFields.id_servicio) {

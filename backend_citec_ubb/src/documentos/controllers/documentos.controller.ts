@@ -106,18 +106,15 @@ export class DocumentosController extends BaseControllers {
 
     @ApiOperation({ summary: 'Descargar documento PDF' })
     @ApiRespuestaError()
-    @Public() // Marcar el endpoint como público
+    @Public()
     @Get('descargar-pdf/:fileName')
     @Header('Content-Type', 'application/pdf')
     @Header('Content-Disposition', 'attachment; filename="informe.pdf"')
     async descargarPdf(
         @Param('fileName') fileName: string,
-        @Query('token') token: string, // Recibir el token como parámetro de consulta
+        @Query('token') token: string,
         @Res({ passthrough: true }) res: Response,
     ): Promise<StreamableFile> {
-        // No necesitamos verificar el token aquí porque es un endpoint público
-        // Pero podríamos hacerlo si quisiéramos agregar una verificación adicional
-
         const buffer = await this.documentosService.obtenerPdf(fileName);
 
         // Configurar cabeceras para la descarga

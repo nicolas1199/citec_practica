@@ -7,7 +7,10 @@ import { ConfigModule } from '@nestjs/config';
 import Documentos from 'src/database/models/documentos.model';
 import { AreasDocumentos } from 'src/database/models/area-documento.model';
 import { AREAS_DE_DOCUMENTO } from 'src/common/constants/area-documentos.constants';
-import { ActualizarDocumentoDto, CrearDocumentoDto } from '../dto/documento.dto';
+import {
+    ActualizarDocumentoDto,
+    CrearDocumentoDto,
+} from '../dto/documento.dto';
 import { VALIDEZ_DE_DOCUMENTO } from 'src/common/constants/validez-de-documento.constants';
 import ValidezDocumentos from 'src/database/models/validez-documento.model';
 
@@ -42,8 +45,8 @@ describe('DocumentosController', () => {
         await app.init();
 
         /**
-        * Crear datos necesarios antes de las pruebas
-        */
+         * Crear datos necesarios antes de las pruebas
+         */
         const areasModel = app.get(getModelToken(AreasDocumentos));
         const areas = Object.values(AREAS_DE_DOCUMENTO);
         for (const area of areas) {
@@ -60,7 +63,7 @@ describe('DocumentosController', () => {
         }
     });
 
-    const ruta = '/documentos'
+    const ruta = '/documentos';
 
     describe('Areas', () => {
         it('Deben existir al menos 2 areas', async () => {
@@ -68,14 +71,14 @@ describe('DocumentosController', () => {
             const count = await areasModel.count();
             expect(count).toBeGreaterThanOrEqual(2);
         });
-    })
+    });
     describe('Validez', () => {
         it('Deben existir al menos 3 estados de validez', async () => {
             const validezModel = app.get(getModelToken(ValidezDocumentos));
             const count = await validezModel.count();
             expect(count).toBeGreaterThanOrEqual(3);
         });
-    })
+    });
 
     describe('crear', () => {
         const crearDocumento: CrearDocumentoDto = {
@@ -86,8 +89,8 @@ describe('DocumentosController', () => {
             area_documento: AREAS_DE_DOCUMENTO.OPCION_1,
             fecha_inicio: new Date(2025, 1, 1, 12),
             fecha_finalizacion: new Date(2025, 1, 1, 12),
-            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3
-        }
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3,
+        };
         it('Crear documento correctamente', async () => {
             const res = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
@@ -101,11 +104,10 @@ describe('DocumentosController', () => {
                 area_documento: crearDocumento.area_documento,
                 fecha_inicio: crearDocumento.fecha_inicio,
                 fecha_finalizacion: crearDocumento.fecha_finalizacion,
-
             });
             expect(res.body).toHaveProperty('updatedAt');
             expect(res.body).toHaveProperty('createdAt');
-        })
+        });
         it('fallar si existen campos adicionales o estan mal escritos', async () => {
             // Probar cada campo faltante
             const camposAProbar = [
@@ -144,7 +146,6 @@ describe('DocumentosController', () => {
                     validez_document: crearDocumento.validez_documento,
                     validez_documento: undefined,
                 }, // Error en la validez
-
             ];
             for (const casoError of camposAProbar) {
                 const res = await request(app.getHttpServer())
@@ -155,7 +156,7 @@ describe('DocumentosController', () => {
                 expect(res.body.statusCode).toBe(400);
                 expect(res.body.error).toBe('Bad Request');
             }
-        })
+        });
 
         it('fallar si el nombre ya existe', async () => {
             const crearDocumentoAntes = await request(app.getHttpServer())
@@ -201,7 +202,7 @@ describe('DocumentosController', () => {
                 cliente: 'AnoNimo',
                 direccion: 'ConcEpcioN',
                 area_documento: 'aa',
-            }
+            };
             const res = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
                 .send(datosPrueba);
@@ -211,9 +212,8 @@ describe('DocumentosController', () => {
             expect(res.body.cliente).toBe('ANONIMO');
             expect(res.body.direccion).toBe('CONCEPCION');
             expect(res.body.nombre_tipos).toBe('AA');
-        })
-
-    })
+        });
+    });
 
     describe('actualizar', () => {
         const crearDocumento: CrearDocumentoDto = {
@@ -224,8 +224,8 @@ describe('DocumentosController', () => {
             area_documento: AREAS_DE_DOCUMENTO.OPCION_1,
             fecha_inicio: new Date(2025, 1, 1, 12),
             fecha_finalizacion: new Date(2025, 1, 1, 12),
-            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3
-        }
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3,
+        };
         const crearDocumento2: CrearDocumentoDto = {
             nombre: 'AUX2',
             cliente: 'TEST',
@@ -234,8 +234,8 @@ describe('DocumentosController', () => {
             area_documento: AREAS_DE_DOCUMENTO.OPCION_2,
             fecha_inicio: new Date(2025, 1, 5, 12),
             fecha_finalizacion: new Date(2025, 1, 12, 12),
-            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2
-        }
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2,
+        };
         const actualizarDocumento: ActualizarDocumentoDto = {
             cliente: 'TEST',
             ejecutor: 'CITEC UBB',
@@ -257,8 +257,8 @@ describe('DocumentosController', () => {
             numero: 0,
 
             nueva_validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_3,
-            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2
-        }
+            validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2,
+        };
         it('actualizar documento correctamente', async () => {
             const crearDoc = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
@@ -274,7 +274,8 @@ describe('DocumentosController', () => {
                 direccion: actualizarDocumento.nueva_direccion,
                 area_documento: actualizarDocumento.nueva_area_documento,
                 fecha_inicio: actualizarDocumento.nueva_fecha_inicio,
-                fecha_finalizacion: actualizarDocumento.nueva_fecha_finalizacion,
+                fecha_finalizacion:
+                    actualizarDocumento.nueva_fecha_finalizacion,
             });
             expect(res.body).toHaveProperty('createdAt');
             expect(res.body).toHaveProperty('updatedAt');
@@ -339,10 +340,10 @@ describe('DocumentosController', () => {
                 }, // Error en fecha de finalizacion
                 {
                     ...actualizarDocumento,
-                    fecha_finalizacion_n: actualizarDocumento.nueva_fecha_finalizacion,
+                    fecha_finalizacion_n:
+                        actualizarDocumento.nueva_fecha_finalizacion,
                     nueva_fecha_finalizacion: undefined,
                 }, // Error en nueva_fecha_finalizacion
-
             ];
 
             for (const casoError of camposAProbar) {
@@ -368,7 +369,7 @@ describe('DocumentosController', () => {
                 nueva_direccion: 'ConcEpcioN2',
                 area_documento: 'aa',
                 nueva_area_documento: 'eC',
-            }
+            };
             const res = await request(app.getHttpServer())
                 .post(`${ruta}/crear`)
                 .send(datosPrueba);
@@ -376,11 +377,10 @@ describe('DocumentosController', () => {
             expect(res.body.nombre).toBe('AUX');
             expect(res.body.direccion).toBe('CONCEPCION2');
             expect(res.body.nombre_tipos).toBe('EC');
-        })
-    })
+        });
+    });
 
     afterAll(async () => {
         await app.close();
     });
-
 });

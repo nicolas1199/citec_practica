@@ -76,7 +76,7 @@ export class DocumentosService extends BaseServices {
             ]);
         }
 
-        const filasAfectadas = await Documentos.update(
+        await Documentos.update(
             {
                 nombre: documento.nuevo_nombre,
                 direccion: documento.nueva_direccion,
@@ -105,7 +105,7 @@ export class DocumentosService extends BaseServices {
             ]);
         }
 
-        const filasAfectadas = await Documentos.update(
+        await Documentos.update(
             { validez_documento: VALIDEZ_DE_DOCUMENTO.OPCION_2 },
             { where: { numero: clavePrimaria.numero } },
         );
@@ -129,21 +129,20 @@ export class DocumentosService extends BaseServices {
         let htmlContent = '';
 
         switch (generarPdfDto.tipoServicio) {
-            case 'EC': // Ensayo Compresión
+            case 'EC':
                 htmlContent = this.construirHtmlEC(generarPdfDto.contenido);
                 break;
-            case 'AA_MAQUINARIA': // Análisis Acústico - Maquinaria
+            case 'AA_MAQUINARIA':
                 htmlContent = this.construirHtmlAAMaquinaria(
                     generarPdfDto.contenido,
                 );
                 break;
-            case 'AA_ESTRUCTURAL': // Análisis Acústico - Estructural
+            case 'AA_ESTRUCTURAL':
                 htmlContent = this.construirHtmlAAEstructural(
                     generarPdfDto.contenido,
                 );
                 break;
             default:
-                // Formato genérico
                 htmlContent = this.construirHtmlGenerico(
                     generarPdfDto.contenido,
                 );

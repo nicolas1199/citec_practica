@@ -11,4 +11,6 @@ export class ValidezDeDocumentoDto {
     readonly nombre: string;
 }
 
-export class ObtenerPorIdValidezDto extends PickType(ValidezDeDocumentoDto, ['nombre']) { }
+export class ObtenerPorIdValidezDto extends PickType(ValidezDeDocumentoDto, [
+    'nombre',
+]) {}

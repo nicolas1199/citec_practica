@@ -14,7 +14,7 @@ export class AreasDocumentosController extends BaseControllersSimple {
 
     @ApiOperation({ summary: 'Obtener todas las áreas de documentos' })
     @ApiRespuestaError()
-    @Public() // Hacemos este endpoint público para que el frontend pueda acceder sin autenticación
+    @Public()
     @Get('obtener-todos')
     obtenerTodos() {
         return this.tiposServicio.obtenerTodos();
@@ -22,7 +22,7 @@ export class AreasDocumentosController extends BaseControllersSimple {
 
     @ApiOperation({ summary: 'Obtener un área de documento por su código' })
     @ApiRespuestaError()
-    @Public() // Hacemos este endpoint público
+    @Public()
     @Get('obtener-por-id/:nombre')
     obtenerPorId(@Param() nombre: ObtenerPorIdAreasDto) {
         return this.tiposServicio.obtenerPorId(nombre);

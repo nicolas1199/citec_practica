@@ -3,7 +3,7 @@ import { ValidezDeDocumentoService } from './services/validez-de-documento.servi
 import { ValidezDeDocumentoController } from './controllers/validez-de-documento.controller';
 
 @Module({
-  controllers: [ValidezDeDocumentoController],
-  providers: [ValidezDeDocumentoService],
+    controllers: [ValidezDeDocumentoController],
+    providers: [ValidezDeDocumentoService],
 })
-export class ValidezDeDocumentoModule { }
+export class ValidezDeDocumentoModule {}
