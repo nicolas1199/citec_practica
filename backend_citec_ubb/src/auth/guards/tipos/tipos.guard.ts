@@ -19,6 +19,16 @@ export class TiposGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        // Primero verificar si la ruta está marcada como pública
+        const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+
+        if (isPublic) {
+            return true;
+        }
+
         const requiredRoles = this.reflector.getAllAndOverride<
             TiposDeUsuario[]
         >(TIPOS_DE_USUARIO_KEY, [context.getHandler(), context.getClass()]);

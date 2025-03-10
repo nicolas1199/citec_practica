@@ -6,4 +6,4 @@ import { AreasDocumentosService } from './services/areas-documentos.service';
     controllers: [AreasDocumentosController],
     providers: [AreasDocumentosService],
 })
-export class AreasModule {}
+export class AreasDocumentosModule {}

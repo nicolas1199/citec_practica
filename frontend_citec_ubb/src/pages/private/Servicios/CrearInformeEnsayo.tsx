@@ -8,12 +8,25 @@ import { ENDPOINTS } from '../../../common/constants/urls.constants';
 import ServicioAA from './components/ServicioAA';
 import ServicioEC from './components/ServicioEC';
 
+// Interfaz para las áreas de documentos
+interface AreaDocumento {
+    cod_area: string;
+}
+
 const CrearInformeEnsayo: React.FC = () => {
     const { token } = useData();
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
+    const [ensayos, setEnsayos] = useState<any[]>([]);
+    const [areasDocumento, setAreasDocumento] = useState<AreaDocumento[]>([]);
     const [aaTipoServicio, setAATipoServicio] = useState<
         'maquinaria' | 'estructural'
     >('maquinaria');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [generatedPdf, setGeneratedPdf] = useState<{
+        fileName: string;
+        filePath: string;
+        documento?: any;
+    } | null>(null);
 
     // Estados de los campos de los formularios
     const initialCommonState = {
@@ -130,6 +143,42 @@ const CrearInformeEnsayo: React.FC = () => {
         fetchEmpresas();
     }, [token]);
 
+    useEffect(() => {
+        const fetchEnsayos = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.ENSAYOS.OBTENER_TODOS}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    },
+                );
+                setEnsayos(response.data);
+            } catch (error) {
+                console.error('Error al obtener los ensayos:', error);
+                ResponseMessage.show('Error al cargar los ensayos');
+            }
+        };
+
+        fetchEnsayos();
+    }, [token]);
+
+    // Nuevo efecto para cargar áreas de documento desde la API
+    useEffect(() => {
+        const fetchAreasDocumento = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.AREAS_DOCUMENTOS.OBTENER_TODOS}`,
+                );
+                setAreasDocumento(response.data);
+            } catch (error) {
+                console.error('Error al obtener áreas de documentos:', error);
+                ResponseMessage.show('Error al cargar áreas de documentos');
+            }
+        };
+
+        fetchAreasDocumento();
+    }, []);
+
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => {
@@ -150,15 +199,12 @@ const CrearInformeEnsayo: React.FC = () => {
             }
 
             setAATipoServicio(e.target.value as 'maquinaria' | 'estructural');
-
-            requestAnimationFrame(() => {
-                console.log('Type changed to:', e.target.value);
-            });
         }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
         try {
             if (!commonFields.id_servicio) {
@@ -168,23 +214,112 @@ const CrearInformeEnsayo: React.FC = () => {
             const formData = getActiveFields();
             console.log('Datos del formulario:', formData);
 
+            // Determinar el tipo de servicio para el backend
+            let tipoServicio = '';
+            if (commonFields.id_servicio === '1') {
+                // AA
+                tipoServicio =
+                    aaTipoServicio === 'maquinaria'
+                        ? 'AA_MAQUINARIA'
+                        : 'AA_ESTRUCTURAL';
+            } else if (commonFields.id_servicio === '2') {
+                // EC
+                tipoServicio = 'EC';
+            }
+
+            // Crear un título para el informe
+            const empresaSeleccionada = empresas.find(
+                (emp) => emp.rut === commonFields.rut_receptor,
+            );
+            const nombreEmpresa =
+                empresaSeleccionada?.razon_social || 'Cliente';
+            const fecha = commonFields.fecha_informe
+                ? new Date(commonFields.fecha_informe).toLocaleDateString()
+                : new Date().toLocaleDateString();
+
+            const ensayoSeleccionado = ensayos.find(
+                (ensayo) => ensayo.id.toString() === commonFields.id_servicio,
+            );
+            const nombreEnsayo = ensayoSeleccionado?.nombre || 'Ensayo';
+            const titulo = `Informe de ${nombreEnsayo} - ${nombreEmpresa} - ${fecha}`;
+
+            // Datos para crear/actualizar documento en la DB
+            const documentoData = {
+                nombre: titulo,
+                ejecutor: 'CITEC UBB',
+                cliente: empresaSeleccionada?.razon_social || '',
+                direccion: empresaSeleccionada?.direccion || '',
+                area_documento: commonFields.id_servicio === '1' ? 'AA' : 'EC',
+                fecha_inicio: commonFields.fecha_inicio,
+                fecha_finalizacion: commonFields.fecha_termino,
+                empresa_rut: commonFields.rut_receptor,
+            };
+
+            // Enviar los datos al backend para generar el PDF
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.DOCUMENTOS.GENERAR_PDF}`,
+                {
+                    contenido: formData,
+                    titulo: titulo,
+                    tipoServicio: tipoServicio,
+                    documentoData: documentoData, // Enviar datos para el documento
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                },
+            );
+
+            // Guardar la referencia al PDF generado
+            setGeneratedPdf(response.data);
+
             // Limpiar drafts de localStorage
             clearLocalStorageDrafts();
 
-            // Reestablecer los campos a sus valores iniciales
+            // Devolver a estado inicial
             setCommonFields(initialCommonState);
             setAAMaquinariaFields(initialAAMaquinariaState);
             setAAEstructuralFields(initialAAEstructuralState);
             setECFields(initialECState);
 
-            ResponseMessage.show('Informe creado exitosamente');
+            ResponseMessage.show('Informe generado exitosamente');
         } catch (error) {
-            console.error('Error al crear el informe:', error);
-            ResponseMessage.show('Error al crear el informe');
+            console.error('Error al generar el informe:', error);
+            ResponseMessage.show('Error al generar el informe');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    const servicios = [
+    const handleDownloadPdf = () => {
+        if (!generatedPdf) return;
+
+        fetch(
+            `${import.meta.env.VITE_BACKEND_NESTJS_URL}/documentos/descargar-pdf/${generatedPdf.fileName}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        )
+            .then((response) => response.blob())
+            .then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = generatedPdf.fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            })
+            .catch((error) => {
+                console.error('Error al descargar el PDF:', error);
+                ResponseMessage.show('Error al descargar el PDF');
+            });
+    };
+
+    // Define fixed service areas
+    const areasDeServicio = [
         { id: 1, nombre: 'AA' },
         { id: 2, nombre: 'EC' },
     ];
@@ -258,9 +393,12 @@ const CrearInformeEnsayo: React.FC = () => {
                         value={commonFields.id_servicio}
                     >
                         <option value="">Seleccione un servicio</option>
-                        {servicios.map((servicio) => (
-                            <option key={servicio.id} value={servicio.id}>
-                                {servicio.nombre}
+                        {areasDocumento.map((area) => (
+                            <option
+                                key={area.cod_area}
+                                value={area.cod_area === 'AA' ? '1' : '2'}
+                            >
+                                {area.cod_area}
                             </option>
                         ))}
                     </select>
@@ -321,13 +459,16 @@ const CrearInformeEnsayo: React.FC = () => {
                     </label>
 
                     <select
-                        name="estado"
+                        name="ensayo"
                         className="w-100 mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                         onChange={handleInputChange}
                     >
                         <option value="">Seleccione un tipo de ensayo</option>
-                        <option value="1">Ensayo 1</option>
-                        <option value="2">Ensayo 2</option>
+                        {ensayos.map((ensayo) => (
+                            <option key={ensayo.id} value={ensayo.id}>
+                                {ensayo.nombre}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="mb-4">
@@ -359,13 +500,45 @@ const CrearInformeEnsayo: React.FC = () => {
 
             {renderServicioForm()}
 
-            <button
-                type="submit"
-                className="bg-primary-600 text-white font-bold py-2 px-4 rounded-md hover:bg-primary-700 transition-colors"
-                disabled={!commonFields.id_servicio}
-            >
-                Crear Informe
-            </button>
+            <div className="flex gap-4 mt-6">
+                <button
+                    type="submit"
+                    className="bg-primary-600 text-white font-bold py-2 px-4 rounded-md hover:bg-primary-700 transition-colors"
+                    disabled={!commonFields.id_servicio || isSubmitting}
+                >
+                    {isSubmitting ? 'Generando...' : 'Generar Informe'}
+                </button>
+
+                {generatedPdf && (
+                    <>
+                        <button
+                            type="button"
+                            onClick={handleDownloadPdf}
+                            className="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+                        >
+                            Ver/Descargar PDF
+                        </button>
+                        {generatedPdf.documento && (
+                            <p className="text-sm text-gray-700 self-center">
+                                Documento guardado con ID:{' '}
+                                {generatedPdf.documento.numero}
+                            </p>
+                        )}
+                    </>
+                )}
+            </div>
+
+            {generatedPdf && (
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-green-800 font-medium">
+                        ¡Informe generado correctamente!
+                    </p>
+                    <p className="text-sm text-green-700">
+                        Haga clic en "Ver/Descargar PDF" para visualizar o
+                        guardar el documento.
+                    </p>
+                </div>
+            )}
         </form>
     );
 };

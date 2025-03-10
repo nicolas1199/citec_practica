@@ -32,7 +32,7 @@ export class Documentos extends Model<Documentos> {
 
     @ApiProperty({ type: 'string', default: 'INFORME' })
     @Column({
-        type: DataType.STRING(50),
+        type: DataType.STRING(255),
         allowNull: false,
     })
     declare nombre: string;
@@ -109,5 +109,33 @@ export class Documentos extends Model<Documentos> {
 
     @BelongsTo(() => ValidezDocumentos)
     declare validez: ValidezDocumentos;
+
+    @ApiProperty({ type: 'string', nullable: true })
+    @Column({
+        type: DataType.STRING(255),
+        allowNull: true,
+    })
+    declare pdf_path: string;
+
+    @ApiProperty({ type: 'string', nullable: true })
+    @Column({
+        type: DataType.TEXT,
+        allowNull: true,
+    })
+    declare contenido_json: string;
+
+    @ApiProperty({ type: 'string', nullable: true })
+    @Column({
+        type: DataType.STRING(50),
+        allowNull: true,
+    })
+    declare tipo_servicio: string;
+
+    @ApiProperty({ type: 'string', nullable: true })
+    @Column({
+        type: DataType.STRING(255),
+        allowNull: true,
+    })
+    declare empresa_rut: string;
 }
 export default Documentos;
