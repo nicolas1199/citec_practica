@@ -308,6 +308,25 @@ export class DocumentosService extends BaseServices {
         }
     }
 
+    async obtenerPdfPorId(documentoId: number): Promise<Buffer> {
+        const documento = await Documentos.findByPk(documentoId);
+        if (!documento) {
+            throw new NotFoundException('El documento no fue encontrado');
+        }
+
+        const filePath = path.join(
+            process.cwd(),
+            'uploads',
+            'temp',
+            documento.pdf_path,
+        );
+        try {
+            return await fs.promises.readFile(filePath);
+        } catch (error) {
+            throw new NotFoundException('El archivo PDF no fue encontrado');
+        }
+    }
+
     /**
      * Construye HTML para informes de Ensayo de Compresión
      */

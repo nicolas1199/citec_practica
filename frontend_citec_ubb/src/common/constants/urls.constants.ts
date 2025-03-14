@@ -71,6 +71,7 @@ export const ENDPOINTS = {
         ELIMINAR: 'documentos/eliminar',
         GENERAR_PDF: 'documentos/generar-pdf',
         DESCARGAR_PDF: 'documentos/descargar-pdf',
+        OBTENER_PDF_POR_ID: 'documentos/obtener-pdf',
     },
     AREAS_DOCUMENTOS: {
         OBTENER_TODOS: 'area-documentos/obtener-todos',

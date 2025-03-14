@@ -124,4 +124,14 @@ export class DocumentosController extends BaseControllers {
 
         return new StreamableFile(buffer);
     }
+
+    @ApiOperation({ summary: 'Obtener PDF por ID' })
+    @ApiRespuestaError()
+    @Public()
+    @Get('obtener-pdf/:id')
+    async obtenerPdf(@Param('id') id: number): Promise<StreamableFile> {
+        const buffer = await this.documentosService.obtenerPdfPorId(id);
+
+        return new StreamableFile(buffer);
+    }
 }
