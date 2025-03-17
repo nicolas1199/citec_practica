@@ -409,14 +409,13 @@ function Layout() {
                                                     Ver Ensayos
                                                 </Link>
                                             </li>
+                                            {/* Nueva opción de menú para visualizar documentos */}
                                             <li>
                                                 <Link
-                                                    to={
-                                                        '/dashboard/orden-trabajo/crear-informe'
-                                                    }
+                                                    to={'/dashboard/documentos'}
                                                     className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
                                                 >
-                                                    Crear Informe
+                                                    Ver Documentos
                                                 </Link>
                                             </li>
                                         </ul>

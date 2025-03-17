@@ -21,6 +21,7 @@ import CrearPropuesta from './pages/private/Servicios/CrearPropuesta';
 import TablaPropuestas from './components/TablaPropuestas';
 import EditarPropuesta from './pages/private/Servicios/EditarPropuesta';
 import CrearInformeEnsayo from './pages/private/Servicios/CrearInformeEnsayo';
+import VisualizarDocumentos from './pages/private/Servicios/VisualizarDocumentos';
 
 const App: React.FC = () => {
     return (
@@ -101,6 +102,14 @@ const App: React.FC = () => {
                                     <Route
                                         path="crear-informe"
                                         element={<CrearInformeEnsayo />}
+                                    />
+                                </Route>
+
+                                {/* Nueva ruta para visualizar documentos */}
+                                <Route path="documentos">
+                                    <Route
+                                        index
+                                        element={<VisualizarDocumentos />}
                                     />
                                 </Route>
                             </Route>
