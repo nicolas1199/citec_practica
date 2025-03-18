@@ -409,15 +409,6 @@ function Layout() {
                                                     Ver Ensayos
                                                 </Link>
                                             </li>
-                                            {/* Nueva opción de menú para visualizar documentos */}
-                                            <li>
-                                                <Link
-                                                    to={'/dashboard/documentos'}
-                                                    className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
-                                                >
-                                                    Ver Documentos
-                                                </Link>
-                                            </li>
                                         </ul>
                                     )}
                                 </div>
