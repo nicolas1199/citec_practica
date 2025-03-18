@@ -129,9 +129,13 @@ export class DocumentosController extends BaseControllers {
     @ApiRespuestaError()
     @Public()
     @Get('obtener-pdf/:id')
-    async obtenerPdf(@Param('id') id: number): Promise<StreamableFile> {
+    @Header('Content-Type', 'application/pdf')
+    @Header('Content-Disposition', 'inline; filename="documento.pdf"')
+    async obtenerPdf(
+        @Param('id') id: number,
+        @Res({ passthrough: true }) res: Response,
+    ): Promise<StreamableFile> {
         const buffer = await this.documentosService.obtenerPdfPorId(id);
-
         return new StreamableFile(buffer);
     }
 }
