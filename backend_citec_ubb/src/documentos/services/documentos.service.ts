@@ -294,20 +294,6 @@ export class DocumentosService extends BaseServices {
         };
     }
 
-    /**
-     * Descarga un PDF ya generado
-     * @param fileName Nombre del archivo a descargar
-     * @returns Buffer del archivo
-     */
-    async obtenerPdf(fileName: string): Promise<Buffer> {
-        const filePath = path.join(process.cwd(), 'uploads', 'temp', fileName);
-        try {
-            return await fs.promises.readFile(filePath);
-        } catch (error) {
-            throw new NotFoundException('El archivo PDF no fue encontrado');
-        }
-    }
-
     async obtenerPdfPorId(documentoId: number): Promise<Buffer> {
         const documento = await Documentos.findByPk(documentoId);
         if (!documento) {
@@ -323,7 +309,10 @@ export class DocumentosService extends BaseServices {
         try {
             return await fs.promises.readFile(filePath);
         } catch (error) {
-            throw new NotFoundException('El archivo PDF no fue encontrado');
+            console.error('Error al leer el archivo PDF:', error);
+            throw new NotFoundException(
+                'El archivo PDF no fue encontrado o no es accesible',
+            );
         }
     }
 

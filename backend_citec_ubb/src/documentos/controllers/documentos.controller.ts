@@ -9,7 +9,6 @@ import {
     Res,
     StreamableFile,
     Header,
-    Query,
 } from '@nestjs/common';
 import { DocumentosService } from '../services/documentos.service';
 import {
@@ -104,38 +103,29 @@ export class DocumentosController extends BaseControllers {
         return this.documentosService.generarPdf(generarPdfDto);
     }
 
-    @ApiOperation({ summary: 'Descargar documento PDF' })
+    @ApiOperation({ summary: 'Obtener PDF por ID' })
     @ApiRespuestaError()
     @Public()
-    @Get('descargar-pdf/:fileName')
+    @Get('obtener-pdf/:id')
     @Header('Content-Type', 'application/pdf')
-    @Header('Content-Disposition', 'attachment; filename="informe.pdf"')
-    async descargarPdf(
-        @Param('fileName') fileName: string,
-        @Query('token') token: string,
+    @Header('Content-Disposition', 'attachment; filename="documento.pdf"')
+    async obtenerPdf(
+        @Param('id') id: number,
         @Res({ passthrough: true }) res: Response,
     ): Promise<StreamableFile> {
-        const buffer = await this.documentosService.obtenerPdf(fileName);
+        const buffer = await this.documentosService.obtenerPdfPorId(id);
+
+        // Obtener el documento para personalizar el nombre del archivo
+        const documento = await this.documentosService.obtenerPorId({
+            numero: id,
+        });
+        const fileName = documento.pdf_path || `documento-${id}.pdf`;
 
         // Configurar cabeceras para la descarga
         res.set({
             'Content-Disposition': `attachment; filename="${fileName}"`,
         });
 
-        return new StreamableFile(buffer);
-    }
-
-    @ApiOperation({ summary: 'Obtener PDF por ID' })
-    @ApiRespuestaError()
-    @Public()
-    @Get('obtener-pdf/:id')
-    @Header('Content-Type', 'application/pdf')
-    @Header('Content-Disposition', 'inline; filename="documento.pdf"')
-    async obtenerPdf(
-        @Param('id') id: number,
-        @Res({ passthrough: true }) res: Response,
-    ): Promise<StreamableFile> {
-        const buffer = await this.documentosService.obtenerPdfPorId(id);
         return new StreamableFile(buffer);
     }
 }

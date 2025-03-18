@@ -27,13 +27,11 @@ const CrearInformeEnsayo: React.FC = () => {
         filePath: string;
         documento?: any;
     } | null>(null);
-    const [tipoServicio, setTipoServicio] = useState<string>('');
     const [tipoEnsayo, setTipoEnsayo] = useState<string>('');
 
     // Función para obtener la fecha actual en formato chileno
     const getChileanFormattedDate = () => {
         const now = new Date();
-        // Configurar para zona horaria de Chile (UTC-3/UTC-4)
         const chileanDate = new Date(
             now.toLocaleString('en-US', { timeZone: 'America/Santiago' }),
         );
@@ -224,9 +222,7 @@ const CrearInformeEnsayo: React.FC = () => {
         const { name, value } = e.target;
 
         // Manejar cambios en los campos adicionales
-        if (name === 'tipo_servicio') {
-            setTipoServicio(value);
-        } else if (name === 'ensayo') {
+        if (name === 'ensayo') {
             setTipoEnsayo(value);
         }
 
@@ -305,7 +301,6 @@ const CrearInformeEnsayo: React.FC = () => {
             }
 
             const formData = getActiveFields();
-            console.log('Datos del formulario:', formData);
 
             // Determinar el tipo de servicio para el backend
             let tipoServicio = '';
@@ -371,7 +366,6 @@ const CrearInformeEnsayo: React.FC = () => {
             setAAMaquinariaFields(initialAAMaquinariaState);
             setAAEstructuralFields(initialAAEstructuralState);
             setECFields(initialECState);
-            setTipoServicio('');
             setTipoEnsayo('');
             setAATipoServicio('maquinaria');
 
@@ -385,10 +379,10 @@ const CrearInformeEnsayo: React.FC = () => {
     };
 
     const handleDownloadPdf = () => {
-        if (!generatedPdf) return;
+        if (!generatedPdf || !generatedPdf.documento) return;
 
         fetch(
-            `${import.meta.env.VITE_BACKEND_NESTJS_URL}/documentos/descargar-pdf/${generatedPdf.fileName}`,
+            `${import.meta.env.VITE_BACKEND_NESTJS_URL}/${ENDPOINTS.DOCUMENTOS.OBTENER_PDF_POR_ID}/${generatedPdf.documento.numero}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -400,7 +394,9 @@ const CrearInformeEnsayo: React.FC = () => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = generatedPdf.fileName;
+                a.download =
+                    generatedPdf.fileName ||
+                    `informe-${generatedPdf.documento.numero}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
@@ -511,24 +507,7 @@ const CrearInformeEnsayo: React.FC = () => {
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Tipo de Servicio
-                    </label>
-
-                    <select
-                        name="tipo_servicio"
-                        className="w-100 mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
-                        onChange={handleInputChange}
-                        value={tipoServicio}
-                    >
-                        <option value="">Seleccione un tipo de servicio</option>
-                        <option value="1">Ensayo</option>
-                        <option value="2">Calibración</option>
-                    </select>
-                </div>
-
-                <div>
+                <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700">
                         Tipo de Ensayo
                     </label>
@@ -588,7 +567,7 @@ const CrearInformeEnsayo: React.FC = () => {
                     {isSubmitting ? 'Generando...' : 'Generar Informe'}
                 </button>
 
-                {generatedPdf && (
+                {generatedPdf && generatedPdf.documento && (
                     <>
                         <button
                             type="button"
@@ -597,12 +576,10 @@ const CrearInformeEnsayo: React.FC = () => {
                         >
                             Ver/Descargar PDF
                         </button>
-                        {generatedPdf.documento && (
-                            <p className="text-sm text-gray-700 self-center">
-                                Documento guardado con ID:{' '}
-                                {generatedPdf.documento.numero}
-                            </p>
-                        )}
+                        <p className="text-sm text-gray-700 self-center">
+                            Documento guardado con ID:{' '}
+                            {generatedPdf.documento.numero}
+                        </p>
                     </>
                 )}
             </div>

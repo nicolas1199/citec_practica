@@ -30,11 +30,6 @@ function Layout() {
         setIsServiciosMenuOpen(!isServiciosMenuOpen);
     };
 
-    const [isEnsayosMenuOpen, setIsEnsayosMenuOpen] = useState(false);
-    const toggleEnsayosMenu = () => {
-        setIsEnsayosMenuOpen(!isEnsayosMenuOpen);
-    };
-
     const [isOrdenTrabajoMenuOpen, setIsOrdenTrabajoMenuOpen] = useState(false);
     const toggleOrdenTrabajoMenu = () => {
         setIsOrdenTrabajoMenuOpen(!isOrdenTrabajoMenuOpen);
