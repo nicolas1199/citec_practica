@@ -11,7 +11,6 @@ import { AppModule } from './app.module';
 import { JwtAuthGuard } from './auth/guards/jwt/jwt.guard'; // Asegúrate de importar el guard
 import { JwtService } from '@nestjs/jwt';
 import { LogsMiddleware } from './common/middlewares/logs.middleware';
-import { UsuariosService } from './usuarios/services/usuarios.service';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
