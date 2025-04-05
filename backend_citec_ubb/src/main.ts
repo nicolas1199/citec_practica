@@ -37,21 +37,8 @@ async function bootstrap() {
             },
             transform: true,
         }),
-
     );
-    /**
-     * Crear Usuario de prueba
-     */
-    const usuarioService = app.get(UsuariosService);
-    if (usuarioService.obtenerPorId({ email: 'prueba@gmail.com' }) === null) {
-        usuarioService.crear({
-            email: 'prueba@gmail.com',
-            nombre: 'Prueba',
-            apellido: 'Prueba',
-            contraseña: 'prueba',
-            nombre_tipos: 'ADMINISTRADOR',
-        });
-    }
+
     app.useGlobalGuards(
         new JwtAuthGuard(app.get(JwtService), app.get(Reflector)),
     );

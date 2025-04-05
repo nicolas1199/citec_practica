@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Usuarios } from '../../models/usuarios.model';
+import { UsuariosService } from '../../../usuarios/services/usuarios.service';
 import * as fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import * as path from 'path';
@@ -36,5 +37,29 @@ export class UsuariosSeeder {
         });
 
         console.log('Usuarios importados desde CSV exitosamente.');
+    }
+
+    constructor(private usuarioService: UsuariosService) {}
+
+    /**
+     * Método para crear un usuario de prueba
+     * Solo se ejecuta en desarrollo
+     */
+    async seed() {
+        if (process.env.NODE_ENV !== 'production') {
+            const testUser = await this.usuarioService.obtenerPorId({
+                email: 'prueba@gmail.com',
+            });
+            if (!testUser) {
+                await this.usuarioService.crear({
+                    email: 'prueba@gmail.com',
+                    nombre: 'Prueba',
+                    apellido: 'Prueba',
+                    contraseña:
+                        process.env.TEST_USER_PASSWORD || 'prueba_segura',
+                    nombre_tipos: 'ADMINISTRADOR',
+                });
+            }
+        }
     }
 }
