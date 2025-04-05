@@ -123,6 +123,7 @@ export class UsuariosService extends BaseServices {
 
         //Si el usuario no existe
         if (!usuario) {
+            console.log('El usuario no existe');
             throw new ForbiddenException(['Correo o contraseña incorrectas']);
         }
 
@@ -135,6 +136,7 @@ export class UsuariosService extends BaseServices {
         );
 
         if (!contraseñaValida) {
+            console.log('La contraseña no es valida');
             throw new ForbiddenException(['Correo o contraseña incorrectas']);
         }
 
