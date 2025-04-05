@@ -56,7 +56,7 @@ export class UsuariosSeeder {
                     email: 'prueba@gmail.com',
                     nombre: 'Prueba',
                     apellido: 'Prueba',
-                    contraseña: await bcrypt.hash('prueba_segura', 10),
+                    contraseña: await bcrypt.hash('prueba', 10),
                     nombre_tipos: 'ADMINISTRADOR',
                 });
             }
